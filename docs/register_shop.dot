@@ -1,34 +1,47 @@
-digraph RegisterShop {
-	fontname = "Inconsolata"
-	fontsize = 8
+digraph G {
+	rankdir = "LR";
+	labelloc = "b";
+	peripheries = 0;
+
+	fontname = "Inconsolata";
+	fontsize = 8;
 
 	node [
 		fontname = "Inconsolata"
 		fontsize = 8
-		shape = "record"
-	]
+	];
+
+	subgraph clusterUser { label="User"; user };
+	user [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
+
+	subgraph clusterUser { label="Administrator"; admin };
+	admin [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
+
+	node [
+		shape = "ellipse";
+		style = "solid";
+	];
+
+	register [ label = "Registrieren" ];
+	activate [ label = "Account aktivieren" ];
+	email [ label = "E-Mail" ];
+	password [ label = "Passwort" ];
+
+	admin -> user [ arrowhead="onormal" ];
 
 	edge [
-		fontname = "Inconsolata"
-		fontsize = 8
-		arrowtail = "empty"
-	]
+		arrowtail = "none"
+	];
 
-	RegPage [
-		label = "Benutzer klickt \"Shop registrieren\""
-	]
+	user -> register;
+	admin -> activate;
 
-	FillForm [
-		label = "Registrierungsformular ausfüllen"
-	]
+	edge [
+		arrowhead = "vee";
+		label = "<<extend>>";
+		style = "dashed"
+	];
 
-	SendForm [
-		label = "Formular absenden"
-	]
-
-	WaitForActivation [
-		label = "Auf Freischaltung durch Administrator warten"
-	]
-
-	RegPage -> FillForm -> SendForm -> WaitForActivation
+	email -> register;
+	password -> register;
 }

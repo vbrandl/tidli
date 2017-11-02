@@ -32,6 +32,8 @@ Hilfe bei möglichen Problemen zu bekommen.
 
 ### Shop registrieren
 
+![Shop registrieren](./register_shop.png)
+
 Ein Laden Betreiber kann seinen eigenen Shop registrieren um dort
 zukünftig Produkte anbieten zu können. Hierfür wird eine E-Mail
 Adresse, ein Passwort, die Adresse des Shops und ein Name benötigt.

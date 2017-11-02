@@ -1,5 +1,5 @@
 digraph G {
-	rankdir=LR;
+	rankdir = "LR";
 	labelloc="b";
 	peripheries=0;
 
@@ -7,35 +7,30 @@ digraph G {
 	fontsize = 8;
 
 	node [
-		shape = plaintext;
+		shape = "plaintext";
 		fontname = "Inconsolata"
 	];
 
 	subgraph clusterUser {label="User"; User};
 	User [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
 
-	/* subgraph clusterAdmin {label="Admin"; Admin}; */
-	/* Admin [ shapefile="./assets/stick.png"; peripheries=0; label="" ]; */
-
 	node [
-		shape=ellipse;
-		style=solid
+		shape = "ellipse";
+		style = "solid"
 	];
 
 	Register [ label = "Registrieren" ];
 	EMail [ label="E-Mail" ];
 	Password [ label="Passwort" ];
 
-	/* Admin -> User [ arrowhead=onormal ]; */
-
 	edge [
-		arrowhead=none
+		arrowhead="none"
 	];
 
 
 	User -> Register;
 
-	edge [ arrowhead="vee" label="<<extend>>" style=dashed ];
+	edge [ arrowhead="vee" label="<<extend>>" style="dashed" ];
 
 	EMail -> Register;
 	Password -> Register;
