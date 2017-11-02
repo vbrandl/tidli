@@ -1,0 +1,126 @@
+digraph G {
+	fontname = "Inconsolata"
+	fontsize = 8
+
+	node [
+		fontname = "Inconsolata"
+		fontsize = 8
+		shape = "record"
+	]
+
+	edge [
+		fontname = "Inconsolata"
+		fontsize = 8
+		arrowtail = "empty"
+	]
+
+	Account [
+		label = "{\<\<Interface\>\>\n
+		Account|
+		@Id\l
+		+ id: int\l
+		+ email: String\l
+		+ password: byte[]\l
+		+ salt: byte[]\l
+		+ iterations: int\l
+		+ key_length: int\l
+		+ name: String\l
+		+ creation_date: Date\l
+		+ last_updated: Date\l
+		}"
+	]
+
+	Shop [
+		label = "{Shop|
+		+ address: Address\l
+		+ opening_times: OpeningTime\l
+		@ManyToOne\l
+		+ offers: Collection\<Offer\>\l
+		+ description: String\l
+		}"
+	]
+
+	User [
+		label = "{User|
+		+ address: Address\l
+		}"
+	]
+
+	OpeningTime [
+		label = "{OpeningTime|
+		@Id\l
+		+ id: int\l
+		@OneToMany\l
+		+ days: Collection\<OpeningDay\>\l
+		}"
+	]
+
+	OpeningDay [
+		label = "{OpeningDay|
+		@Id\l
+		+ id: int\l
+		+ day: WeekDay\l
+		+ from: TimeStamp\l
+		+ to: TimeStamp\l
+		}"
+	]
+
+	OpeningDay -> WeekDay [arrowhead=vee taillabel="1" headlabel="*"]
+
+	WeekDay [
+		label ="{\<\<Enum\>\>\n
+		WeekDay
+		}"
+	]
+
+	Address [
+		label = "{@Embeddable\n
+		Address|
+		@Id\l
+		+ id: int\l
+		+ country: String\l
+		+ zip_code: int\l
+		+ city: String\l
+		+ street: String\l
+		+ number: String\l
+		}"
+	]
+
+	Administrator [
+		label = "{Administrator|
+		+ \l
+		}"
+	]
+
+	Article [
+		label = "{\<\<Interface\>\>\n
+		Article|
+		@Id\l
+		+ id: int\l
+		+ name: String\l
+		+ description: String\l
+		+ image: byte[]\l
+		+ available: bool\l
+		}"
+	]
+
+	Offer [
+		label = "{Offer|
+		@OneToMany(mappedBy=\"offers\")\l
+		+ owner: Shop\l
+		+ amount: int\l
+		+ price: int\l
+		+ day: Date\l
+		}"
+	]
+
+	Administrator -> Account [dir=back]
+	Shop -> Account [dir=back]
+	User -> Account [dir=back]
+	OpeningTime -> OpeningDay [arrowhead=vee headlabel="*   " taillabel="1  "]
+	Shop -> OpeningTime [arrowhead=vee headlabel="1   " taillabel="1  "]
+	Shop -> Address [arrowhead=vee headlabel="1    " taillabel="1  "]
+	User -> Address [arrowhead=vee headlabel="1    " taillabel="1  "]
+	Offer -> Article [dir=back]
+	Shop -> Offer [dir=none headlabel="*     " taillabel="1  "]
+}

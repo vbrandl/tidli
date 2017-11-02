@@ -1,0 +1,34 @@
+digraph RegisterShop {
+	fontname = "Inconsolata"
+	fontsize = 8
+
+	node [
+		fontname = "Inconsolata"
+		fontsize = 8
+		shape = "record"
+	]
+
+	edge [
+		fontname = "Inconsolata"
+		fontsize = 8
+		arrowtail = "empty"
+	]
+
+	RegPage [
+		label = "Benutzer klickt \"Shop registrieren\""
+	]
+
+	FillForm [
+		label = "Registrierungsformular ausfüllen"
+	]
+
+	SendForm [
+		label = "Formular absenden"
+	]
+
+	WaitForActivation [
+		label = "Auf Freischaltung durch Administrator warten"
+	]
+
+	RegPage -> FillForm -> SendForm -> WaitForActivation
+}
