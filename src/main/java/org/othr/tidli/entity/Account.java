@@ -48,7 +48,7 @@ public abstract class Account extends Id implements Serializable {
      * The password will be hashed using scrypt
      * @param email
      * @param password
-     * @param name 
+     * @param name
      */
     public Account(final String email, final String password, final String name) {
         super();
@@ -96,6 +96,23 @@ public abstract class Account extends Id implements Serializable {
 
     public void setLastUpdated(final Date lastUpdated) {
         this.lastUpdated = (Date)lastUpdated.clone();
+    }
+
+    public boolean changePassword(final String old, final String newPw) {
+        if (this.checkPassword(old)) {
+            this.hashAndSetPassword(newPw);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void hashAndSetPassword(final String pw) {
+        this.password = SCryptUtil.scrypt(pw, Static.SCRYPT_CPU_COST, Static.SCRYPT_MEM_COST, Static.SCRYPT_PARALLELIZATION);
+    }
+
+    public boolean checkPassword(final String pw) {
+        return SCryptUtil.check(pw, this.password);
     }
 
 }

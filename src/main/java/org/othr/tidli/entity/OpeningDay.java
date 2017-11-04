@@ -17,6 +17,7 @@
 package org.othr.tidli.entity;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,8 +36,10 @@ public class OpeningDay extends Id {
 
     private WeekDay weekDay;
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "from_date")
     private Date from;
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "to_date")
     private Date to;
 
     public OpeningDay(final WeekDay wd, final Date f, final Date t) {

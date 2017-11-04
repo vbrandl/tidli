@@ -18,7 +18,7 @@ package org.othr.tidli.entity;
 
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -33,7 +33,7 @@ public class Offer extends Article {
     @Transient
     private static final long serialVersionUID = -3282709858909762202L;
 
-    @OneToMany(mappedBy="offers")
+    @ManyToOne
     private Shop owner;
     private int amount;
     private int price;

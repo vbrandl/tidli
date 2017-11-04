@@ -49,3 +49,4 @@ nbdist/
 
 nb-configuration.xml
 # End of https://www.gitignore.io/api/maven,java,netbeans
+/nbproject/

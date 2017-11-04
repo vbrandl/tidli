@@ -16,10 +16,33 @@
  */
 package org.othr.tidli.service;
 
+import javax.enterprise.context.RequestScoped;
+import javax.transaction.Transactional;
+import org.othr.tidli.entity.Shop;
+
 /**
  *
  * @author Brandl Valentin
  */
-public class ShopService {
-    
+@RequestScoped
+public class ShopService extends AbstractService {
+
+    @Transactional
+    public Shop registerShop(final Shop s) {
+        s.setActivated(false);
+        getEm().persist(s);
+        return s;
+    }
+
+    @Transactional
+    public Shop activateShop(final Shop s) {
+        s.setActivated(true);
+        getEm().persist(s);
+        return s;
+    }
+
+    public Shop findShop(final long id) {
+        return getEm().find(Shop.class, id);
+    }
+
 }
