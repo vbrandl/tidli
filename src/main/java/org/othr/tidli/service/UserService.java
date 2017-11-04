@@ -16,26 +16,68 @@
  */
 package org.othr.tidli.service;
 
-import com.lambdaworks.crypto.SCryptUtil;
+import java.util.Objects;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
 import javax.jws.WebService;
 import javax.transaction.Transactional;
+import javax.transaction.UserTransaction;
 import org.othr.tidli.entity.User;
-import org.othr.tidli.util.Static;
 
 /**
  *
  * @author Brandl Valentin
  */
+@ManagedBean
 @RequestScoped
 @WebService
 public class UserService extends AbstractService {
-    
+    private User newUser = new User();
+    private String pw1, pw2;
+
     @Transactional
-    public User registerUser(final User user, final String password) {
-        user.setPassword(SCryptUtil.scrypt(password, Static.SCRYPT_CPU_COST, Static.SCRYPT_MEM_COST, Static.SCRYPT_PARALLELIZATION));
+    public User registerUser(final User user) {
         getEm().persist(user);
         return user;
+    }
+
+    @Transactional
+    public void register() {
+        if (Objects.equals(pw1, pw2)) {
+            newUser.hashAndSetPassword(pw1);
+            getEm().persist(newUser);
+            newUser = new User();
+        }
+    }
+
+	public User findUser(final long id) {
+		return getEm().find(User.class, id);
+	}
+
+    public User getUser() {
+        return newUser;
+    }
+
+    public void setUser(final User newUser) {
+        this.newUser = newUser;
+    }
+
+    public String getPw1() {
+        return pw1;
+    }
+
+    public void setPw1(final String pw) {
+        this.pw1 = pw;
+    }
+
+    public String getPw2() {
+        return pw2;
+    }
+
+    public void setPw2(final String pw) {
+        this.pw2 = pw;
     }
 
 }
