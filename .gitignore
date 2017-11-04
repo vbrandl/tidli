@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/maven,java
+# Created by https://www.gitignore.io/api/maven,java,netbeans
 
 ### Java ###
 # Compiled class file
@@ -39,4 +39,13 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-# End of https://www.gitignore.io/api/maven,java
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+nb-configuration.xml
+# End of https://www.gitignore.io/api/maven,java,netbeans
