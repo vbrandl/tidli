@@ -38,7 +38,10 @@ public class User extends Account {
         this.address = address;
     }
 
-    public User() {}
+    public User() {
+        super();
+        this.address = new Address();
+    }
 
     public Address getAddress() {
         return address;

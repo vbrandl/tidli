@@ -18,13 +18,15 @@ package org.othr.tidli.entity;
 
 import java.util.Collection;
 import java.util.Collections;
-import javax.persistence.ManyToOne;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 /**
  *
  * @author Brandl Valentin
  */
+@Entity
 public class Shop extends Account {
     
     @Transient
@@ -32,7 +34,7 @@ public class Shop extends Account {
 
     private Address address;
     private OpeningTime openingTimes;
-    @ManyToOne
+    @OneToMany(mappedBy="owner")
     private Collection<Offer> offers;
     private String description;
     private boolean activated = false;
