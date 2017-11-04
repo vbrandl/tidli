@@ -20,10 +20,7 @@ digraph G {
 		@Id\l
 		+ id: int\l
 		+ email: String\l
-		+ password: byte[]\l
-		+ salt: byte[]\l
-		+ iterations: int\l
-		+ key_length: int\l
+		+ password: String\l
 		+ name: String\l
 		+ creation_date: Date\l
 		+ last_updated: Date\l
@@ -37,6 +34,7 @@ digraph G {
 		@ManyToOne\l
 		+ offers: Collection\<Offer\>\l
 		+ description: String\l
+		+ activated: bool\l
 		}"
 	]
 
@@ -100,7 +98,6 @@ digraph G {
 		+ name: String\l
 		+ description: String\l
 		+ image: byte[]\l
-		+ available: bool\l
 		}"
 	]
 
