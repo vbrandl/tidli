@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        Hello from Facelets
+        <br />
+        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+        <h:form>
+            <p:panelGrid columns="2">
+                <p:outputLabel for="email" value="E-Mail"/>
+                <p:inputText id="email" value="#{userService.user.email}" required="true" />
+
+                <p:outputLabel for="name" value="Name"/>
+                <p:inputText id="name" value="#{userService.user.name}" required="true" />
+
+                <p:outputLabel for="pw1" value="Passwort"/>
+                <p:password id="pw1" value="#{userService.pw1}" required="true" />
+
+                <p:outputLabel for="pw2" value="Passwort wiederholen"/>
+                <p:password id="pw2" value="#{userService.pw2}" required="true" />
+
+                <p:outputLabel for="city" value="Stadt" />
+                <p:inputText id="city" value="#{userService.user.address.city}" />
+
+                <p:outputLabel for="street" value="Straße" />
+                <p:inputText id="street" value="#{userService.user.address.street}" />
+
+                <p:outputLabel for="number" value="Hausnummer" />
+                <p:inputText id="number" value="#{userService.user.address.number}" />
+
+            </p:panelGrid>
+            <p:commandButton value="Registrieren" actionListener="#{userService.register()}" />
+                <!--<p:outputLabel for="zip" value="PLZ" />-->
+                <!--<p:inputNumber id="zip" value="#{userService.user.address.zipCode}" />-->
+        </h:form>
+    </h:body>
+</html>
+
