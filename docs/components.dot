@@ -1,0 +1,59 @@
+digraph G {
+	graph [ splines=ortho ];
+	node [ shape=component ];
+	subgraph cluster_tidli {
+		label="Tidli";
+		ArticleService;
+		OfferService;
+		UserService;
+		ShopService;
+		LoginService;
+		AdminService;
+	}
+
+	{
+		node [ shape=point width=0 style=invis ];
+		empty_0;
+		empty_1;
+		empty_2;
+		empty_3;
+		empty_4;
+		empty_5;
+	}
+
+	subgraph cluster_extern {
+		label="External services";
+
+		subgraph cluster_ticket {
+			label="TicketSystem";
+			TicketService;
+		}
+
+		subgraph cluster_event {
+			label="Event calendar";
+			EventService;
+		}
+	}
+
+	{
+		edge [ dir=none style=dashed];
+		empty_0 -> empty_1;
+		empty_4 -> empty_0;
+		empty_5 -> empty_0;
+		empty_2 -> empty_3;
+	}
+
+	{
+		edge [ arrowhead=icurve ];
+		TicketService -> empty_0;
+		OfferService -> empty_3;
+	}
+
+	{
+		edge [ arrowhead=dot ];
+		UserService -> empty_1;
+		ShopService -> empty_4;
+		AdminService -> empty_5;
+		EventService -> empty_2;
+	}
+}
