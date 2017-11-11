@@ -1,16 +1,21 @@
-.PHONY: clean
-.PHONY: all
+.PHONY: clean all md dot clean_md clean_dot
 
-all: dot md
+DOT = $(wildcard *.dot)
+PNG = $(DOT:.dot=.png)
 
-dot: $(patsubst %.dot,%.png,$(wildcard *.dot))
+MD = $(wildcard *.md)
+PDF = $(MD:.md=.pdf)
 
-md: $(patsubst %.md,%.pdf,$(wildcard *.md))
+all: md
+
+dot: $(PNG)
+
+md: dot $(PDF)
 
 %.png: %.dot
 	dot -Tpng $< -o $@
 
-%.pdf: %.md
+%.pdf: %.md dot
 	pandoc $< -o $@ --from markdown --template templates/eisvogel.latex --listings --number-sections --toc
 
 clean: clean_md clean_dot
@@ -20,3 +25,4 @@ clean_md:
 
 clean_dot:
 	rm -f *.png
+
