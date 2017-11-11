@@ -1,0 +1,86 @@
+digraph G {
+	rankdir = "LR";
+	labelloc="b";
+	peripheries=0;
+
+	/* graph [ splines=ortho ] */
+
+	fontname = "Inconsolata";
+	fontsize = 8;
+
+	node [
+		shape = "plaintext";
+		fontname = "Inconsolata"
+	];
+
+	subgraph clusterUser {label="User"; User};
+	User [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
+
+	subgraph clusterAdmin {label="Administrator"; Administrator};
+	Administrator [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
+
+	subgraph clusterShop {label="Shop"; Shop};
+	Shop [ shapefile="./assets/stick.png"; peripheries=0; label="" ];
+
+	node [
+		shape = "ellipse";
+		style = "solid"
+	];
+
+	ActivateShop [ label = "Activate shop" ];
+	AnswerTicket [ label = "Answer support ticket" ];
+	CloseTicket [ label = "Close support ticket" ];
+	CreateOffer [ label = "Create offer" ];
+	CreateOpeningTimes [ label = "Create opening times" ];
+	DecrementAvailable [ label = "Decrement available products" ];
+	DeleteAccount [ label = "Delete account" ];
+	DeleteOffer [ label = "Delete offer" ];
+	Login [ label = "Logged in" ]
+	OpenTicket [ label = "Open support ticket" ];
+	RateOffer [ label = "Rate offer" ];
+	RateShop [ label = "Rate shop" ];
+	Register [ label = "Register account" ];
+	Search [ label = "Search offer" ];
+
+	edge [
+		arrowhead="none"
+	];
+
+	User -> AnswerTicket;
+	User -> CloseTicket;
+	User -> OpenTicket;
+	User -> RateOffer;
+	User -> RateShop;
+	User -> Register;
+	User -> Search;
+
+	Administrator -> ActivateShop;
+	Administrator -> AnswerTicket;
+	Administrator -> CloseTicket;
+	Administrator -> DeleteAccount;
+	Administrator -> DeleteOffer;
+
+	Shop -> AnswerTicket;
+	Shop -> CloseTicket;
+	Shop -> CreateOffer;
+	Shop -> CreateOpeningTimes;
+	Shop -> Register;
+	Shop -> DecrementAvailable;
+	Shop -> DeleteOffer;
+	Shop -> OpenTicket;
+
+	edge [ arrowhead="vee" label="<<extends>>" style="dashed" ];
+
+	ActivateShop -> Login;
+	AnswerTicket -> Login;
+	CloseTicket -> Login;
+	CreateOffer -> Login;
+	CreateOpeningTimes -> Login;
+	DecrementAvailable -> Login;
+	DeleteAccount -> Login;
+	DeleteOffer -> Login;
+	OpenTicket -> Login;
+	RateOffer -> Login;
+	RateShop -> Login;
+
+}
