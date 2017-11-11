@@ -1,10 +1,10 @@
 ---
 title: "Tidli - Take it, don't leave it"
 author: [Brandl Valentin]
-date: 2017-11-02
+date: \today
 subject: "Tidli Datenmodell"
 tags: [SW, JavaEE, OTHR, Datenmodell]
-lang: de
+lang: en
 titlepage: true
 lof: true
 ...
@@ -29,6 +29,8 @@ Hilfe bei möglichen Problemen zu bekommen.
 ![Datenmodell](./tidli.png)
 
 ## Use Cases
+
+![Usecases](./usecases.png)
 
 ### Shop registrieren
 
@@ -81,7 +83,9 @@ Außerdem kann nach bestimmten Produkten gesucht werden.
 
 Ein registrierter und eingeloggter Benutzer kann ein Angebot bewerten.
 
-## Schnittstellen
+## Komponenten Diagramm
+
+![Komponenten Diagramm](./components.png)
 
 ### Bereitstellen
 
@@ -90,4 +94,4 @@ einstellen.
 
 ### Konsumieren
 
-Ticket System für Support und Beschwerden
+Ticket System für Support und Beschwerden.
