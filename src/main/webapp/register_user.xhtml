@@ -2,39 +2,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
         <ui:composition template="template/layout.xhtml">
             <ui:define name="content">
-                <h:form>
-                    <p:panelGrid columns="2">
-                        <p:outputLabel for="email" value="E-Mail"/>
-                        <p:inputText id="email" value="#{userRegisterController.email}" required="true" />
+                <b:form>
+                    <b:panelGrid columns="1">
+                        <b:inputText id="email" label="E-Mail" value="#{userRegisterController.email}" required="true" />
                         
-                        <p:outputLabel for="name" value="Name"/>
-                        <p:inputText id="name" value="#{userRegisterController.name}" required="true" />
+                        <b:inputText id="name" label="Name" value="#{userRegisterController.name}" required="true" />
                         
-                        <p:outputLabel for="pw1" value="Passwort"/>
-                        <p:password id="pw1" value="#{userRegisterController.pw1}" required="true" />
+                        <b:inputSecret id="pw1" label="Passwort" value="#{userRegisterController.pw1}" required="true" />
                         
-                        <p:outputLabel for="pw2" value="Passwort wiederholen"/>
-                        <p:password id="pw2" value="#{userRegisterController.pw2}" required="true" />
+                        <b:inputSecret id="pw2" label="Passwort wiederholen" value="#{userRegisterController.pw2}" required="true" />
                         
-                        <p:outputLabel for="city" value="Stadt" />
-                        <p:inputText id="city" value="#{userRegisterController.city}" />
+                        <b:inputText id="city" label="Stadt" value="#{userRegisterController.city}" />
                         
-                        <p:outputLabel for="street" value="Straße" />
-                        <p:inputText id="street" value="#{userRegisterController.street}" />
+                        <b:inputText id="street" label="Straße" value="#{userRegisterController.street}" />
                         
-                        <p:outputLabel for="number" value="Hausnummer" />
-                        <p:inputText id="number" value="#{userRegisterController.number}" />
+                        <b:inputText id="number" label="Hausnummer" value="#{userRegisterController.number}" />
                         
-                    </p:panelGrid>
-                    <p:commandButton value="Registrieren" actionListener="#{userRegisterController.register()}" />
-                    <!--<p:outputLabel for="zip" value="PLZ" />-->
-                    <!--<p:inputNumber id="zip" value="#{userService.user.address.zipCode}" />-->
-                </h:form>
+                        <b:commandButton value="Registrieren" actionListener="#{userRegisterController.register()}" />
+                    </b:panelGrid>
+                </b:form>
             </ui:define>
         </ui:composition>
     </h:body>

@@ -21,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.service.LoginServiceIF;
+import org.othr.tidli.service.UserServiceIF;
 
 /**
  *
@@ -30,15 +31,57 @@ import org.othr.tidli.service.LoginServiceIF;
 public class UserDetailController extends AbstractController {
     @Inject
     private LoginServiceIF ls;
+    @Inject 
+    private UserServiceIF us;
     private Account user;
+    private String pw1, pw2, pwOld;
 
     @PostConstruct
     private void prepareData() {
         user = ls.getAccount().get();
     }
 
+    private static boolean isNullOrEmpty(final String str) {
+        return null == str || str.isEmpty();
+    }
+
+    public void updateUser() {
+        if (!isNullOrEmpty(pw1) || !isNullOrEmpty(pw2) || !isNullOrEmpty(pwOld)) {
+            if (pw1.equals(pw2) && user.checkPassword(pw1)) {
+                this.user.changePassword(pwOld, pw1);
+            } else {
+                return;
+            }
+        }
+        this.user = us.updateUser(user);
+    }
+
     public Account getUnwrapedUser() {
         return user;
+    }
+
+    public String getPw1() {
+        return pw1;
+    }
+
+    public void setPw1(String pw1) {
+        this.pw1 = pw1;
+    }
+
+    public String getPw2() {
+        return pw2;
+    }
+
+    public void setPw2(String pw2) {
+        this.pw2 = pw2;
+    }
+
+    public String getPwOld() {
+        return pwOld;
+    }
+
+    public void setPwOld(String pwOld) {
+        this.pwOld = pwOld;
     }
     
 }

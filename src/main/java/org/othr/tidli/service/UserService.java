@@ -16,8 +16,10 @@
  */
 package org.othr.tidli.service;
 
+import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.jws.WebService;
+import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
 
 /**
@@ -37,6 +39,13 @@ public class UserService extends RegisterService<Account> implements UserService
     @Override
     protected boolean validateEntity(final Account entity) {
         return true;
+    }
+
+    @Transactional
+    @Override
+    public Account updateUser(Account user) {
+        user.setLastUpdated(new Date());
+        return getEm().merge(user);
     }
 
 }

@@ -3,9 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:b="http://bootsfaces.net/ui">
     <h:body>
         <ui:composition>
             <h:form>
@@ -13,17 +11,14 @@
                           style="padding-top:2px;padding-bottom:2px">
                     <b:navbarLinks>
                         <b:navLink outcome="/index" value="Home" icon-awesome="home" />
-                        <c:if test="#{not navigationController.loggedIn}">
-                            <b:navLink outcome="/login" value="Login" />
-                            <b:navLink outcome="/register_shop" value="Register Shop" />
-                            <b:navLink outcome="/register_user" value="Register User" />
-                        </c:if>
+                        <b:navLink outcome="/register_shop" value="Register Shop" rendered="#{not navigationController.loggedIn}" />
+                        <b:navLink outcome="/register_user" value="Register User" rendered="#{not navigationController.loggedIn}" />
+                        <b:navLink outcome="/user_detail" value="Account details" rendered="#{navigationController.loggedIn}" />
                     </b:navbarLinks>
-                    <h:form styleClass="navbar-form navbar-right">
-                        <c:if test="#{loginController.loggedIn}">
-                            <b:commandButton action="a" value="Logout" actionListener="#{loginController.logout()}" look="success" />
-                        </c:if>
-                    </h:form>
+                    <b:navbarLinks styleClass="navbar-right">
+                        <b:navLink outcome="/login" value="Login" rendered="#{not navigationController.loggedIn}" />
+                        <b:navCommandLink outcome="/index" value="Logout" actionListener="#{loginController.logout()}" rendered="#{navigationController.loggedIn}" />
+                    </b:navbarLinks>
                 </b:navBar>
             </h:form>
         </ui:composition>

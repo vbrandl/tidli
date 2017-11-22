@@ -26,5 +26,6 @@ import org.othr.tidli.entity.Account;
 public interface UserServiceIF {
 
     Optional<Account> register(final Account entity);
+    Account updateUser(final Account user);
     
 }

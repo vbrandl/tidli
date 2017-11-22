@@ -2,23 +2,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
         <ui:composition template="template/layout.xhtml">
             <ui:define name="content">
-                <h:form>
-                    <p:panelGrid columns="2">
-                        <p:outputLabel for="email" value="E-Mail"/>
-                        <p:inputText id="email" value="#{loginController.email}" required="true" />
+                <b:form>
+                    <b:focus target="email" />
+                    <b:panelGrid columns="1">
+                        <b:inputText id="email" label="E-Mail" value="#{loginController.email}" required="true" />
                         
-                        <p:outputLabel for="pw1" value="Passwort"/>
-                        <p:password id="pw1" value="#{loginController.pw}" required="true" />
+                        <b:inputSecret id="pw" label="Passwort" value="#{loginController.pw}" required="true" />
                         
-                        <p:outputLabel />
-                        <p:commandButton value="Anmelden" actionListener="#{loginController.login()}" action="index?faces-redirect=true" ajax="false" />
-                    </p:panelGrid>
-                </h:form>
+                        <b:commandButton value="Anmelden" actionListener="#{loginController.login()}" action="index?faces-redirect=true" ajax="false" />
+                    </b:panelGrid>
+                </b:form>
             </ui:define>
         </ui:composition>
     </h:body>

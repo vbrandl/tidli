@@ -3,22 +3,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
-        <c:if test="#{userDetailController.loggedIn}">
-            <ui:composition template="template/layout.xhtml">
-                <ui:define name="content">
-                    <b:panelGrid columns="2">
-                        <b:label text="E-Mail" />
-                        <b:inputText id="mail" value="#{userDetailController.unwrapedUser.email}" />
-
-                        <b:label text="Name" />
-                        <b:inputText id="mail" value="#{userDetailController.unwrapedUser.name}" />
+        <ui:composition template="template/layout.xhtml" rendered="#{userDetailController.loggedIn}">
+            <ui:define name="content">
+                <b:form>
+                    <b:panelGrid columns="1">
+                        <b:inputText id="mail" label="E-Mail" value="#{userDetailController.unwrapedUser.email}" />
+                        
+                        <b:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
+                        
+                        <b:inputSecret id="pw_old" label="Aktuelles Passwort" value="#{userDetailController.pwOld}" />
+                            
+                        <b:inputSecret id="pw1" label="Neues Passwort" value="#{userDetailController.pw1}" />
+                            
+                        <b:inputSecret id="pw2" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" />
+                            
+                        <b:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
                     </b:panelGrid>
-                </ui:define>
-            </ui:composition>
-        </c:if>
+                </b:form>
+            </ui:define>
+        </ui:composition>
     </h:body>
 </html>
 
