@@ -30,7 +30,7 @@ import org.othr.tidli.util.WeekDay;
  */
 @Entity
 public class OpeningDay extends Id {
-    
+
     @Transient
     private static final long serialVersionUID = -3578698357739936426L;
 
@@ -74,5 +74,5 @@ public class OpeningDay extends Id {
     public void setTo(final Date to) {
         this.to = (Date)to.clone();
     }
-    
+
 }

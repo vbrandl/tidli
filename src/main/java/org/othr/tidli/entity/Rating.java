@@ -16,39 +16,47 @@
  */
 package org.othr.tidli.entity;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  *
  * @author Brandl Valentin
  */
 @Entity
-public class OpeningTime extends Id implements Serializable {
+public class Rating extends Id {
+    
+    private static final long serialVersionUID = 8722056234237334575L;
 
-    @Transient
-    private static final long serialVersionUID = 5269673570636175593L;
+    @Min(value = 0)
+    @Max(value = 5)
+    private int score;
+    @ManyToOne
+    private Account account;
 
-    @OneToMany
-    private Collection<OpeningDay> days;
-
-    public OpeningTime(final Collection<OpeningDay> d) {
-        super();
-        this.days = d;
+    public Rating(final int score, final Account account) {
+        this.score = score;
+        this.account = account;
     }
 
-    public OpeningTime() {}
+    public Rating() {}
 
-    public Collection<OpeningDay> getDays() {
-        return Collections.unmodifiableCollection(days);
+    public int getScore() {
+        return score;
     }
 
-    public void setDays(final Collection<OpeningDay> days) {
-        this.days = days;
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
 }

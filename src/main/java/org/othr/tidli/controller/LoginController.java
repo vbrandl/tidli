@@ -14,29 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.service;
+package org.othr.tidli.controller;
 
-import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
-import org.othr.tidli.entity.Account;
+import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
+import org.othr.tidli.service.LoginServiceIF;
 
 /**
  *
  * @author Brandl Valentin
  */
-@RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
+@ManagedBean
+public class LoginController extends AbstractController {
+    @Inject
+    private LoginServiceIF ls;
+    
+    private String email, pw;
 
-    private static final long serialVersionUID = 1161955593295568896L;
-    @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
+    public boolean login() {
+        final boolean login = ls.login(email, pw);
+        System.out.println(login);
+        return login;
     }
 
-    @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
+    public void logout() {
+        ls.logout();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPw() {
+        return pw;
+    }
+
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
 }

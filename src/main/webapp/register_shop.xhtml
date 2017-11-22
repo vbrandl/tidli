@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="email" value="E-Mail"/>
+                        <p:inputText id="email" value="#{shopRegisterController.email}" required="true" />
+                        
+                        <p:outputLabel for="pw1" value="Passwort"/>
+                        <p:password id="pw1" value="#{shopRegisterController.pw1}" required="true" />
+                        
+                        <p:outputLabel for="pw2" value="Passwort wiederholen"/>
+                        <p:password id="pw2" value="#{shopRegisterController.pw2}" required="true" />
+                        
+                        <p:outputLabel for="name" value="Name" />
+                        <p:inputText id="name" value="#{shopRegisterController.name}" />
+                        
+                        <p:outputLabel for="desc" value="Beschreibung" />
+                        <p:inputTextarea id="desc" value="#{shopRegisterController.desc}" />
+                        
+                        <p:outputLabel for="city" value="Stadt" />
+                        <p:inputText id="city" value="#{shopRegisterController.city}" />
+                        
+                        <p:outputLabel for="street" value="Straße" />
+                        <p:inputText id="street" value="#{shopRegisterController.street}" />
+                        
+                        <p:outputLabel for="number" value="Hausnummer" />
+                        <p:inputText id="number" value="#{shopRegisterController.number}" />
+                        
+                        <p:outputLabel />
+                        <p:commandButton value="Registrieren" actionListener="#{shopRegisterController.register()}" />
+                    </p:panelGrid>
+                    <!--<p:outputLabel for="zip" value="PLZ" />-->
+                    <!--<p:inputNumber id="zip" value="#{userService.user.address.zipCode}" />-->
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

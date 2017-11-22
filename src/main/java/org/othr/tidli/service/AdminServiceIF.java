@@ -16,27 +16,20 @@
  */
 package org.othr.tidli.service;
 
-import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
+import java.util.Optional;
 import org.othr.tidli.entity.Account;
+import org.othr.tidli.entity.Administrator;
+import org.othr.tidli.entity.Offer;
+import org.othr.tidli.entity.Shop;
 
 /**
  *
  * @author Brandl Valentin
  */
-@RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
+public interface AdminServiceIF {
 
-    private static final long serialVersionUID = 1161955593295568896L;
-    @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
-    }
-
-    @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
-    }
-
+    boolean activateShop(final Shop s, final Optional<Administrator> adm);
+    boolean deleteAccount(final Account acc, final Optional<Administrator> adm);
+    boolean deleteOffer(final Offer off, final Optional<Administrator> adm);
+    
 }

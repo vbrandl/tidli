@@ -14,29 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.service;
+package org.othr.tidli.entity;
 
-import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
-import org.othr.tidli.entity.Account;
+import javax.persistence.Entity;
+import org.othr.tidli.util.Role;
 
 /**
  *
  * @author Brandl Valentin
  */
-@RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
-
-    private static final long serialVersionUID = 1161955593295568896L;
-    @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
-    }
+@Entity
+public class Administrator extends Account {
+    
+    private static final long serialVersionUID = -9156274763174215690L;
+    private static final Role ROLE = Role.Administrator;
 
     @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
+    public Role getRole() {
+        return ROLE;
     }
-
+    
 }

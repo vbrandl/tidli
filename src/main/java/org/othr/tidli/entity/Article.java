@@ -16,22 +16,25 @@
  */
 package org.othr.tidli.entity;
 
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import java.util.Collection;
+import java.util.Collections;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author Brandl Valentin
  */
-@MappedSuperclass
-public abstract class Article extends Id {
+@Entity
+public class Article extends Id implements RatableEntity {
     
-    @Transient
     private static final long serialVersionUID = -1604497535637986945L;
 
     private String name;
     private String description;
     private byte[] image;
+    @OneToMany(targetEntity = Rating.class)
+    private Collection<Rating> ratings;
 
     public Article(final String name, final String description, final byte[] image) {
         super();
@@ -64,6 +67,21 @@ public abstract class Article extends Id {
 
     public void setImage(final byte[] image) {
         this.image = image;
+    }
+
+    @Override
+    public Collection<Rating> getRatings() {
+        return Collections.unmodifiableCollection(ratings);
+    }
+
+    @Override
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    @Override
+    public boolean addRating(Rating r) {
+        return this.ratings.add(r);
     }
     
 }

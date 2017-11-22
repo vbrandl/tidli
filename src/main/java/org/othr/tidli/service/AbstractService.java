@@ -16,18 +16,73 @@
  */
 package org.othr.tidli.service;
 
+import java.io.Serializable;
+import java.util.Optional;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import org.othr.tidli.entity.Account;
+import org.othr.tidli.entity.Id;
+import org.othr.tidli.util.Role;
 
 /**
  *
  * @author Brandl Valentin
+ * @param <T>
  */
-public class AbstractService {
+public abstract class AbstractService<T extends Id> implements Serializable {
+
+    private static final long serialVersionUID = -7707210843707915366L;
+    protected static<T> Optional<T> singleResultToOptional(final TypedQuery<T> query) {
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException nre) {
+            return Optional.empty();
+        }
+    }
+
     @PersistenceContext
     private EntityManager em;
-    
+    protected abstract Class<T> getEntityClass();
+
     protected EntityManager getEm() {
         return em;
     }
+
+    /**
+     * Finds an entity by its id
+     * @param id The primary key
+     * @return The entity or {@code empty}
+     */
+    public Optional<T> findEntity(final long id) {
+        return Optional.ofNullable(
+                getEm().find(getEntityClass(), id)
+        );
+    }
+
+    /**
+     * Merges an entity if present and returns the resulting value
+     * @param entity The optional to merge
+     * @return The merged entity or {@code empty}
+     */
+    protected Optional<T> mergeIfPresent(final Optional<T> entity) {
+        if (entity.isPresent()) {
+            final T e = getEm().merge(entity.get());
+            return Optional.of(e);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    protected <E extends Id>boolean deleteEntity(final E entity, Optional<? extends Account> acc,
+            final Role reqRole) {
+        return acc.filter(a -> null != entity && a.getRole() == reqRole)
+                .map(a -> {
+                    final E merged = getEm().merge(entity);
+                    getEm().remove(merged);
+                    return true;
+                }).orElse(false);
+    }
+
 }

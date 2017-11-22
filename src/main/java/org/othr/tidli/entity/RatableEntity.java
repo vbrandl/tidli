@@ -14,29 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.service;
+package org.othr.tidli.entity;
 
-import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
-import org.othr.tidli.entity.Account;
+import java.util.Collection;
 
 /**
  *
  * @author Brandl Valentin
  */
-@RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
+public interface RatableEntity {
 
-    private static final long serialVersionUID = 1161955593295568896L;
-    @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
+    Collection<Rating> getRatings();
+    void setRatings(final Collection<Rating> ratings);
+    boolean addRating(final Rating r);
+    default boolean isRatedByUser(final Account a) {
+        return this.getRatings().parallelStream().anyMatch(r -> r.getAccount().equals(a));
     }
-
-    @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
-    }
-
+    
 }

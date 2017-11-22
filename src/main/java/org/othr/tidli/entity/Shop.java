@@ -20,41 +20,49 @@ import java.util.Collection;
 import java.util.Collections;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.OneToOne;
+import org.othr.tidli.util.Role;
 
 /**
  *
  * @author Brandl Valentin
  */
 @Entity
-public class Shop extends Account {
-    
-    @Transient
-    private static final long serialVersionUID = 1837882861365109107L;
+//@NamedQueries({
+    //@NamedQuery(name = "isRatedByUser", query = "SELECT 1 FROM Shop s WHERE s.ratings.account = :user")
+//})
+public class Shop extends Account implements RatableEntity {
 
-    private Address address;
+    private static final long serialVersionUID = 1837882861365109107L;
+    private static final Role ROLE = Role.Shop;
+
+    @OneToOne
+//    @NotNull
     private OpeningTime openingTimes;
-    @OneToMany(mappedBy="owner")
+    @OneToMany
     private Collection<Offer> offers;
     private String description;
-    private boolean activated = false;
+    @OneToMany(targetEntity = Rating.class)
+    private Collection<Rating> ratings;
+    @OneToOne
+    private Contact contact;
 
-    public Shop(final String email, final String password, final String name,
-            final Address address, final OpeningTime openingTimes, final String description) {
-        super(email, password, name);
-        this.address = address;
+    public Shop(final String email, final String name, final String password,
+            final Address address, final String description) {
+        super(email, password, name, address);
+        this.description = description;
+        this.setActivated(false);
+    }
+
+    public Shop(final String name, final OpeningTime openingTimes,
+            final String description) {
         this.openingTimes = openingTimes;
         this.description = description;
+        this.setActivated(false);
     }
 
-    public Shop() {}
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(final Address address) {
-        this.address = address;
+    public Shop() {
+        this.setActivated(false);
     }
 
     public OpeningTime getOpeningTimes() {
@@ -81,12 +89,40 @@ public class Shop extends Account {
         this.description = description;
     }
 
-    public boolean isActivated() {
-        return activated;
+    @Override
+    public Role getRole() {
+        return ROLE;
     }
 
-    public void setActivated(final boolean activated) {
-        this.activated = activated;
+    @Override
+    public Collection<Rating> getRatings() {
+        return Collections.unmodifiableCollection(ratings);
     }
-    
+
+    @Override
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    @Override
+    public boolean addRating(Rating r) {
+        return this.ratings.add(r);
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public boolean addOffer(final Offer o) {
+        return this.offers.add(o);
+    }
+
+    public boolean hasOffer(final Offer o) {
+        return this.offers.contains(o);
+    }
+
 }

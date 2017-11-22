@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.othr.tidli.util.Role;
 
 /**
  *
@@ -56,7 +57,7 @@ public class AccountTest {
     public void testCheckPassword() {
         System.out.println("checkPassword");
         final String pw = "foo";
-        final Account instance = new User("foo", pw, "baz", null);
+        final Account instance = new Account("foo", pw, "bar", null);
         assertTrue(instance.checkPassword(pw));
         assertFalse(instance.checkPassword("baz"));
     }
@@ -69,7 +70,7 @@ public class AccountTest {
         System.out.println("changePassword");
         final String old = "bar";
         final String newPw = "baz";
-        final Account instance = new User("foo", old, "baz", null);
+        final Account instance = new Account("foo", old, "bar", null);
         assertFalse(instance.changePassword("foo", newPw));
         assertTrue(instance.checkPassword(old));
         assertTrue(instance.changePassword(old, newPw));

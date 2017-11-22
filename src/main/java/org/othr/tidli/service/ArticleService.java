@@ -17,26 +17,26 @@
 package org.othr.tidli.service;
 
 import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
-import org.othr.tidli.entity.Account;
+import org.othr.tidli.entity.Article;
 
 /**
  *
  * @author Brandl Valentin
  */
 @RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
+public class ArticleService extends AbstractService<Article> implements ArticleServiceIF {
 
-    private static final long serialVersionUID = 1161955593295568896L;
+    private static final long serialVersionUID = 7206970196829319624L;
+    
     @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
+    protected Class<Article> getEntityClass() {
+        return Article.class;
     }
 
     @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
+    public Article createArticle(final Article article) {
+        getEm().persist(article);
+        return article;
     }
 
 }

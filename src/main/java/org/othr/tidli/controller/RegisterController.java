@@ -14,29 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.service;
+package org.othr.tidli.controller;
 
-import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
-import org.othr.tidli.entity.Account;
+import java.util.Optional;
+import org.othr.tidli.entity.Id;
+import org.othr.tidli.service.RegisterService;
 
 /**
  *
  * @author Brandl Valentin
+ * @param <T>
  */
-@RequestScoped
-@WebService
-public class UserService extends RegisterService<Account> implements UserServiceIF {
-
-    private static final long serialVersionUID = 1161955593295568896L;
-    @Override
-    protected Class<Account> getEntityClass() {
-        return Account.class;
+public abstract class RegisterController<T extends Id> {
+    protected abstract RegisterService<T> getService();
+    protected abstract Optional<T> createEntity();
+    public void register() {
+        final Optional<T> entOpt = createEntity();
+        if (entOpt.isPresent()) {
+            final T entity = entOpt.get();
+            getService().register(entity);
+        }
     }
-
-    @Override
-    protected boolean validateEntity(final Account entity) {
-        return true;
-    }
-
 }

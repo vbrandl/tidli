@@ -16,8 +16,12 @@
  */
 package org.othr.tidli.service;
 
+import java.util.Collection;
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
+import org.othr.tidli.entity.Address;
+import org.othr.tidli.entity.OpeningDay;
+import org.othr.tidli.entity.OpeningTime;
 import org.othr.tidli.entity.Shop;
 
 /**
@@ -25,24 +29,41 @@ import org.othr.tidli.entity.Shop;
  * @author Brandl Valentin
  */
 @RequestScoped
-public class ShopService extends AbstractService {
+public class ShopService extends RegisterService<Shop> implements ShopServiceIF {
 
-    @Transactional
-    public Shop registerShop(final Shop s) {
-        s.setActivated(false);
-        getEm().persist(s);
-        return s;
+    private static final long serialVersionUID = -4857663652344397423L;
+
+    @Override
+    protected Class<Shop> getEntityClass() {
+        return Shop.class;
     }
 
     @Transactional
-    public Shop activateShop(final Shop s) {
-        s.setActivated(true);
-        getEm().persist(s);
-        return s;
+    @Override
+    public Shop activateShop(final Shop shop) {
+        shop.setActivated(true);
+        getEm().persist(shop);
+        return shop;
     }
 
-    public Shop findShop(final long id) {
-        return getEm().find(Shop.class, id);
+    @Transactional
+    @Override
+    public void deleteShop(final Shop shop) {
+        final OpeningTime ot = shop.getOpeningTimes();
+        final Collection<OpeningDay> od = ot.getDays();
+        od.forEach(d -> getEm().remove(d));
+        getEm().remove(ot);
+        getEm().remove(shop);
     }
 
+    @Override
+    protected boolean validateEntity(final Shop entity) {
+        final Address a = entity.getAddress();
+        return null != a
+                && null != a.getCity()
+                && null != a.getNumber()
+                && null != a.getStreet()
+                && null != a.getZipCode();
+    }
+    
 }

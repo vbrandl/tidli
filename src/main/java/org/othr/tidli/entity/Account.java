@@ -17,31 +17,52 @@
 package org.othr.tidli.entity;
 
 import com.lambdaworks.crypto.SCryptUtil;
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import org.othr.tidli.util.Role;
 import org.othr.tidli.util.Static;
 
 /**
  *
  * @author Brandl Valentin
  */
-@MappedSuperclass
-public abstract class Account extends Id implements Serializable {
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email")
+})
+public class Account extends Id {
 
-    @Transient
     private static final long serialVersionUID = -1876443309866494657L;
+    private static final Role ROLE = Role.User;
+    public static Account createUser(final String email, final String name,
+            final Address address, final String password) {
+        return new Account(
+                email, password, name, address
+        );
+    }
 
+    @NotNull
+    @Column(unique = true)
     private String email;
+    @NotNull
     private String password;
+    @NotNull
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date creationTime = new Date();
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
+    private Address address;
+    @NotNull
+    private boolean activated = true;
+
 
     /**
      * Superconstructor for all account entities.
@@ -49,14 +70,33 @@ public abstract class Account extends Id implements Serializable {
      * @param email
      * @param password
      * @param name
+     * @param address
      */
-    public Account(final String email, final String password, final String name) {
+    public Account(final String email, final String password, final String name,
+            final Address address) {
         super();
         this.email = email;
         this.password = SCryptUtil.scrypt(password, Static.SCRYPT_CPU_COST, Static.SCRYPT_MEM_COST, Static.SCRYPT_PARALLELIZATION);
+        this.name = name;
+        this.address = address;
+    }
+    public Account() {}
+    public final boolean isActivated() {
+        return activated;
     }
 
-    public Account() {}
+    public final void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
 
     public String getEmail() {
         return email;
@@ -71,7 +111,8 @@ public abstract class Account extends Id implements Serializable {
     }
 
     public void setPassword(final String password) {
-        this.password = password;
+//        this.password = password;
+        throw new UnsupportedOperationException("Password should not be set directly");
     }
 
     public String getName() {
@@ -113,6 +154,10 @@ public abstract class Account extends Id implements Serializable {
 
     public boolean checkPassword(final String pw) {
         return SCryptUtil.check(pw, this.password);
+    }
+
+    public Role getRole() {
+        return ROLE;
     }
 
 }

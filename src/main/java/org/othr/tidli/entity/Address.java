@@ -30,15 +30,13 @@ public class Address implements Serializable {
     @Transient
     private static final long serialVersionUID = -5335746519732869566L;
 
-    private String country;
-    private int zipCode;
+    private Integer zipCode;
     private String city;
     private String street;
     private String number;
 
-    public Address(final String country, final int zipCode, final String city,
+    public Address(final Integer zipCode, final String city,
             final String street, final String number) {
-        this.country = country;
         this.zipCode = zipCode;
         this.city = city;
         this.street = street;
@@ -47,19 +45,11 @@ public class Address implements Serializable {
 
     public Address() {}
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public int getZipCode() {
+    public Integer getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(final Integer zipCode) {
         this.zipCode = zipCode;
     }
 

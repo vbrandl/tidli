@@ -14,41 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.entity;
+package org.othr.tidli.service;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import java.util.Optional;
+import org.othr.tidli.entity.Account;
 
 /**
  *
  * @author Brandl Valentin
  */
-@Entity
-@Table(name = "Users")
-public class User extends Account {
-    
-    @Transient
-    private static final long serialVersionUID = -368811577625307277L;
+public interface UserServiceIF {
 
-    private Address address;
-
-    public User(final String email, final String password, final String name, final Address address) {
-        super(email, password, name);
-        this.address = address;
-    }
-
-    public User() {
-        super();
-        this.address = new Address();
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
+    Optional<Account> register(final Account entity);
     
 }

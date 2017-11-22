@@ -69,7 +69,7 @@ digraph G {
 	Shop -> DeleteOffer;
 	Shop -> OpenTicket;
 
-	edge [ arrowhead="vee" label="<<extends>>" style="dashed" ];
+	edge [ dir=back arrowtail="vee" label="<<extends>>" style="dashed" ];
 
 	ActivateShop -> Login;
 	AnswerTicket -> Login;

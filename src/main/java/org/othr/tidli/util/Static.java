@@ -24,4 +24,9 @@ public final class Static {
     public static final int SCRYPT_CPU_COST = 16384;
     public static final int SCRYPT_MEM_COST = 8;
     public static final int SCRYPT_PARALLELIZATION = 1;
+
+    /**
+     * Hide ctor.
+     */
+    private Static() { }
 }

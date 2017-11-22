@@ -16,9 +16,13 @@
  */
 package org.othr.tidli.entity;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -28,35 +32,30 @@ import javax.persistence.Transient;
  * @author Brandl Valentin
  */
 @Entity
-public class Offer extends Article {
+public class Offer extends Id implements RatableEntity {
     
     @Transient
     private static final long serialVersionUID = -3282709858909762202L;
 
     @ManyToOne
-    private Shop owner;
+    private Article article;
+    //@ManyToOne
+    //private Shop owner;
     private int amount;
     private int price;
     @Temporal(TemporalType.DATE)
+    @Column(name = "offer_date")
     private Date day = new Date();
+    @OneToMany(targetEntity = Rating.class)
+    private Collection<Rating> ratings;
 
-    public Offer(final String name, final String description, final byte[] image,
-            final Shop owner, final int amount, final int price) {
-        super(name, description, image);
-        this.owner = owner;
+    public Offer(final Article art, final int amount, final int price) {
+        this.article = art;
         this.amount = amount;
         this.price = price;
     }
 
     public Offer() {}
-
-    public Shop getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final Shop owner) {
-        this.owner = owner;
-    }
 
     public int getAmount() {
         return amount;
@@ -64,6 +63,10 @@ public class Offer extends Article {
 
     public void setAmount(final int amount) {
         this.amount = amount;
+    }
+
+    public void decrementAmount(final int n) {
+        this.amount -= n;
     }
 
     public int getPrice() {
@@ -80,6 +83,29 @@ public class Offer extends Article {
 
     public void setDay(final Date day) {
         this.day = (Date)day.clone();
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    @Override
+    public Collection<Rating> getRatings() {
+        return Collections.unmodifiableCollection(ratings);
+    }
+
+    @Override
+    public void setRatings(Collection<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    @Override
+    public boolean addRating(Rating r) {
+        return this.ratings.add(r);
     }
     
 }

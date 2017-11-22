@@ -19,7 +19,6 @@ package org.othr.tidli.entity;
 import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 
 /**
  *
@@ -28,7 +27,6 @@ import javax.persistence.Transient;
 @MappedSuperclass
 public abstract class Id implements Serializable {
     
-    @Transient
     private static final long serialVersionUID = 1826889089474198772L;
 
     @javax.persistence.Id
@@ -43,10 +41,6 @@ public abstract class Id implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     @Override
@@ -68,10 +62,7 @@ public abstract class Id implements Serializable {
             return false;
         }
         final Id other = (Id) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
+        return this.id == other.id;
     }
     
 }
