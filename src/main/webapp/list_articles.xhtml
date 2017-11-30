@@ -3,24 +3,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/layout.xhtml" rendered="#{userDetailController.loggedIn}">
+        <ui:composition template="template/layout.xhtml" rendered="#{listArticlesController.shopRole}">
             <ui:define name="content">
                 <b:form>
-                    <b:panelGrid columns="1">
-                        <b:inputText id="mail" label="E-Mail" value="#{userDetailController.unwrapedUser.email}" />
+                    <b:dataTable value="#{listArticlesController.articles}" id="artTable" var="art" selectionMode="single" select="true">
+                        <b:dataTableColumn label="Name">
+                            <b:label text="#{art.name}" />
+                        </b:dataTableColumn>
                         
-                        <b:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
+                        <b:dataTableColumn label="Beschreibung">
+                            <b:label text="#{art.description}" />
+                        </b:dataTableColumn>
                         
-                        <b:inputSecret id="pw_old" label="Aktuelles Passwort" value="#{userDetailController.pwOld}" />
-                            
-                        <b:inputSecret id="pw1" label="Neues Passwort" value="#{userDetailController.pw1}" />
-                            
-                        <b:inputSecret id="pw2" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" />
-                            
-                        <b:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
-                    </b:panelGrid>
+                        <b:dataTableColumn label="Bild">
+                            <b:image value="#{images.image}">
+                                <f:param name="id" value="#{art.id}" />
+                            </b:image>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn>
+                            <b:commandButton value="Löschen" icon="trash" ajax="true" update="artTable" actionListener="#{listArticlesController.deleteArticle(art)}" />
+                        </b:dataTableColumn>
+                    </b:dataTable>
                 </b:form>
             </ui:define>
         </ui:composition>

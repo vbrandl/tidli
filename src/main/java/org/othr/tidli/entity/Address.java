@@ -76,5 +76,11 @@ public class Address implements Serializable {
     public void setNumber(String number) {
         this.number = number;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s\n%d %s", this.street,
+                this.number, this.zipCode, this.city);
+    }
     
 }

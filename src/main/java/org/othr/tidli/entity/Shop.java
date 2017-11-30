@@ -19,6 +19,8 @@ package org.othr.tidli.entity;
 import java.util.Collection;
 import java.util.Collections;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import org.othr.tidli.util.Role;
@@ -28,9 +30,9 @@ import org.othr.tidli.util.Role;
  * @author Brandl Valentin
  */
 @Entity
-//@NamedQueries({
-    //@NamedQuery(name = "isRatedByUser", query = "SELECT 1 FROM Shop s WHERE s.ratings.account = :user")
-//})
+@NamedQueries({
+    @NamedQuery(name = "Shop.findAll", query = "SELECT s FROM Shop s")
+})
 public class Shop extends Account implements RatableEntity {
 
     private static final long serialVersionUID = 1837882861365109107L;
@@ -41,6 +43,8 @@ public class Shop extends Account implements RatableEntity {
     private OpeningTime openingTimes;
     @OneToMany
     private Collection<Offer> offers;
+    @OneToMany
+    private Collection<Article> articles;
     private String description;
     @OneToMany(targetEntity = Rating.class)
     private Collection<Rating> ratings;
@@ -117,12 +121,28 @@ public class Shop extends Account implements RatableEntity {
         this.contact = contact;
     }
 
+    public Collection<Article> getArticles() {
+        return Collections.unmodifiableCollection(articles);
+    }
+
+    public void setArticles(Collection<Article> articles) {
+        this.articles = articles;
+    }
+
     public boolean addOffer(final Offer o) {
         return this.offers.add(o);
     }
 
     public boolean hasOffer(final Offer o) {
         return this.offers.contains(o);
+    }
+
+    public boolean addArticle(final Article art) {
+        return this.articles.add(art);
+    }
+
+    public boolean hasArticle(final Article art) {
+        return this.articles.contains(art);
     }
 
 }

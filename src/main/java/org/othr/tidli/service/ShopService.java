@@ -65,5 +65,18 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
                 && null != a.getStreet()
                 && null != a.getZipCode();
     }
+
+    @Override
+    public Collection<Shop> getAllShops() {
+        return getEm().createNamedQuery("Shop.findAll", Shop.class).getResultList();
+    }
+
+    @Transactional
+    @Override
+    public Shop toogleActivationState(final Shop shp) {
+        final Shop merged = getEm().merge(shp);
+        merged.setActivated(!merged.isActivated());
+        return merged;
+    }
     
 }

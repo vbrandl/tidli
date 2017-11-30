@@ -16,6 +16,7 @@
  */
 package org.othr.tidli.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
@@ -45,7 +46,7 @@ public interface OfferServiceIF {
      * @param s
      * @return The new amount or empty
      */
-    Optional<Integer> decrementOffer(final Offer offer, final int n, final Optional<Shop> s);
+    Optional<Offer> decrementOffer(final Offer offer, final int n, final Optional<Shop> s);
 
     /**
      * Deletes an offer if it is owned by the given shop.
@@ -54,5 +55,12 @@ public interface OfferServiceIF {
      * @return 
      */
     boolean deleteOffer(final Offer off, final Optional<Shop> shp);
+
+    /**
+     * Finds all offers for a given article
+     * @param art the article
+     * @return a list of offers
+     */
+    List<Offer> findForArticle(final Article art);
     
 }

@@ -49,6 +49,18 @@ public abstract class AbstractController {
         return getUser().filter(a -> a.getRole() == r).isPresent();
     }
 
+    public boolean isUserRole() {
+        return isRole(Role.User);
+    }
+
+    public boolean isShopRole() {
+        return isRole(Role.Shop);
+    }
+
+    public boolean isAdminRole() {
+        return isRole(Role.Administrator);
+    }
+
     public boolean isLoggedIn() {
         return ls.getAccount().isPresent();
     }

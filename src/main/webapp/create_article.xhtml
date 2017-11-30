@@ -3,23 +3,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/layout.xhtml" rendered="#{userDetailController.loggedIn}">
+        <ui:composition template="template/layout.xhtml" rendered="#{createArticleController.shopRole}">
             <ui:define name="content">
                 <b:form>
                     <b:panelGrid columns="1">
-                        <b:inputText id="mail" label="E-Mail" value="#{userDetailController.unwrapedUser.email}" />
+                        <b:inputText id="name" label="Name" value="#{createArticleController.name}" required="true" />
+
+                        <b:inputTextarea id="desc" label="Beschreibung" value="#{createArticleController.description}" required="true" />
+
+                        <p:fileUpload id="dl" label="Bild" fileUploadListener="#{createArticleController.fileUpload}" required="true" auto="true" />
                         
-                        <b:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
-                        
-                        <b:inputSecret id="pw_old" label="Aktuelles Passwort" value="#{userDetailController.pwOld}" />
-                            
-                        <b:inputSecret id="pw1" label="Neues Passwort" value="#{userDetailController.pw1}" />
-                            
-                        <b:inputSecret id="pw2" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" />
-                            
-                        <b:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
+                        <b:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
                     </b:panelGrid>
                 </b:form>
             </ui:define>

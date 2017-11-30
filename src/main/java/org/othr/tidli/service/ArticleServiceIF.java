@@ -17,6 +17,7 @@
 package org.othr.tidli.service;
 
 import org.othr.tidli.entity.Article;
+import org.othr.tidli.entity.Shop;
 
 /**
  *
@@ -24,6 +25,8 @@ import org.othr.tidli.entity.Article;
  */
 public interface ArticleServiceIF {
 
-    Article createArticle(final Article art);
+    Article createArticle(final Article art, final Shop shp);
+    byte[] getImageForId(final long id);
+    void deleteArticle(final Article art);
     
 }

@@ -17,19 +17,18 @@
 package org.othr.tidli.service;
 
 import java.util.Collection;
-import java.util.Optional;
+import org.othr.tidli.entity.Article;
+import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
 
 /**
  *
  * @author Brandl Valentin
  */
-public interface ShopServiceIF {
+public interface PubOfferServiceIF {
 
-    Shop activateShop(final Shop shop);
-    void deleteShop(final Shop shop);
-    Optional<Shop> register(final Shop entity);
-    Collection<Shop> getAllShops();
-    Shop toogleActivationState(final Shop shp);
-    
+    boolean createOffer(final Shop s, final Article art, final Offer off);
+    boolean createArticle(final Shop s, final Article art);
+    Collection<Article> listArticles(final Shop s);
+
 }

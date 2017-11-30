@@ -17,8 +17,10 @@
 
 package org.othr.tidli.service;
 
+import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
@@ -43,7 +45,7 @@ public class OfferService extends AbstractService<Offer> implements OfferService
 
     @Transactional
     @Override
-    public Optional<Integer> decrementOffer(final Offer offer, final int n, final Optional<Shop> shop) {
+    public Optional<Offer> decrementOffer(final Offer offer, final int n, final Optional<Shop> shop) {
         //return shop
                 //.map(s -> getEm().merge(s))
                 //.filter(s -> s.hasOffer(offer))
@@ -61,7 +63,7 @@ public class OfferService extends AbstractService<Offer> implements OfferService
                     of.decrementAmount(n);
                     return Optional.of(of);
                 }) // decrement offer-> amount by n
-                .flatMap(of -> mergeIfPresent(of).map(Offer::getAmount)); // merge offer and return the content
+                .flatMap(of -> mergeIfPresent(of)); // merge offer and return the content
 
                 //.flatMap(of -> {
                     //return Optional.of(1);
@@ -83,6 +85,13 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     public boolean deleteOffer(Offer off, Optional<Shop> shp) {
         final Optional<Shop> opt = shp.filter(s -> s.getOffers().contains(off));
         return deleteEntity(off, opt, Role.Shop);
+    }
+
+    @Override
+    public List<Offer> findForArticle(final Article art) {
+        final TypedQuery<Offer> query = getEm().createNamedQuery("Offer.findForArticle", Offer.class);
+        query.setParameter("article", art);
+        return query.getResultList();
     }
     
 }

@@ -16,20 +16,14 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Collection;
-import java.util.Optional;
-import org.othr.tidli.entity.Shop;
+import org.othr.tidli.entity.Account;
 
 /**
  *
  * @author Brandl Valentin
  */
-public interface ShopServiceIF {
+public interface PubUserServiceIF {
 
-    Shop activateShop(final Shop shop);
-    void deleteShop(final Shop shop);
-    Optional<Shop> register(final Shop entity);
-    Collection<Shop> getAllShops();
-    Shop toogleActivationState(final Shop shp);
+    Account getUser(final long id);
     
 }

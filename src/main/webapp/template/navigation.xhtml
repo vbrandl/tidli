@@ -13,7 +13,10 @@
                         <b:navLink outcome="/index" value="Home" icon-awesome="home" />
                         <b:navLink outcome="/register_shop" value="Register Shop" rendered="#{not navigationController.loggedIn}" />
                         <b:navLink outcome="/register_user" value="Register User" rendered="#{not navigationController.loggedIn}" />
-                        <b:navLink outcome="/user_detail" value="Account details" rendered="#{navigationController.loggedIn}" />
+                        <b:navLink outcome="/user_detail" value="Account details" rendered="#{navigationController.userRole}" />
+                        <b:navLink outcome="/create_article" value="Artikel anlegen" rendered="#{navigationController.shopRole}" />
+                        <b:navLink outcome="/list_articles" value="Artikel ansehen" rendered="#{navigationController.shopRole}" />
+                        <b:navLink outcome="/admin/shop_admin" value="Shops administrieren" rendered="#{navigationController.adminRole}" />
                     </b:navbarLinks>
                     <b:navbarLinks styleClass="navbar-right">
                         <b:navLink outcome="/login" value="Login" rendered="#{not navigationController.loggedIn}" />

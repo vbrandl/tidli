@@ -5,22 +5,31 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
-        <ui:composition template="template/layout.xhtml" rendered="#{userDetailController.loggedIn}">
+        <ui:composition template="/template/layout.xhtml" rendered="#{adminShopController.adminRole}">
             <ui:define name="content">
                 <b:form>
-                    <b:panelGrid columns="1">
-                        <b:inputText id="mail" label="E-Mail" value="#{userDetailController.unwrapedUser.email}" />
+                    <b:remoteCommand update="shpTable" name="updateTable" />
+                    <b:dataTable value="#{adminShopController.shops}" id="shpTable" var="shp">
+                        <b:dataTableColumn label="Name" value="#{shp.name}">
+                        </b:dataTableColumn>
                         
-                        <b:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
+                        <b:dataTableColumn label="Beschreibung" value="#{shp.description}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Adresse" value="#{shp.address.toString()}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Aktiviert" value="#{shp.activated}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Status ändern">
+                            <b:commandButton value="Aktivieren/Deaktivieren" icon="edit" ajax="true" actionListener="#{adminShopController.toogleActivationState(shp)}" update="shpTable" oncomplete="updateTable();" />
+                        </b:dataTableColumn>
                         
-                        <b:inputSecret id="pw_old" label="Aktuelles Passwort" value="#{userDetailController.pwOld}" />
-                            
-                        <b:inputSecret id="pw1" label="Neues Passwort" value="#{userDetailController.pw1}" />
-                            
-                        <b:inputSecret id="pw2" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" />
-                            
-                        <b:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
-                    </b:panelGrid>
+                        <b:dataTableColumn label="Löschen">
+                            <b:commandButton value="Löschen" icon="trash" ajax="true" actionListener="#{adminShopController.deleteShop(shp)}" update="shpTable" oncomplete="updateTable();" />
+                        </b:dataTableColumn>
+                    </b:dataTable>
                 </b:form>
             </ui:define>
         </ui:composition>
