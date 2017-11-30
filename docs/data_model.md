@@ -11,6 +11,6 @@ lof: true
 
 # Tidli - Take it, don't leave it
 
-## Data Modell
+## Data Model
 
-![Data Modell](./tidli.png)
+![Data Model](./data_model.png)
