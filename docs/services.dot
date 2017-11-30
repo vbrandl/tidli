@@ -1,0 +1,106 @@
+digraph G {
+	graph [ splines=ortho ]
+	fontname = "Inconsolata"
+	fontsize = 8
+
+	node [
+		fontname = "Inconsolata"
+		fontsize = 8
+		shape = "record"
+	]
+
+	edge [
+		fontname = "Inconsolata"
+		fontsize = 8
+	]
+
+	AdminServiceIF [
+		label = "{AdminServiceIF|
+			activateShop(Shop, Optional\<Administrator\>): boolean\l
+			deleteAccount(Account, Optional\<Administrator\>): boolean\l
+			deleteOffer(Offer, Optional\<Administrator\>): boolean\l
+			}"
+	]
+
+AdminServiceIF -> ArticleServiceIF [ style=invis ]
+
+	ArticleServiceIF [
+		label = "{ArticleServiceIF|
+			createArticle(Article, Shop): Article\l
+			getImageForId(long): byte[]\l
+			deleteArticle(Article): void\l
+			}"
+	]
+
+LoginServiceIF -> ArticleServiceIF [ style=invis ]
+
+	LoginServiceIF [
+		label = "{LoginServiceIF|
+			login(String, String): boolean\l
+			logout(): void\l
+			isLoggedIn(): boolean\l
+			getAccount(): Optional\<Account\>\l
+			getShop(): Optional\<Shop\>\l
+			getAdmin(): Optional\<Administrator\>\l
+			getRole(): Optional\<Role\>\l
+			}"
+	]
+
+LoginServiceIF -> OfferServiceIF [ style=invis ]
+
+	OfferServiceIF [
+		label = "{OfferServiceIF|
+			createOffer(Article, price: int, amount: int, Shop): Offer\l
+			decrementOffer(Offer, int, Optional\<Shop\>): Optional\<Offer\>\l
+			deleteOffer(Offer, Optional\<Shop\>): boolean\l
+			findForArticle(Article): List\<Offer\>\l
+			}"
+	]
+
+PubOfferServiceIF -> OfferServiceIF [ style=invis ]
+
+	PubOfferServiceIF [
+		label = "{PubOfferServiceIF|
+			createOffer(Shop, Article, Offer): boolean\l
+			createArticle(Shop, Article): boolean\l
+			listArticles(Shop): Collection\<Article\>\l
+			}"
+	]
+
+PubOfferServiceIF -> RatingServiceIF [ style=invis ]
+
+	PubUserServiceIF [
+		label = "{PubUserServiceIF|
+			getUser(long): Account\l
+			}"
+	]
+
+PubOfferServiceIF -> PubUserServiceIF [ style=invis ]
+
+	RatingServiceIF [
+		label = "{RatingServiceIF|
+			rateArticle(Article, int, Optional\<Account\>): void\l
+			rateShop(Shop, int, Optional\<Account\>): void\l
+			}"
+	]
+
+RatingServiceIF -> ShopServiceIF [ style=invis ]
+
+	ShopServiceIF [
+		label = "{ShopServiceIF|
+			activateShop(Shop): Shop\l
+			deleteShop(Shop): void\l
+			register(Shop): Optional\<Shop\>\l
+			getAllShops(): Collection\<Shop\>\l
+			toogleActivationState(Shop): Shop\l
+			}"
+	]
+
+	UserServiceIF [
+		label = "{UserServiceIF|
+			register(Account): Optional\<Account\>\l
+			updateUser(Account): Account\l
+			}"
+	]
+
+}

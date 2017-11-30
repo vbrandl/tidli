@@ -29,7 +29,6 @@ digraph G {
 		OpeningTime -> Id
 		OpeningDay -> Id
 		Rating -> Id
-		Contact -> Id
 	}
 
 	Account [
@@ -42,14 +41,6 @@ digraph G {
 			+ last_updated: Date\l
 			@OneToOne\l
 			+ address: Address\l
-		}"
-	]
-
-	Contact [
-		label = "{
-			Contact|
-			+ tel_no: String\l
-			+ email: String\l
 		}"
 	]
 
@@ -70,8 +61,6 @@ digraph G {
 			+ activated: bool\l
 			@OneToMany\l
 			+ ratings: Collection\<Rating\>\l
-			@OneToOne\l
-			+ contact: Contact\l
 			}"
 	]
 
@@ -118,8 +107,7 @@ digraph G {
 	]
 
 	Article [
-		label = "{\<\<Interface\>\>\n
-			Article|
+		label = "{Article|
 			+ name: String\l
 			+ description: String\l
 			+ image: byte[]\l
@@ -162,7 +150,6 @@ digraph G {
 		edge [ arrowhead=vee taillabel="1" headlabel="1   " ]
 		Shop -> OpeningTime
 		Account -> Address
-		Shop -> Contact
 	}
 	{
 		edge [ dir=none taillabel="* " headlabel = "*"]

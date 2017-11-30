@@ -28,8 +28,7 @@ digraph G {
 	];
 
 	ActivateShop [ label = "Activate shop" ];
-	AnswerTicket [ label = "Answer support ticket" ];
-	CloseTicket [ label = "Close support ticket" ];
+	CreateArticle [ label = "Create article" ];
 	CreateOffer [ label = "Create offer" ];
 	CreateOpeningTimes [ label = "Create opening times" ];
 	DecrementAvailable [ label = "Decrement available products" ];
@@ -37,7 +36,7 @@ digraph G {
 	DeleteOffer [ label = "Delete offer" ];
 	Login [ label = "Logged in" ]
 	OpenTicket [ label = "Open support ticket" ];
-	RateOffer [ label = "Rate offer" ];
+	RateProduct [ label = "Rate product" ];
 	RateShop [ label = "Rate shop" ];
 	Register [ label = "Register account" ];
 	Search [ label = "Search offer" ];
@@ -46,22 +45,17 @@ digraph G {
 		arrowhead="none"
 	];
 
-	User -> AnswerTicket;
-	User -> CloseTicket;
 	User -> OpenTicket;
-	User -> RateOffer;
+	User -> RateProduct;
 	User -> RateShop;
 	User -> Register;
 	User -> Search;
 
 	Administrator -> ActivateShop;
-	Administrator -> AnswerTicket;
-	Administrator -> CloseTicket;
 	Administrator -> DeleteAccount;
 	Administrator -> DeleteOffer;
 
-	Shop -> AnswerTicket;
-	Shop -> CloseTicket;
+	Shop -> CreateArticle;
 	Shop -> CreateOffer;
 	Shop -> CreateOpeningTimes;
 	Shop -> Register;
@@ -69,18 +63,17 @@ digraph G {
 	Shop -> DeleteOffer;
 	Shop -> OpenTicket;
 
-	edge [ dir=back arrowtail="vee" label="<<extends>>" style="dashed" ];
+	edge [ arrowhead="vee" label="<<extends>>" style="dashed" ];
 
 	ActivateShop -> Login;
-	AnswerTicket -> Login;
-	CloseTicket -> Login;
+	CreateArticle -> Login;
 	CreateOffer -> Login;
 	CreateOpeningTimes -> Login;
 	DecrementAvailable -> Login;
 	DeleteAccount -> Login;
 	DeleteOffer -> Login;
 	OpenTicket -> Login;
-	RateOffer -> Login;
+	RateProduct -> Login;
 	RateShop -> Login;
 
 }
