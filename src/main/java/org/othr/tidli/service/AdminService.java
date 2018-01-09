@@ -20,7 +20,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
-import org.othr.tidli.entity.Id;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
 import org.othr.tidli.util.Role;
@@ -40,10 +39,10 @@ public class AdminService extends AbstractService<Administrator> implements Admi
 
     @Transactional
     @Override
-    public boolean activateShop(Shop s, Optional<Administrator> adm) {
+    public boolean activateShop(final Shop s, final Optional<Administrator> adm) {
         return adm.filter(
-                a -> null != s && s.isActivated()
-        ).map(a -> {
+                _unused -> null != s && s.isActivated()
+        ).map(_unused -> {
             final Shop merged = getEm().merge(s);
             merged.setActivated(true);
             getEm().persist(merged);
@@ -53,12 +52,12 @@ public class AdminService extends AbstractService<Administrator> implements Admi
 
     @Transactional
     @Override
-    public boolean deleteAccount(Account acc, Optional<Administrator> adm) {
+    public boolean deleteAccount(final Account acc, final Optional<Administrator> adm) {
         return deleteEntity(acc, adm, Role.Administrator);
     }
 
     @Override
-    public boolean deleteOffer(Offer off, Optional<Administrator> adm) {
+    public boolean deleteOffer(final Offer off, final Optional<Administrator> adm) {
         return deleteEntity(off, adm, Role.Administrator);
     }
     

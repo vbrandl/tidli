@@ -35,7 +35,9 @@ import javax.persistence.Transient;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Offer.findForArticle", query = "SELECT o FROM Offer o WHERE o.article = :article")
+    @NamedQuery(name = "Offer.findForArticle", query = "SELECT o FROM Offer o WHERE o.article = :article"),
+    @NamedQuery(name = "Offer.findForQuery", query = "SELECT o FROM Offer o WHERE LOWER(o.article.description) LIKE LOWER('%:query%') OR LOWER(o.article.name) LIKE LOWER('%:query%')"),
+    @NamedQuery(name = "Offer.findForLocation", query = "SELECT o FROM Offer o, Shop s WHERE s.offers = o AND LOWER(s.address.city) = LOWER(:city) OR s.address.zipCode = :zipCode")
 })
 public class Offer extends Id implements RatableEntity {
     

@@ -37,7 +37,7 @@ public abstract class AbstractService<T extends Id> implements Serializable {
     protected static<T> Optional<T> singleResultToOptional(final TypedQuery<T> query) {
         try {
             return Optional.of(query.getSingleResult());
-        } catch (NoResultException nre) {
+        } catch (NoResultException _unused) {
             return Optional.empty();
         }
     }
@@ -78,7 +78,7 @@ public abstract class AbstractService<T extends Id> implements Serializable {
     protected <E extends Id>boolean deleteEntity(final E entity, Optional<? extends Account> acc,
             final Role reqRole) {
         return acc.filter(a -> null != entity && a.getRole() == reqRole)
-                .map(a -> {
+                .map(_unused -> {
                     final E merged = getEm().merge(entity);
                     getEm().remove(merged);
                     return true;

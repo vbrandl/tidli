@@ -17,11 +17,13 @@
 
 package org.othr.tidli.service;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
@@ -46,33 +48,16 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Transactional
     @Override
     public Optional<Offer> decrementOffer(final Offer offer, final int n, final Optional<Shop> shop) {
-        //return shop
-                //.map(s -> getEm().merge(s))
-                //.filter(s -> s.hasOffer(offer))
-                //.flatMap(a -> findEntity(offer.getId()))
-                //.filter(of -> of.getAmount() >= n)
-                //.map(of -> {of.decrementAmount(n); return of;})
-                //.map()
-
         return shop
                 .map(s -> getEm().merge(s)) // merge shop into persistence context
                 .filter(s -> n > 0 && s.hasOffer(offer))  // check if n is positive and of offer is owned by shop
-                .map(s -> getEm().merge(offer)) // merge offer into persistence context
+                .map(_unused -> getEm().merge(offer)) // merge offer into persistence context
                 .filter(of -> of.getAmount() >= n) // check if offer is at least n times available
                 .map(of -> {
                     of.decrementAmount(n);
                     return Optional.of(of);
                 }) // decrement offer-> amount by n
                 .flatMap(of -> mergeIfPresent(of)); // merge offer and return the content
-
-                //.flatMap(of -> {
-                    //return Optional.of(1);
-                //});
-                //.flatMap(s -> {
-                    //final Optional<Offer> o = findEntity(offer.getId());
-                    //o.filter(of -> of.getAmount() >= n).ifPresent(of -> of.decrementAmount(n));
-                    //return mergeIfPresent(o).map(Offer::getAmount);
-                //});
     }
 
     @Override
@@ -82,16 +67,36 @@ public class OfferService extends AbstractService<Offer> implements OfferService
 
     @Transactional
     @Override
-    public boolean deleteOffer(Offer off, Optional<Shop> shp) {
+    public boolean deleteOffer(final Offer off, final Optional<Shop> shp) {
         final Optional<Shop> opt = shp.filter(s -> s.getOffers().contains(off));
         return deleteEntity(off, opt, Role.Shop);
     }
 
     @Override
-    public List<Offer> findForArticle(final Article art) {
+    public Collection<Offer> findForArticle(final Article art) {
         final TypedQuery<Offer> query = getEm().createNamedQuery("Offer.findForArticle", Offer.class);
         query.setParameter("article", art);
         return query.getResultList();
+    }
+
+    @Override
+    public Collection<Offer> findForQuery(final String query) {
+        final TypedQuery<Offer> typedQuery = getEm().createNamedQuery("Offer.findForQuery", Offer.class);
+        typedQuery.setParameter("query", query);
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public Collection<Offer> findForLocation(final Optional<? extends Account> acc) {
+        return acc
+                .filter(a -> a.getAddress() != null)
+                .map(a -> {
+                    final TypedQuery<Offer> query = getEm().createNamedQuery("Offer.findForLocation", Offer.class);
+                    query.setParameter("city", a.getAddress().getCity());
+                    query.setParameter("zipCode", a.getAddress().getZipCode());
+                    return query.getResultList();
+                }).orElse(Collections.emptyList());
+
     }
     
 }

@@ -16,12 +16,14 @@
  */
 package org.othr.tidli.service;
 
+import javax.jws.WebService;
 import org.othr.tidli.entity.Account;
 
 /**
  *
  * @author Brandl Valentin
  */
+@WebService
 public interface PubUserServiceIF {
 
     Account getUser(final long id);

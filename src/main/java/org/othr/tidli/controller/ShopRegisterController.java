@@ -39,6 +39,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     private ShopServiceIF srs;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected RegisterService<Shop> getService() {
         return (RegisterService<Shop>)srs;
     }

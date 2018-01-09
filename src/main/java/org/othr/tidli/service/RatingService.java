@@ -37,19 +37,19 @@ public class RatingService extends AbstractService<Rating> implements RatingServ
 
     @Transactional
     @Override
-    public void rateOffer(Offer offer, int score, final Optional<Account> acc) {
+    public void rateOffer(final Offer offer, final int score, final Optional<Account> acc) {
         rate(offer, score, acc);
     }
 
     @Transactional
     @Override
-    public void rateShop(Shop shop, int score, final Optional<Account> acc) {
+    public void rateShop(final Shop shop, final int score, final Optional<Account> acc) {
         rate(shop, score, acc);
     }
 
     @Transactional
     @Override
-    public void rateArticle(Article art, int score, final Optional<Account> acc) {
+    public void rateArticle(final Article art, final int score, final Optional<Account> acc) {
         rate(art, score, acc);
     }
 

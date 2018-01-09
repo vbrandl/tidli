@@ -16,8 +16,9 @@
  */
 package org.othr.tidli.service;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
+import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
@@ -40,7 +41,7 @@ public interface OfferServiceIF {
 
     /**
      * Decrements the available amount of an {@link Offer} by {@code n } and
-     * returns the new amount or none
+     * returns the new amount or none.
      * @param offer The offer to decrement
      * @param n The amount by which to decrement
      * @param s
@@ -57,10 +58,24 @@ public interface OfferServiceIF {
     boolean deleteOffer(final Offer off, final Optional<Shop> shp);
 
     /**
-     * Finds all offers for a given article
+     * Finds all offers for a given article.
      * @param art the article
-     * @return a list of offers
+     * @return a collection of offers
      */
-    List<Offer> findForArticle(final Article art);
+    Collection<Offer> findForArticle(final Article art);
+
+    /**
+     * Finds all offers for a given article.
+     * @param query the search query
+     * @return a collection of offers
+     */
+    Collection<Offer> findForQuery(final String query);
+
+    /**
+     * Finds all offers for a given article.
+     * @param acc the account
+     * @return a collection of offers
+     */
+    Collection<Offer> findForLocation(final Optional<? extends Account> acc);
     
 }

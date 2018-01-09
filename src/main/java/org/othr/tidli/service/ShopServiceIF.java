@@ -18,6 +18,8 @@ package org.othr.tidli.service;
 
 import java.util.Collection;
 import java.util.Optional;
+import org.othr.tidli.entity.Contact;
+import org.othr.tidli.entity.OpeningTime;
 import org.othr.tidli.entity.Shop;
 
 /**
@@ -31,5 +33,7 @@ public interface ShopServiceIF {
     Optional<Shop> register(final Shop entity);
     Collection<Shop> getAllShops();
     Shop toogleActivationState(final Shop shp);
+    boolean editOpeningTimes(final Optional<Shop> shp, final OpeningTime ot);
+    boolean editContact(final Optional<Shop> shp, final Contact contact);
     
 }

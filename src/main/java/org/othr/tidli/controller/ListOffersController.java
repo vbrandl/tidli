@@ -38,7 +38,7 @@ public class ListOffersController extends AbstractController {
     private Set<Offer> offers;
 
     @PostConstruct
-    private void prepareDate() {
+    private void prepareData() {
         getShop().ifPresent(shp -> offers = new HashSet<>(shp.getOffers()));
     }
 
