@@ -17,32 +17,37 @@
 package org.othr.tidli.controller;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.othr.tidli.service.LoginServiceIF;
+import org.othr.tidli.util.LoginStatus;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
+@ViewScoped
 public class LoginController extends AbstractController {
+
+    private static final long serialVersionUID = -635336017048699103L;
     @Inject
     private LoginServiceIF ls;
     
     private String email, pw;
 
-    public boolean login() {
-        final boolean login = ls.login(email, pw);
-        System.out.println(login);
-        return login;
+    public String login() {
+        final LoginStatus login = this.ls.login(this.email, this.pw);
+        login.getMessage().ifPresent(m -> this.sendError("Login", m));
+        return login.getTarget();
     }
 
     public void logout() {
-        ls.logout();
+        this.ls.logout();
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -50,7 +55,7 @@ public class LoginController extends AbstractController {
     }
 
     public String getPw() {
-        return pw;
+        return this.pw;
     }
 
     public void setPw(String pw) {

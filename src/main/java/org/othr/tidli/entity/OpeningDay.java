@@ -16,7 +16,7 @@
  */
 package org.othr.tidli.entity;
 
-import java.util.Date;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
@@ -37,12 +37,12 @@ public class OpeningDay extends Id {
     private WeekDay weekDay;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "from_date")
-    private Date from;
+    private LocalTime from;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "to_date")
-    private Date to;
+    private LocalTime to;
 
-    public OpeningDay(final WeekDay wd, final Date f, final Date t) {
+    public OpeningDay(final WeekDay wd, final LocalTime f, final LocalTime t) {
         super();
         this.weekDay = wd;
         this.from = f;
@@ -52,27 +52,27 @@ public class OpeningDay extends Id {
     public OpeningDay() {}
 
     public WeekDay getWeekDay() {
-        return weekDay;
+        return this.weekDay;
     }
 
     public void setWeekDay(final WeekDay weekDay) {
         this.weekDay = weekDay;
     }
 
-    public Date getFrom() {
-        return (Date)from.clone();
+    public LocalTime getFrom() {
+        return this.from;
     }
 
-    public void setFrom(final Date from) {
-        this.from = (Date)from.clone();
+    public void setFrom(final LocalTime from) {
+        this.from = from;
     }
 
-    public Date getTo() {
-        return (Date)to.clone();
+    public LocalTime getTo() {
+        return this.to;
     }
 
-    public void setTo(final Date to) {
-        this.to = (Date)to.clone();
+    public void setTo(final LocalTime to) {
+        this.to = to;
     }
 
 }

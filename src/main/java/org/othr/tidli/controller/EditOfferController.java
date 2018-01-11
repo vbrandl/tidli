@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Article;
-import org.othr.tidli.entity.Offer;
 import org.othr.tidli.service.OfferServiceIF;
 
 /**
@@ -31,7 +31,10 @@ import org.othr.tidli.service.OfferServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@SessionScoped
 public class EditOfferController extends AbstractController {
+
+    private static final long serialVersionUID = -1331128825835684493L;
 
     @Inject
     private OfferServiceIF os;
@@ -42,15 +45,15 @@ public class EditOfferController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        getShop().ifPresent(shp -> articles = shp.getArticles());
+        this.getShop().ifPresent(shp -> this.articles = shp.getArticles());
     }
 
     public Collection<Article> getArticles() {
-        return Collections.unmodifiableCollection(articles);
+        return Collections.unmodifiableCollection(this.articles);
     }
 
     public int getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(final int amount) {
@@ -58,7 +61,7 @@ public class EditOfferController extends AbstractController {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return this.price;
     }
 
     public void setPrice(final BigDecimal price) {
@@ -66,7 +69,7 @@ public class EditOfferController extends AbstractController {
     }
 
     public Article getArticle() {
-        return art;
+        return this.art;
     }
 
     public void setArticle(final Article art) {
@@ -74,11 +77,9 @@ public class EditOfferController extends AbstractController {
     }
 
     public void createOffer() {
-        getShop().ifPresent(shp ->
-                os.createOffer(
-                        art,
-                        amount,
-                        price.multiply(new BigDecimal(100)).intValue(),
+        this.getShop().ifPresent(shp ->
+                this.os.createOffer(this.art, this.amount,
+                        this.price.multiply(new BigDecimal(100)).intValue(),
                         shp
                 )
         );

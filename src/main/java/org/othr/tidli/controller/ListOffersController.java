@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Offer;
@@ -31,7 +32,10 @@ import org.othr.tidli.service.OfferServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@SessionScoped
 public class ListOffersController extends AbstractController {
+
+    private static final long serialVersionUID = -8904855712220676294L;
 
     @Inject
     private OfferServiceIF os;
@@ -39,23 +43,23 @@ public class ListOffersController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        getShop().ifPresent(shp -> offers = new HashSet<>(shp.getOffers()));
+        this.getShop().ifPresent(shp -> this.offers = new HashSet<>(shp.getOffers()));
     }
 
     public Set<Offer> getOffers() {
-        return Collections.unmodifiableSet(offers);
+        return Collections.unmodifiableSet(this.offers);
     }
 
     public void decrementOffer(final Offer off, final int n) {   
-        os.decrementOffer(off, n, getShop()).ifPresent(offer -> {
-            if (offers.remove(offer)) {
-                offers.add(offer);
+        this.os.decrementOffer(off, n, this.getShop()).ifPresent(offer -> {
+            if (this.offers.remove(offer)) {
+                this.offers.add(offer);
             }
         });
     }
 
     public void deleteOffer(final Offer off) {
-        os.deleteOffer(off, getShop());
+        this.os.deleteOffer(off, this.getShop());
     }
 
     public boolean isActive(final Offer off) {

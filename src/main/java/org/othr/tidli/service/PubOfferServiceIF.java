@@ -16,7 +16,6 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Collection;
 import javax.jws.WebService;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
@@ -26,12 +25,11 @@ import org.othr.tidli.entity.Shop;
  *
  * @author Brandl Valentin
  */
-@WebService
 public interface PubOfferServiceIF {
 
     boolean createOffer(final Shop s, final Article art, final Offer off,
             final int price, final int amount);
-    boolean createArticle(final Shop s, final Article art);
-    Collection<Article> listArticles(final Shop s);
+    //boolean createArticle(final Shop s, final Article art);
+    //Collection<Article> listArticles(final Shop s);
 
 }

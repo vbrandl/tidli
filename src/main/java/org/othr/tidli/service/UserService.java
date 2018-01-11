@@ -45,7 +45,7 @@ public class UserService extends RegisterService<Account> implements UserService
     @Override
     public Account updateUser(Account user) {
         user.setLastUpdated(new Date());
-        return getEm().merge(user);
+        return this.getEm().merge(user);
     }
 
 }

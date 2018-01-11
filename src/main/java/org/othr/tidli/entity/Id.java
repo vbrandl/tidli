@@ -40,7 +40,7 @@ public abstract class Id implements Serializable {
     public Id() {}
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class Id implements Serializable {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Id other = (Id) obj;

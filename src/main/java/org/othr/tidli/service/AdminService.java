@@ -43,9 +43,9 @@ public class AdminService extends AbstractService<Administrator> implements Admi
         return adm.filter(
                 _unused -> null != s && s.isActivated()
         ).map(_unused -> {
-            final Shop merged = getEm().merge(s);
+            final Shop merged = this.getEm().merge(s);
             merged.setActivated(true);
-            getEm().persist(merged);
+            this.getEm().persist(merged);
             return true;
         }).orElse(false);
     }
@@ -53,12 +53,12 @@ public class AdminService extends AbstractService<Administrator> implements Admi
     @Transactional
     @Override
     public boolean deleteAccount(final Account acc, final Optional<Administrator> adm) {
-        return deleteEntity(acc, adm, Role.Administrator);
+        return this.deleteEntity(acc, adm, Role.Administrator);
     }
 
     @Override
     public boolean deleteOffer(final Offer off, final Optional<Administrator> adm) {
-        return deleteEntity(off, adm, Role.Administrator);
+        return this.deleteEntity(off, adm, Role.Administrator);
     }
     
 }

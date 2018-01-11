@@ -44,7 +44,7 @@ public class Rating extends Id {
     public Rating() {}
 
     public int getScore() {
-        return score;
+        return this.score;
     }
 
     public void setScore(int score) {
@@ -52,7 +52,7 @@ public class Rating extends Id {
     }
 
     public Account getAccount() {
-        return account;
+        return this.account;
     }
 
     public void setAccount(Account account) {

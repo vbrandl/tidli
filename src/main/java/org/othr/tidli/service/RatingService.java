@@ -38,26 +38,26 @@ public class RatingService extends AbstractService<Rating> implements RatingServ
     @Transactional
     @Override
     public void rateOffer(final Offer offer, final int score, final Optional<Account> acc) {
-        rate(offer, score, acc);
+        this.rate(offer, score, acc);
     }
 
     @Transactional
     @Override
     public void rateShop(final Shop shop, final int score, final Optional<Account> acc) {
-        rate(shop, score, acc);
+        this.rate(shop, score, acc);
     }
 
     @Transactional
     @Override
     public void rateArticle(final Article art, final int score, final Optional<Account> acc) {
-        rate(art, score, acc);
+        this.rate(art, score, acc);
     }
 
     @Transactional
     private<T extends RatableEntity> void rate(final T ratable, final int score, final Optional<Account> acc) {
         acc.filter(a -> !ratable.isRatedByUser(a)).map(a -> new Rating(score, a)).ifPresent(r -> {
-            final T merged = getEm().merge(ratable);
-            getEm().persist(r);
+            final T merged = this.getEm().merge(ratable);
+            this.getEm().persist(r);
             merged.addRating(r);
         });
     }

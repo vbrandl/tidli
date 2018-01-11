@@ -18,6 +18,7 @@ package org.othr.tidli.entity;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -46,7 +47,7 @@ public class Article extends Id implements RatableEntity {
     public Article() {}
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -54,7 +55,7 @@ public class Article extends Id implements RatableEntity {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(final String description) {
@@ -62,21 +63,21 @@ public class Article extends Id implements RatableEntity {
     }
 
     public byte[] getImage() {
-        return image;
+        return this.image.clone();
     }
 
     public void setImage(final byte[] image) {
-        this.image = image;
+        this.image = image.clone();
     }
 
     @Override
     public Collection<Rating> getRatings() {
-        return Collections.unmodifiableCollection(ratings);
+        return Collections.unmodifiableCollection(this.ratings);
     }
 
     @Override
-    public void setRatings(Collection<Rating> ratings) {
-        this.ratings = ratings;
+    public void setRatings(final Collection<Rating> ratings) {
+        this.ratings = new HashSet<>(ratings);
     }
 
     @Override

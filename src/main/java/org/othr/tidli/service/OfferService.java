@@ -38,9 +38,9 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Transactional
     @Override
     public Offer createOffer(final Article art, final int price, final int amount, final Shop s) {
-        final Shop shop = getEm().merge(s);
+        final Shop shop = this.getEm().merge(s);
         final Offer o = new Offer(art, amount, price);
-        getEm().persist(o);
+        this.getEm().persist(o);
         shop.addOffer(o);
         return o;
     }
@@ -49,15 +49,15 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Override
     public Optional<Offer> decrementOffer(final Offer offer, final int n, final Optional<Shop> shop) {
         return shop
-                .map(s -> getEm().merge(s)) // merge shop into persistence context
+                .map(s -> this.getEm().merge(s)) // merge shop into persistence context
                 .filter(s -> n > 0 && s.hasOffer(offer))  // check if n is positive and of offer is owned by shop
-                .map(_unused -> getEm().merge(offer)) // merge offer into persistence context
+                .map(_unused -> this.getEm().merge(offer)) // merge offer into persistence context
                 .filter(of -> of.getAmount() >= n) // check if offer is at least n times available
                 .map(of -> {
                     of.decrementAmount(n);
                     return Optional.of(of);
                 }) // decrement offer-> amount by n
-                .flatMap(of -> mergeIfPresent(of)); // merge offer and return the content
+                .flatMap(of -> this.mergeIfPresent(of)); // merge offer and return the content
     }
 
     @Override
@@ -69,19 +69,19 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Override
     public boolean deleteOffer(final Offer off, final Optional<Shop> shp) {
         final Optional<Shop> opt = shp.filter(s -> s.getOffers().contains(off));
-        return deleteEntity(off, opt, Role.Shop);
+        return this.deleteEntity(off, opt, Role.Shop);
     }
 
     @Override
     public Collection<Offer> findForArticle(final Article art) {
-        final TypedQuery<Offer> query = getEm().createNamedQuery("Offer.findForArticle", Offer.class);
+        final TypedQuery<Offer> query = this.getEm().createNamedQuery("Offer.findForArticle", Offer.class);
         query.setParameter("article", art);
         return query.getResultList();
     }
 
     @Override
     public Collection<Offer> findForQuery(final String query) {
-        final TypedQuery<Offer> typedQuery = getEm().createNamedQuery("Offer.findForQuery", Offer.class);
+        final TypedQuery<Offer> typedQuery = this.getEm().createNamedQuery("Offer.findForQuery", Offer.class);
         typedQuery.setParameter("query", query);
         return typedQuery.getResultList();
     }
@@ -91,7 +91,7 @@ public class OfferService extends AbstractService<Offer> implements OfferService
         return acc
                 .filter(a -> a.getAddress() != null)
                 .map(a -> {
-                    final TypedQuery<Offer> query = getEm().createNamedQuery("Offer.findForLocation", Offer.class);
+                    final TypedQuery<Offer> query = this.getEm().createNamedQuery("Offer.findForLocation", Offer.class);
                     query.setParameter("city", a.getAddress().getCity());
                     query.setParameter("zipCode", a.getAddress().getZipCode());
                     return query.getResultList();

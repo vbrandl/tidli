@@ -18,6 +18,7 @@ package org.othr.tidli.entity;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -70,7 +71,7 @@ public class Shop extends Account implements RatableEntity {
     }
 
     public OpeningTime getOpeningTimes() {
-        return openingTimes;
+        return this.openingTimes;
     }
 
     public void setOpeningTimes(final OpeningTime openingTimes) {
@@ -78,15 +79,15 @@ public class Shop extends Account implements RatableEntity {
     }
 
     public Collection<Offer> getOffers() {
-        return Collections.unmodifiableCollection(offers);
+        return Collections.unmodifiableCollection(this.offers);
     }
 
     public void setOffers(final Collection<Offer> offers) {
-        this.offers = offers;
+        this.offers = new HashSet<>(offers);
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(final String description) {
@@ -100,12 +101,12 @@ public class Shop extends Account implements RatableEntity {
 
     @Override
     public Collection<Rating> getRatings() {
-        return Collections.unmodifiableCollection(ratings);
+        return Collections.unmodifiableCollection(this.ratings);
     }
 
     @Override
     public void setRatings(Collection<Rating> ratings) {
-        this.ratings = ratings;
+        this.ratings = new HashSet<>(ratings);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class Shop extends Account implements RatableEntity {
     }
 
     public Contact getContact() {
-        return contact;
+        return this.contact;
     }
 
     public void setContact(Contact contact) {
@@ -122,11 +123,11 @@ public class Shop extends Account implements RatableEntity {
     }
 
     public Collection<Article> getArticles() {
-        return Collections.unmodifiableCollection(articles);
+        return Collections.unmodifiableCollection(this.articles);
     }
 
     public void setArticles(Collection<Article> articles) {
-        this.articles = articles;
+        this.articles = new HashSet<>(articles);
     }
 
     public boolean addOffer(final Offer o) {

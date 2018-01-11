@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Shop;
@@ -30,7 +31,10 @@ import org.othr.tidli.service.ShopServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@SessionScoped
 public class AdminShopController extends AbstractController {
+
+    private static final long serialVersionUID = 3565920421845368710L;
     
     @Inject
     private ShopServiceIF ss;
@@ -38,23 +42,23 @@ public class AdminShopController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        this.shops = new HashSet<>(ss.getAllShops());
+        this.shops = new HashSet<>(this.ss.getAllShops());
     }
 
     public void toogleActivationState(final Shop shp) {
-        if (shops.remove(shp)) {
-            final Shop updated = ss.toogleActivationState(shp);
-            shops.add(updated);
+        if (this.shops.remove(shp)) {
+            final Shop updated = this.ss.toogleActivationState(shp);
+            this.shops.add(updated);
         }
     }
 
     public void deleteShop(final Shop shp) {
-        if (shops.remove(shp)) {
-            ss.deleteShop(shp);
+        if (this.shops.remove(shp)) {
+            this.ss.deleteShop(shp);
         }
     }
 
     public Set<Shop> getShops() {
-        return Collections.unmodifiableSet(shops);
+        return Collections.unmodifiableSet(this.shops);
     }
 }

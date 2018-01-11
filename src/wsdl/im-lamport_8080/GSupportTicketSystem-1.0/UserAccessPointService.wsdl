@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://services.gsupportticketsystem.sw.othr.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="UserAccessPointServiceService" targetNamespace="http://services.gsupportticketsystem.sw.othr.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://services.gsupportticketsystem.sw.othr.com/" elementFormDefault="unqualified" targetNamespace="http://services.gsupportticketsystem.sw.othr.com/" version="1.0">
+
+  <xs:element name="CloseTicket" type="tns:CloseTicket"/>
+
+  <xs:element name="CloseTicketResponse" type="tns:CloseTicketResponse"/>
+
+  <xs:element name="CreateTicket" type="tns:CreateTicket"/>
+
+  <xs:element name="CreateTicketResponse" type="tns:CreateTicketResponse"/>
+
+  <xs:element name="GetTickets" type="tns:GetTickets"/>
+
+  <xs:element name="GetTicketsResponse" type="tns:GetTicketsResponse"/>
+
+  <xs:element name="ReplyTicket" type="tns:ReplyTicket"/>
+
+  <xs:element name="ReplyTicketResponse" type="tns:ReplyTicketResponse"/>
+
+  <xs:complexType name="ReplyTicket">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+      <xs:element minOccurs="0" name="arg2" type="tns:ticketReply"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticketReply">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="answeredBy" type="tns:ticketEntity"/>
+      <xs:element name="ID" type="xs:int"/>
+      <xs:element minOccurs="0" name="relatedTicket" type="tns:ticket"/>
+      <xs:element minOccurs="0" name="replyText" type="xs:string"/>
+      <xs:element minOccurs="0" name="replyTimeStamp" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticketEntity">
+    <xs:sequence>
+      <xs:element name="ID" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="content" type="tns:ticketContent"/>
+      <xs:element minOccurs="0" name="header" type="tns:ticketHeader"/>
+      <xs:element name="ID" type="xs:int"/>
+      <xs:element minOccurs="0" name="owner" type="tns:ticketUser"/>
+      <xs:element minOccurs="0" name="supporter" type="tns:ticketSupporter"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticketContent">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="replyList" nillable="true" type="tns:ticketReply"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticketHeader">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="creationTimeStamp" type="xs:dateTime"/>
+      <xs:element name="ticketPriority" type="xs:int"/>
+      <xs:element name="ticketStatusID" type="xs:int"/>
+      <xs:element name="ticketSubjID" type="xs:int"/>
+      <xs:element name="ticketTypeID" type="xs:int"/>
+      <xs:element minOccurs="0" name="title" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ticketUser">
+    <xs:complexContent>
+      <xs:extension base="tns:ticketEntity">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ticketList" nillable="true" type="tns:ticket"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ticketSupporter">
+    <xs:complexContent>
+      <xs:extension base="tns:ticketEntity">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ticketList" nillable="true" type="tns:ticket"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ReplyTicketResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ticketReply"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GetTickets">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GetTicketsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:ticket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CloseTicket">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element name="arg1" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CloseTicketResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ticket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CreateTicket">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+      <xs:element minOccurs="0" name="arg1" type="tns:ticketHeader"/>
+      <xs:element minOccurs="0" name="arg2" type="tns:ticketReply"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CreateTicketResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ticket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTicketsResponse">
+    <wsdl:part element="tns:GetTicketsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetTickets">
+    <wsdl:part element="tns:GetTickets" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateTicketResponse">
+    <wsdl:part element="tns:CreateTicketResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateTicket">
+    <wsdl:part element="tns:CreateTicket" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ReplyTicket">
+    <wsdl:part element="tns:ReplyTicket" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ReplyTicketResponse">
+    <wsdl:part element="tns:ReplyTicketResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CloseTicket">
+    <wsdl:part element="tns:CloseTicket" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CloseTicketResponse">
+    <wsdl:part element="tns:CloseTicketResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserAccessPointService">
+    <wsdl:operation name="ReplyTicket">
+      <wsdl:input message="tns:ReplyTicket" name="ReplyTicket">
+    </wsdl:input>
+      <wsdl:output message="tns:ReplyTicketResponse" name="ReplyTicketResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTickets">
+      <wsdl:input message="tns:GetTickets" name="GetTickets">
+    </wsdl:input>
+      <wsdl:output message="tns:GetTicketsResponse" name="GetTicketsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseTicket">
+      <wsdl:input message="tns:CloseTicket" name="CloseTicket">
+    </wsdl:input>
+      <wsdl:output message="tns:CloseTicketResponse" name="CloseTicketResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateTicket">
+      <wsdl:input message="tns:CreateTicket" name="CreateTicket">
+    </wsdl:input>
+      <wsdl:output message="tns:CreateTicketResponse" name="CreateTicketResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserAccessPointServiceServiceSoapBinding" type="tns:UserAccessPointService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ReplyTicket">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="ReplyTicket">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ReplyTicketResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTickets">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetTickets">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetTicketsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CloseTicket">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="CloseTicket">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CloseTicketResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateTicket">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateTicket">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateTicketResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserAccessPointServiceService">
+    <wsdl:port binding="tns:UserAccessPointServiceServiceSoapBinding" name="UserAccessPointServicePort">
+      <soap:address location="http://im-lamport:8080/GSupportTicketSystem-1.0/UserAccessPointService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

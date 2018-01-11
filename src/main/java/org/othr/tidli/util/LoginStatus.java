@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Brandl Valentin
+ * Copyright (C) 2018 Brandl Valentin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,42 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.othr.tidli.entity;
+package org.othr.tidli.util;
 
-import javax.persistence.Entity;
+import java.util.Optional;
 
 /**
  *
  * @author Brandl Valentin
  */
-@Entity
-public class Contact extends Id {
-    
-    private static final long serialVersionUID = 5539230094211639447L;
+public enum LoginStatus {
+    Ok("index?faces-redirect=true", null),
+    NotActivated("", "Ihr Account ist nicht aktiv"),
+    Fail("", "Falscher Benutzername oder Passwort");
 
-    private String telNo;
-    private String email;
-
-    public Contact() {}
-    public Contact(final String telNo, final String email) {
-        this.telNo = telNo;
-        this.email = email;
+    private final String target;
+    private final String message;
+    private LoginStatus(final String target, final String message) {
+        this.target = target;
+        this.message = message;
     }
 
-    public String getTelNo() {
-        return this.telNo;
+    public String getTarget() {
+        return this.target;
     }
 
-    public void setTelNo(String telNo) {
-        this.telNo = telNo;
+    public Optional<String> getMessage() {
+        return Optional.ofNullable(this.message);
     }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
 }

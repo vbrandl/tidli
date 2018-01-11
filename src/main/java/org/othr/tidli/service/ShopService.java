@@ -44,7 +44,7 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
     @Override
     public Shop activateShop(final Shop shop) {
         shop.setActivated(true);
-        getEm().persist(shop);
+        this.getEm().persist(shop);
         return shop;
     }
 
@@ -53,9 +53,9 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
     public void deleteShop(final Shop shop) {
         final OpeningTime ot = shop.getOpeningTimes();
         final Collection<OpeningDay> od = ot.getDays();
-        od.forEach(d -> getEm().remove(d));
-        getEm().remove(ot);
-        getEm().remove(shop);
+        od.forEach(d -> this.getEm().remove(d));
+        this.getEm().remove(ot);
+        this.getEm().remove(shop);
     }
 
     @Override
@@ -70,13 +70,13 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
 
     @Override
     public Collection<Shop> getAllShops() {
-        return getEm().createNamedQuery("Shop.findAll", Shop.class).getResultList();
+        return this.getEm().createNamedQuery("Shop.findAll", Shop.class).getResultList();
     }
 
     @Transactional
     @Override
     public Shop toogleActivationState(final Shop shp) {
-        final Shop merged = getEm().merge(shp);
+        final Shop merged = this.getEm().merge(shp);
         merged.setActivated(!merged.isActivated());
         return merged;
     }
@@ -87,8 +87,8 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
         return shp
                 .filter(_unused -> ot.getDays().size() >= 7 && ot.getDays().size() < 0)
                 .map(s -> {
-                    final Shop merged = getEm().merge(s);
-                    getEm().persist(ot);
+                    final Shop merged = this.getEm().merge(s);
+                    this.getEm().persist(ot);
                     merged.setOpeningTimes(ot);
                     return true;
                 }).orElse(false);
@@ -98,9 +98,28 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
     public boolean editContact(final Optional<Shop> shp, final Contact contact) {
         return shp
                 .map(s -> {
-                    final Shop merged = getEm().merge(s);
-                    getEm().persist(contact);
+                    final Shop merged = this.getEm().merge(s);
+                    this.getEm().persist(contact);
                     merged.setContact(contact);
+                    return true;
+                }).orElse(false);
+    }
+
+    @Override
+    @Transactional
+    public boolean addOpeningDay(final Optional<Shop> shp, final OpeningDay od) {
+        return shp
+                .map(s -> {
+                    final Shop merged = this.getEm().merge(s);
+                    this.getEm().persist(od);
+                    if (merged.getOpeningTimes() == null) {
+                        final OpeningTime ot = new OpeningTime();
+                        ot.addDay(od);
+                        this.getEm().persist(ot);
+                        merged.setOpeningTimes(ot);
+                    } else {
+                        merged.getOpeningTimes().addDay(od);
+                    }
                     return true;
                 }).orElse(false);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Brandl Valentin
+ * Copyright (C) 2018 Brandl Valentin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,10 @@
  */
 package org.othr.tidli.controller;
 
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
-
 /**
  *
  * @author Brandl Valentin
  */
-@ManagedBean
-@SessionScoped
-public class NavigationController extends AbstractController {
-    
-    private static final long serialVersionUID = -4852204425754218642L;
+public class TmpTmp {
     
 }

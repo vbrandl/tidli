@@ -19,6 +19,7 @@ package org.othr.tidli.controller;
 import java.util.Objects;
 import java.util.Optional;
 import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Address;
 import org.othr.tidli.entity.Shop;
@@ -30,7 +31,10 @@ import org.othr.tidli.service.ShopServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@ViewScoped
 public class ShopRegisterController extends RegisterController<Shop> {
+
+    private static final long serialVersionUID = 5982363413410764051L;
 
     private String email, pw1, pw2, name, desc, city, street, number;
     private Integer zip = 0;
@@ -41,23 +45,23 @@ public class ShopRegisterController extends RegisterController<Shop> {
     @Override
     @SuppressWarnings("unchecked")
     protected RegisterService<Shop> getService() {
-        return (RegisterService<Shop>)srs;
+        return (RegisterService<Shop>)this.srs;
     }
 
     @Override
     protected Optional<Shop> createEntity() {
-        if (Objects.equals(pw1, pw2)) {
+        if (Objects.equals(this.pw1, this.pw2)) {
             final Address addr = new Address(
-                    zip, city, street, number
-            );
-            return Optional.of(new Shop(email, name, pw1, addr, desc));
+                    this.zip, this.city, this.street, this.number);
+            return Optional.of(new Shop(this.email, this.name, this.pw1, addr, this.desc));
         } else {
+            this.sendError("Register", "Passwörter stimmen nicht überein");
             return Optional.empty();
         }
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -65,7 +69,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getPw1() {
-        return pw1;
+        return this.pw1;
     }
 
     public void setPw1(String pw1) {
@@ -73,7 +77,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getPw2() {
-        return pw2;
+        return this.pw2;
     }
 
     public void setPw2(String pw2) {
@@ -81,7 +85,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -89,7 +93,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getDesc() {
-        return desc;
+        return this.desc;
     }
 
     public void setDesc(String desc) {
@@ -97,7 +101,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -105,7 +109,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getStreet() {
-        return street;
+        return this.street;
     }
 
     public void setStreet(String street) {
@@ -113,7 +117,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public String getNumber() {
-        return number;
+        return this.number;
     }
 
     public void setNumber(String number) {
@@ -121,7 +125,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     }
 
     public int getZip() {
-        return zip;
+        return this.zip;
     }
 
     public void setZip(int zip) {

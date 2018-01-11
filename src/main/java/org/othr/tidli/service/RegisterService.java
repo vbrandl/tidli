@@ -18,6 +18,7 @@ package org.othr.tidli.service;
 
 import java.util.Optional;
 import javax.enterprise.context.Dependent;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Id;
 
@@ -41,9 +42,13 @@ public abstract class RegisterService<T extends Id> extends AbstractService<T> {
      */
     @Transactional
     public Optional<T> register(final T entity) {
-        if (validateEntity(entity)) {
-            getEm().persist(entity);
-            return Optional.of(entity);
+        if (this.validateEntity(entity)) {
+            try {
+                this.getEm().persist(entity);
+                return Optional.of(entity);
+            } catch (final PersistenceException pe) {
+                return Optional.empty();
+            }
         } else {
             return Optional.empty();
         }

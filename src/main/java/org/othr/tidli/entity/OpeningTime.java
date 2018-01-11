@@ -19,6 +19,7 @@ package org.othr.tidli.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -44,11 +45,18 @@ public class OpeningTime extends Id implements Serializable {
     public OpeningTime() {}
 
     public Collection<OpeningDay> getDays() {
-        return Collections.unmodifiableCollection(days);
+        return Collections.unmodifiableCollection(this.days);
     }
 
     public void setDays(final Collection<OpeningDay> days) {
-        this.days = days;
+        this.days = new HashSet<>(days);
+    }
+
+    public void addDay(final OpeningDay day) {
+        if (null == this.days) {
+            this.days = new HashSet<>(7);
+        }
+        this.days.add(day);
     }
 
 }

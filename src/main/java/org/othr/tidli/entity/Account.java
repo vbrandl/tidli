@@ -82,7 +82,7 @@ public class Account extends Id {
     }
     public Account() {}
     public final boolean isActivated() {
-        return activated;
+        return this.activated;
     }
 
     public final void setActivated(boolean activated) {
@@ -90,7 +90,7 @@ public class Account extends Id {
     }
 
     public Address getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(Address address) {
@@ -99,7 +99,7 @@ public class Account extends Id {
 
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(final String email) {
@@ -107,7 +107,7 @@ public class Account extends Id {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(final String password) {
@@ -116,7 +116,7 @@ public class Account extends Id {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -124,7 +124,7 @@ public class Account extends Id {
     }
 
     public Date getCreationTime() {
-        return (Date)creationTime.clone();
+        return (Date)this.creationTime.clone();
     }
 
     public void setCreationTime(final Date creationTime) {
@@ -132,7 +132,7 @@ public class Account extends Id {
     }
 
     public Date getLastUpdated() {
-        return (Date)lastUpdated.clone();
+        return (Date)this.lastUpdated.clone();
     }
 
     public void setLastUpdated(final Date lastUpdated) {

@@ -16,8 +16,8 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Collection;
 import javax.inject.Inject;
+import javax.jws.WebService;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
@@ -26,7 +26,8 @@ import org.othr.tidli.entity.Shop;
  *
  * @author Brandl Valentin
  */
-public final class PubOfferService extends AbstractService<Offer> implements PubOfferServiceIF {
+@WebService
+public class PubOfferService extends AbstractService<Offer> implements PubOfferServiceIF {
 
     private static final long serialVersionUID = -480568517771229974L;
 
@@ -46,15 +47,15 @@ public final class PubOfferService extends AbstractService<Offer> implements Pub
         return null != this.os.createOffer(art, price, amount, s);
     }
 
-    @Override
-    public boolean createArticle(final Shop s, final Article art) {
-        return null != this.as.createArticle(art, s);
-    }
+    //@Override
+    //public boolean createArticle(final Shop s, final Article art) {
+        //return null != this.as.createArticle(art, s);
+    //}
 
-    @Override
-    public Collection<Article> listArticles(final Shop s) {
-        final Shop persistentShop = getEm().find(Shop.class, s.getId());
-        return persistentShop.getArticles();
-    }
+    //@Override
+    //public Collection<Article> listArticles(final Shop s) {
+        //final Shop persistentShop = this.getEm().find(Shop.class, s.getId());
+        //return persistentShop.getArticles();
+    //}
     
 }

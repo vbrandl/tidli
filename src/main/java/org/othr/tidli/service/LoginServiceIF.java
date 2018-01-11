@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
 import org.othr.tidli.entity.Shop;
+import org.othr.tidli.util.LoginStatus;
 import org.othr.tidli.util.Role;
 
 /**
@@ -33,9 +34,9 @@ public interface LoginServiceIF {
      * On success the session will be started
      * @param email
      * @param pw
-     * @return If the login succeeded
+     * @return The login status
      */
-    boolean login(final String email, final String pw);
+    LoginStatus login(final String email, final String pw);
     /**
      * Termiate the current session.
      */

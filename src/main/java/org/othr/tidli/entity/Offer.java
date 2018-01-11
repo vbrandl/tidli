@@ -19,6 +19,7 @@ package org.othr.tidli.entity;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -37,7 +38,7 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Offer.findForArticle", query = "SELECT o FROM Offer o WHERE o.article = :article"),
     @NamedQuery(name = "Offer.findForQuery", query = "SELECT o FROM Offer o WHERE LOWER(o.article.description) LIKE LOWER('%:query%') OR LOWER(o.article.name) LIKE LOWER('%:query%')"),
-    @NamedQuery(name = "Offer.findForLocation", query = "SELECT o FROM Offer o, Shop s WHERE s.offers = o AND LOWER(s.address.city) = LOWER(:city) OR s.address.zipCode = :zipCode")
+    @NamedQuery(name = "Offer.findForLocation", query = "SELECT o FROM Offer o, Shop s WHERE o IN s.offers AND LOWER(s.address.city) = LOWER(:city) OR s.address.zipCode = :zipCode")
 })
 public class Offer extends Id implements RatableEntity {
     
@@ -65,7 +66,7 @@ public class Offer extends Id implements RatableEntity {
     public Offer() {}
 
     public int getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public void setAmount(final int amount) {
@@ -77,7 +78,7 @@ public class Offer extends Id implements RatableEntity {
     }
 
     public int getPrice() {
-        return price;
+        return this.price;
     }
 
     public void setPrice(final int price) {
@@ -85,7 +86,7 @@ public class Offer extends Id implements RatableEntity {
     }
 
     public Date getDay() {
-        return (Date)day.clone();
+        return (Date)this.day.clone();
     }
 
     public void setDay(final Date day) {
@@ -93,7 +94,7 @@ public class Offer extends Id implements RatableEntity {
     }
 
     public Article getArticle() {
-        return article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
@@ -102,12 +103,12 @@ public class Offer extends Id implements RatableEntity {
 
     @Override
     public Collection<Rating> getRatings() {
-        return Collections.unmodifiableCollection(ratings);
+        return Collections.unmodifiableCollection(this.ratings);
     }
 
     @Override
     public void setRatings(Collection<Rating> ratings) {
-        this.ratings = ratings;
+        this.ratings = new HashSet<>(ratings);
     }
 
     @Override

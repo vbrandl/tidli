@@ -16,7 +16,10 @@
  */
 package org.othr.tidli.controller;
 
+import java.io.Serializable;
 import java.util.Optional;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
@@ -28,45 +31,59 @@ import org.othr.tidli.util.Role;
  *
  * @author Brandl Valentin
  */
-public abstract class AbstractController {
+public abstract class AbstractController implements Serializable {
+
+    private static final long serialVersionUID = 9222962181062753050L;
 
     @Inject
     private LoginServiceIF ls;
 
     public Optional<Account> getUser() {
-        return ls.getAccount();
+        return this.ls.getAccount();
     }
 
     public Optional<Shop> getShop() {
-        return ls.getShop();
+        return this.ls.getShop();
     }
 
     public Optional<Administrator> getAdmin() {
-        return ls.getAdmin();
+        return this.ls.getAdmin();
     }
 
     public boolean isRole(final Role r) {
-        return getUser().filter(a -> a.getRole() == r).isPresent();
+        return this.getUser().filter(a -> a.getRole() == r).isPresent();
     }
 
     public boolean isUserRole() {
-        return isRole(Role.User);
+        return this.isRole(Role.User);
     }
 
     public boolean isShopRole() {
-        return isRole(Role.Shop);
+        return this.isRole(Role.Shop);
     }
 
     public boolean isAdminRole() {
-        return isRole(Role.Administrator);
+        return this.isRole(Role.Administrator);
     }
 
     public boolean isLoggedIn() {
-        return ls.getAccount().isPresent();
+        return this.ls.getAccount().isPresent();
     }
 
     public Optional<Role> getRole() {
-        return getUser().map(u -> u.getRole());
+        return this.getUser().map(u -> u.getRole());
+    }
+
+    public void sendError(final String title, final String message) {
+        this.sendMessage(FacesMessage.SEVERITY_ERROR, title, message);
+    }
+
+    public void sendInfo(final String title, final String message) {
+        this.sendMessage(FacesMessage.SEVERITY_INFO, title, message);
+    }
+
+    private void sendMessage(final FacesMessage.Severity severity, final String title, final String msg) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, title, msg));
     }
     
 }

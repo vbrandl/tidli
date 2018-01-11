@@ -46,7 +46,7 @@ public class Address implements Serializable {
     public Address() {}
 
     public Integer getZipCode() {
-        return zipCode;
+        return this.zipCode;
     }
 
     public void setZipCode(final Integer zipCode) {
@@ -54,7 +54,7 @@ public class Address implements Serializable {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -62,7 +62,7 @@ public class Address implements Serializable {
     }
 
     public String getStreet() {
-        return street;
+        return this.street;
     }
 
     public void setStreet(String street) {
@@ -70,7 +70,7 @@ public class Address implements Serializable {
     }
 
     public String getNumber() {
-        return number;
+        return this.number;
     }
 
     public void setNumber(String number) {

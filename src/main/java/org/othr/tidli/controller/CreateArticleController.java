@@ -17,18 +17,21 @@
 package org.othr.tidli.controller;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.service.ArticleServiceIF;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
+@SessionScoped
 public class CreateArticleController extends AbstractController {
+
+    private static final long serialVersionUID = -7706811759715568074L;
 
     private String name, description;
 //    private UploadedFile image;
@@ -37,7 +40,7 @@ public class CreateArticleController extends AbstractController {
     private ArticleServiceIF as;
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(final String name) {
@@ -45,7 +48,7 @@ public class CreateArticleController extends AbstractController {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(final String description) {
@@ -61,13 +64,13 @@ public class CreateArticleController extends AbstractController {
 //    }
 
     public void fileUpload(final FileUploadEvent fue) {
-        content = fue.getFile().getContents();
+        this.content = fue.getFile().getContents();
     }
 
     public void save() {
-        getShop().ifPresent(shp -> {
-            as.createArticle(
-                    new Article(name, description, content),
+        this.getShop().ifPresent(shp -> {
+            this.as.createArticle(
+                    new Article(this.name, this.description, this.content),
                     shp
             );
         });

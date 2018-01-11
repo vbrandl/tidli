@@ -16,7 +16,9 @@
  */
 package org.othr.tidli.controller;
 
+import java.util.Optional;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
@@ -28,40 +30,46 @@ import org.othr.tidli.service.UserServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@SessionScoped
 public class UserDetailController extends AbstractController {
-    @Inject
-    private LoginServiceIF ls;
-    @Inject 
-    private UserServiceIF us;
-    private Account user;
-    private String pw1, pw2, pwOld;
-
-    @PostConstruct
-    private void prepareData() {
-        user = ls.getAccount().get();
-    }
-
+    private static final long serialVersionUID = -2292619186583344544L;
     private static boolean isNullOrEmpty(final String str) {
         return null == str || str.isEmpty();
     }
 
+    @Inject
+    private LoginServiceIF ls;
+    @Inject 
+    private UserServiceIF us;
+    private Optional<Account> user;
+    private String pw1, pw2, pwOld;
+
+
+    @PostConstruct
+    private void prepareData() {
+        this.user = this.ls.getAccount();
+    }
+
+
     public void updateUser() {
-        if (!isNullOrEmpty(pw1) || !isNullOrEmpty(pw2) || !isNullOrEmpty(pwOld)) {
-            if (pw1.equals(pw2) && user.checkPassword(pw1)) {
-                this.user.changePassword(pwOld, pw1);
-            } else {
-                return;
+        this.user = this.user.map(u -> {
+            if (!isNullOrEmpty(this.pw1) || !isNullOrEmpty(this.pw2) || !isNullOrEmpty(this.pwOld)) {
+                if (this.pw1.equals(this.pw2) && u.checkPassword(this.pw1)) {
+                    u.changePassword(this.pwOld, this.pw1);
+                } else {
+                    return u;
+                }
             }
-        }
-        this.user = us.updateUser(user);
+            return this.us.updateUser(u);
+        });
     }
 
     public Account getUnwrapedUser() {
-        return user;
+        return this.user.get();
     }
 
     public String getPw1() {
-        return pw1;
+        return this.pw1;
     }
 
     public void setPw1(String pw1) {
@@ -69,7 +77,7 @@ public class UserDetailController extends AbstractController {
     }
 
     public String getPw2() {
-        return pw2;
+        return this.pw2;
     }
 
     public void setPw2(String pw2) {
@@ -77,7 +85,7 @@ public class UserDetailController extends AbstractController {
     }
 
     public String getPwOld() {
-        return pwOld;
+        return this.pwOld;
     }
 
     public void setPwOld(String pwOld) {

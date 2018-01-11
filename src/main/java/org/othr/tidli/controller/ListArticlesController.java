@@ -19,20 +19,23 @@ package org.othr.tidli.controller;
 import java.util.Collection;
 import java.util.Collections;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Article;
+import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.ArticleServiceIF;
+import org.othr.tidli.util.Role;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-//@Named
-@ViewScoped
+@SessionScoped
 public class ListArticlesController extends AbstractController {
+
+    private static final long serialVersionUID = 1877130317374256378L;
 
     @Inject
     private ArticleServiceIF as;
@@ -40,15 +43,22 @@ public class ListArticlesController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        articles = getShop().map(shp -> shp.getArticles()).orElse(Collections.emptyList());
+        this.articles = this.getShop().map(shp -> shp.getArticles()).orElse(Collections.emptyList());
     }
 
     public Collection<Article> getArticles() {
-        return Collections.unmodifiableCollection(articles);
+        return Collections.unmodifiableCollection(this.articles);
     }
 
     public void deleteArticle(final Article art) {
-        as.deleteArticle(art);
+        this.as.deleteArticle(art);
+    }
+
+    public boolean userIsOwnerOf(final Article art) {
+        return this.getUser()
+                .filter(u -> u.getRole() == Role.Shop)
+                .map(s -> ((Shop)s).getArticles().contains(art))
+                .orElse(false);
     }
     
 }

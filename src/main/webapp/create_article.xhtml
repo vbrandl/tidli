@@ -2,23 +2,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/layout.xhtml" rendered="#{createArticleController.shopRole}">
+        <ui:composition template="template/template.xhtml" rendered="#{createArticleController.shopRole}">
             <ui:define name="content">
-                <b:form>
-                    <b:panelGrid columns="1">
-                        <b:inputText id="name" label="Name" value="#{createArticleController.name}" required="true" />
+                <h:form>
+                    <p:panelGrid columns="1">
+                        <p:inputText id="name" label="Name" value="#{createArticleController.name}" required="true" />
 
-                        <b:inputTextarea id="desc" label="Beschreibung" value="#{createArticleController.description}" required="true" />
+                        <p:inputTextarea id="desc" label="Beschreibung" value="#{createArticleController.description}" required="true" />
 
                         <p:fileUpload id="dl" label="Bild" fileUploadListener="#{createArticleController.fileUpload}" required="true" auto="true" />
                         
-                        <b:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
-                    </b:panelGrid>
-                </b:form>
+                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
+                    </p:panelGrid>
+                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>

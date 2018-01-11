@@ -17,6 +17,7 @@
 package org.othr.tidli.controller;
 
 import java.util.Optional;
+import javax.persistence.PersistenceException;
 import org.othr.tidli.entity.Id;
 import org.othr.tidli.service.RegisterService;
 
@@ -25,14 +26,24 @@ import org.othr.tidli.service.RegisterService;
  * @author Brandl Valentin
  * @param <T>
  */
-public abstract class RegisterController<T extends Id> {
+public abstract class RegisterController<T extends Id> extends AbstractController {
+
+    private static final long serialVersionUID = -8393917313964694618L;
     protected abstract RegisterService<T> getService();
     protected abstract Optional<T> createEntity();
-    public void register() {
-        final Optional<T> entOpt = createEntity();
+    public String register() {
+        final Optional<T> entOpt = this.createEntity();
         if (entOpt.isPresent()) {
-            final T entity = entOpt.get();
-            getService().register(entity);
+            try {
+                entOpt.ifPresent(e -> this.getService().register(e));
+                return "/login";
+            } catch (final PersistenceException pe) {
+                this.sendError("", "Registrierung fehlgeschlagen!");
+                return "";
+            }
+        } else {
+            this.sendError("", "Registrierung fehlgeschlagen!");
+            return "";
         }
     }
 }

@@ -19,6 +19,7 @@ package org.othr.tidli.controller;
 import java.util.Objects;
 import java.util.Optional;
 import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Address;
@@ -30,7 +31,10 @@ import org.othr.tidli.service.UserServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
+@ViewScoped
 public class UserRegisterController extends RegisterController<Account> {
+
+    private static final long serialVersionUID = -9069340813032081058L;
 
     private String email, name, pw1, pw2, city, street, number;
 
@@ -38,24 +42,26 @@ public class UserRegisterController extends RegisterController<Account> {
     private UserServiceIF us;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected RegisterService<Account> getService() {
-        return (RegisterService<Account>)us;
+        return (RegisterService<Account>)this.us;
     }
 
     @Override
     protected Optional<Account> createEntity() {
-        if (Objects.equals(pw1, pw2)) {
-            final Address addr = new Address(0, city, street, number);
+        if (Objects.equals(this.pw1, this.pw2)) {
+            final Address addr = new Address(0, this.city, this.street, this.number);
             return Optional.of(
-                    Account.createUser(email, name, addr, pw1)
+                    Account.createUser(this.email, this.name, addr, this.pw1)
             );
         } else {
+            this.sendError("Register", "Passwörter stimmen nicht überein");
             return Optional.empty();
         }
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -63,7 +69,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -71,7 +77,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getPw1() {
-        return pw1;
+        return this.pw1;
     }
 
     public void setPw1(String pw1) {
@@ -79,7 +85,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getPw2() {
-        return pw2;
+        return this.pw2;
     }
 
     public void setPw2(String pw2) {
@@ -87,7 +93,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -95,7 +101,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getStreet() {
-        return street;
+        return this.street;
     }
 
     public void setStreet(String street) {
@@ -103,7 +109,7 @@ public class UserRegisterController extends RegisterController<Account> {
     }
 
     public String getNumber() {
-        return number;
+        return this.number;
     }
 
     public void setNumber(String number) {

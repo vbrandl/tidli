@@ -17,11 +17,13 @@
 package org.othr.tidli.service;
 
 import java.util.Optional;
+import java.util.UUID;
 import javax.enterprise.context.SessionScoped;
 import javax.persistence.TypedQuery;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
 import org.othr.tidli.entity.Shop;
+import org.othr.tidli.util.LoginStatus;
 import org.othr.tidli.util.Role;
 
 /**
@@ -34,20 +36,34 @@ public class LoginService extends AbstractService<Account> implements LoginServi
     private static final long serialVersionUID = 8818972444125627074L;
 
     private Optional<Account> user = Optional.empty();
+    private final UUID uid;
+
+    public LoginService() {
+        this.uid = UUID.randomUUID();
+    }
 
     private Optional<Account> findByEmail(final String email) {
-        final TypedQuery<Account> query = getEm().createNamedQuery("findByEmail", Account.class);
+        final TypedQuery<Account> query = this.getEm().createNamedQuery("findByEmail", Account.class);
         query.setParameter("email", email);
         return singleResultToOptional(query);
     }
 
     @Override
-    public boolean login(final String email, final String pw) {
-        final Optional<Account> accOpt = findByEmail(email);
-        final boolean result = accOpt
-                .filter(a -> a.isActivated())
-                .map(a -> a.checkPassword(pw)).orElse(false);
-        if (result) {
+    public LoginStatus login(final String email, final String pw) {
+        final Optional<Account> accOpt = this.findByEmail(email);
+        final LoginStatus result = accOpt
+                .map(a -> {
+                    if (a.checkPassword(pw)) {
+                        if (a.isActivated()) {
+                            return LoginStatus.Ok;
+                        } else {
+                            return LoginStatus.NotActivated;
+                        }
+                    } else {
+                        return LoginStatus.Fail;
+                    }
+                }).orElse(LoginStatus.Fail);
+        if (result == LoginStatus.Ok) {
             this.user = accOpt;
         }
         return result;
@@ -70,7 +86,8 @@ public class LoginService extends AbstractService<Account> implements LoginServi
 
     @Override
     public Optional<Account> getAccount() {
-        return this.user.map(u -> u);
+        return this.user;
+        //return this.user.map(u -> u);
     }
 
     @Override

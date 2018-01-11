@@ -41,25 +41,25 @@ public class ArticleService extends AbstractService<Article> implements ArticleS
     @Transactional
     @Override
     public Article createArticle(final Article article, final Shop shp) {
-        final Shop s = getEm().merge(shp);
-        getEm().persist(article);
+        final Shop s = this.getEm().merge(shp);
+        this.getEm().persist(article);
         s.addArticle(article);
         return article;
     }
 
     @Override
     public byte[] getImageForId(final long id) {
-        return findEntity(id).map(art -> art.getImage()).orElse(new byte[] {});
+        return this.findEntity(id).map(art -> art.getImage()).orElse(new byte[] {});
     }
 
     @Transactional
     @Override
     public void deleteArticle(final Article art) {
-        final Article merged = getEm().merge(art);
-        merged.getRatings().parallelStream().forEach(getEm()::remove);
-        os.findForArticle(art).parallelStream().map(getEm()::merge)
-                .forEach(getEm()::remove);
-        getEm().remove(merged);
+        final Article merged = this.getEm().merge(art);
+        merged.getRatings().parallelStream().forEach(this.getEm()::remove);
+        this.os.findForArticle(art).parallelStream().map(this.getEm()::merge)
+                .forEach(this.getEm()::remove);
+        this.getEm().remove(merged);
     }
 
 }

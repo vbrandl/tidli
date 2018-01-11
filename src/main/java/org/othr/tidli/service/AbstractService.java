@@ -47,7 +47,7 @@ public abstract class AbstractService<T extends Id> implements Serializable {
     protected abstract Class<T> getEntityClass();
 
     protected EntityManager getEm() {
-        return em;
+        return this.em;
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class AbstractService<T extends Id> implements Serializable {
      */
     public Optional<T> findEntity(final long id) {
         return Optional.ofNullable(
-                getEm().find(getEntityClass(), id)
+                this.getEm().find(this.getEntityClass(), id)
         );
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractService<T extends Id> implements Serializable {
      */
     protected Optional<T> mergeIfPresent(final Optional<T> entity) {
         if (entity.isPresent()) {
-            final T e = getEm().merge(entity.get());
+            final T e = this.getEm().merge(entity.get());
             return Optional.of(e);
         } else {
             return Optional.empty();
@@ -79,8 +79,8 @@ public abstract class AbstractService<T extends Id> implements Serializable {
             final Role reqRole) {
         return acc.filter(a -> null != entity && a.getRole() == reqRole)
                 .map(_unused -> {
-                    final E merged = getEm().merge(entity);
-                    getEm().remove(merged);
+                    final E merged = this.getEm().merge(entity);
+                    this.getEm().remove(merged);
                     return true;
                 }).orElse(false);
     }
