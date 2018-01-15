@@ -38,6 +38,11 @@
             <version>6.0</version>
         </dependency>
         <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
@@ -118,34 +123,16 @@
                         </goals>
                         <configuration>
                             <wsdlFiles>
-                                <wsdlFile>im-lamport_8080/GSupportTicketSystem-1.0/UserAccessPointService.wsdl</wsdlFile>
+                                <wsdlFile>im-lamport.oth-regensburg.de_8080/GSupportTicketSystem-1.0/UserAccessPointService.wsdl</wsdlFile>
                             </wsdlFiles>
                             <packageName></packageName>
                             <vmArgs>
                                 <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
                             </vmArgs>
-                            <wsdlLocation>http://im-lamport:8080/GSupportTicketSystem-1.0/UserAccessPointService?wsdl</wsdlLocation>
+                            <wsdlLocation>http://im-lamport.oth-regensburg.de:8080/GSupportTicketSystem-1.0/UserAccessPointService?wsdl</wsdlLocation>
                             <staleFile>${project.build.directory}/jaxws/stale/UserAccessPointService.stale</staleFile>
                         </configuration>
                         <id>wsimport-generate-UserAccessPointService</id>
-                        <phase>generate-sources</phase>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>im-lamport_8080/GSupportTicketSystem-1.0/UserAccessPointService.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName></packageName>
-                            <vmArgs>
-                                <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-                            </vmArgs>
-                            <wsdlLocation>http://im-lamport:8080/GSupportTicketSystem-1.0/UserAccessPointService?wsdl</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/UserAccessPointService_1.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-UserAccessPointService_1</id>
                         <phase>generate-sources</phase>
                     </execution>
                 </executions>
