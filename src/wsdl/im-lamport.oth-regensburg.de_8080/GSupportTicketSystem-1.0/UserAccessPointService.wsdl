@@ -235,7 +235,7 @@
   </wsdl:binding>
   <wsdl:service name="UserAccessPointServiceService">
     <wsdl:port binding="tns:UserAccessPointServiceServiceSoapBinding" name="UserAccessPointServicePort">
-      <soap:address location="http://im-lamport:8080/GSupportTicketSystem-1.0/UserAccessPointService"/>
+      <soap:address location="http://im-lamport.oth-regensburg.de:8080/GSupportTicketSystem-1.0/UserAccessPointService"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="template/template.xhtml" rendered="#{listArticlesController.shopRole}">
+            <ui:define name="content">
+                <h:form>
+                    <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art" selectionMode="single">
+                        <p:column headerText="Name">
+                            <p:outputLabel value="#{art.name}" />
+                        </p:column>
+                        
+                        <p:column headerText="Beschreibung">
+                            <p:outputLabel value="#{art.description}" />
+                        </p:column>
+                        
+                        <p:column headerText="Foto">
+                            <!--<b:image value="#{images.image}">
+                                <f:param name="id" value="#{art.id}" />
+                            </b:image>-->
+                        </p:column>
+
+                        <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole}">
+                            <p:commandButton value="Löschen" icon="trash" ajax="true" update="artTable" actionListener="#{listArticlesController.deleteArticle(art)}" rendered="#{listArticlesController.userIsOwnerOf(art)}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

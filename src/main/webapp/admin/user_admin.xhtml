@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:body>
+        <ui:composition template="/template/layout.xhtml" rendered="#{adminShopController.adminRole}">
+            <ui:define name="content">
+                <b:form>
+                    <b:remoteCommand update="shpTable" name="updateTable" />
+                    <b:dataTable value="#{adminShopController.shops}" id="shpTable" var="shp">
+                        <b:dataTableColumn label="Name" value="#{shp.name}">
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn label="Beschreibung" value="#{shp.description}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Adresse" value="#{shp.address.toString()}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Aktiviert" value="#{shp.activated}">
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Status ändern">
+                            <b:commandButton value="Aktivieren/Deaktivieren" icon="edit" ajax="true" actionListener="#{adminShopController.toogleActivationState(shp)}" update="shpTable" oncomplete="updateTable();" />
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn label="Löschen">
+                            <b:commandButton value="Löschen" icon="trash" ajax="true" actionListener="#{adminShopController.deleteShop(shp)}" update="shpTable" oncomplete="updateTable();" />
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </b:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
