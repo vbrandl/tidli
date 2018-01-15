@@ -16,46 +16,60 @@
  */
 package org.othr.tidli.controller;
 
-import java.util.Calendar;
+import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
+import org.othr.tidli.data.WrappedOffer;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.service.OfferServiceIF;
+import org.othr.tidli.service.RatingServiceIF;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class ListOffersController extends AbstractController {
 
     private static final long serialVersionUID = -8904855712220676294L;
 
     @Inject
     private OfferServiceIF os;
-    private Set<Offer> offers;
+    @Inject
+    private RatingServiceIF rs;
+    private Set<WrappedOffer> offers;
 
     @PostConstruct
     private void prepareData() {
-        this.getShop().ifPresent(shp -> this.offers = new HashSet<>(shp.getOffers()));
+        this.offers = this.getUser().map(_u -> this.os.listTodaysOffers()).orElse(Collections.emptySet());
     }
 
-    public Set<Offer> getOffers() {
+    public Set<WrappedOffer> getOffers() {
         return Collections.unmodifiableSet(this.offers);
     }
 
     public void decrementOffer(final Offer off, final int n) {   
         this.os.decrementOffer(off, n, this.getShop()).ifPresent(offer -> {
-            if (this.offers.remove(offer)) {
-                this.offers.add(offer);
+            final WrappedOffer wo = new WrappedOffer(offer);
+            if (this.offers.remove(wo)) {
+                this.offers.add(wo);
             }
         });
+    }
+
+    public void rateOffer(final WrappedOffer off) {
+        final int rating = off.getRating();
+        final Offer unwrap = off.unwrap();
+        if (this.rs.rateOffer(unwrap, rating, this.getUser())) {
+            this.sendInfo("Erfolg", "Angebot erfolgreich bewertet");
+        } else {
+            this.sendError("Fehler", "Angebot bereits bewertet");
+        }
     }
 
     public void deleteOffer(final Offer off) {
@@ -63,12 +77,28 @@ public class ListOffersController extends AbstractController {
     }
 
     public boolean isActive(final Offer off) {
-        final Calendar today = Calendar.getInstance();
-        final Calendar o = Calendar.getInstance();
-        o.setTime(off.getDay());
-        
-        return today.get(Calendar.YEAR) == o.get(Calendar.YEAR)
-                && today.get(Calendar.DAY_OF_YEAR) == o.get(Calendar.DAY_OF_YEAR);
+        return off.getDay().equals(LocalDate.now());
     }
+
+    public String formatPrice(final Offer off) {
+        if (null != off) {
+            return NumberFormat.getCurrencyInstance(Locale.GERMANY).format((double)off.getPrice() / 100);
+        } else {
+            return "";
+        }
+    }
+
+    public boolean isOwnerOfOffer(final Offer off) {
+        return null != off 
+                ? this.getShop() // is shop?
+                        .filter(s -> s.getOffers().contains(off)) // that owns the offer?
+                        .isPresent() // or not?
+                : false; // or no offer?
+    }
+
+    public boolean isAlreadyRated(final WrappedOffer off) {
+        return this.rs.isRatedByUser(off, this.getUser());
+    }
+
     
 }

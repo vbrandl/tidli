@@ -18,6 +18,8 @@ package org.othr.tidli.service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
+import org.othr.tidli.data.WrappedOffer;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
@@ -77,5 +79,9 @@ public interface OfferServiceIF {
      * @return a collection of offers
      */
     Collection<Offer> findForLocation(final Optional<? extends Account> acc);
+
+    Collection<Offer> findForCustomLocation(final String city, final Integer zip);
+
+    Set<WrappedOffer> listTodaysOffers();
     
 }

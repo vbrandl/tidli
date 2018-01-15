@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Brandl Valentin
+ * Copyright (C) 2018 Brandl Valentin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,15 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Optional;
-import org.othr.tidli.entity.Account;
-import org.othr.tidli.entity.Administrator;
-import org.othr.tidli.entity.Offer;
-import org.othr.tidli.entity.Shop;
+import java.util.Collection;
+import org.othr.tidli.dto.ShopDTO;
 
 /**
  *
  * @author Brandl Valentin
  */
-public interface AdminServiceIF {
+public interface PubShopServiceIF {
 
-    boolean activateShop(final Shop s, final Optional<Administrator> adm);
-    boolean deleteAccount(final Account acc, final Optional<Administrator> adm);
-    boolean deleteOffer(final Offer off, final Optional<Administrator> adm);
-    Optional<Administrator> findEntity(final long id);
+    Collection<ShopDTO> listShops();
     
 }

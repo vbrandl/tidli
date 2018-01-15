@@ -5,26 +5,51 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
-        <ui:composition template="template/template.xhtml" rendered="#{userDetailController.loggedIn}">
-            <ui:define name="content">
+        <ui:composition template="template/template.xhtml">
+            <ui:define name="content" rendered="#{shopDetailController.shopRole}">
                 <h:form>
                     <p:panelGrid columns="2">
                         <p:outputLabel for="mail" value="E-Mail" />
-                        <p:inputText id="mail" label="E-Mail" value="#{userDetailController.unwrapedUser.email}" />
+                        <p:inputText id="mail" label="E-Mail" value="#{shopDetailController.unwrapedShop.email}" required="true" />
                         
                         <p:outputLabel for="name" value="Name" />
-                        <p:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
+                        <p:inputText id="name" label="Name" value="#{shopDetailController.unwrapedShop.name}" required="true" />
                         
                         <p:outputLabel for="pw_old" value="Altes Passwort" />
-                        <p:inputText id="pw_old" type="password" label="Altes Passwort" value="#{userDetailController.pwOld}" required="true" />
+                        <p:inputText id="pw_old" type="password" label="Altes Passwort" value="#{shopDetailController.pwOld}" />
                         
                         <p:outputLabel for="pw1" value="Neues Passwort" />
-                        <p:inputText id="pw1" type="password" label="Neues Passwort" value="#{userDetailController.pw1}" required="true" />
+                        <p:inputText id="pw1" type="password" label="Neues Passwort" value="#{shopDetailController.pw1}" />
 
                         <p:outputLabel for="pw2" value="Neues Passwort wiederholen" />
-                        <p:inputText id="pw2" type="password" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" required="true" />
+                        <p:inputText id="pw2" type="password" label="Neues Passwort wiederholen" value="#{shopDetailController.pw2}" />
+
+                        <p:separator />
+                        <p:separator />
+
+                        <p:outputLabel for="city" value="Stadt" />
+                        <p:inputText id="city" value="#{shopDetailController.unwrapedShop.city}" />
                             
-                        <p:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
+                        <p:outputLabel for="street" value="Straße" />
+                        <p:inputText id="street" value="#{shopDetailController.unwrapedShop.street}" />
+                            
+                        <p:outputLabel for="number" value="Hausnummer" />
+                        <p:inputText id="number" value="#{shopDetailController.unwrapedShop.number}" />
+
+                        <p:outputLabel for="zip" value="PLZ" />
+                        <p:inputNumber id="zip" value="#{shopDetailController.unwrapedShop.zipCode}" minValue="0" maxValue="99999" thousandSeparator="" />
+
+                        <p:separator />
+                        <p:separator />
+
+                        <p:outputLabel for="contactMail" value="Kontakt E-Mail" />
+                        <p:inputText id="contactMail" value="#{shopDetailController.unwrapedShop.pubEmail}" />
+
+                        <p:outputLabel for="contactTel" value="Kontakt Telefon" />
+                        <p:inputText id="contactTel" value="#{shopDetailController.unwrapedShop.telNo}" />
+
+                        <p:outputLabel value="" />
+                        <p:commandButton value="Speichern" actionListener="#{shopDetailController.updateShop()}" />
                     </p:panelGrid>
                 </h:form>
             </ui:define>

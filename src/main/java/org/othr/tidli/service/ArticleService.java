@@ -16,8 +16,12 @@
  */
 package org.othr.tidli.service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Shop;
@@ -52,14 +56,37 @@ public class ArticleService extends AbstractService<Article> implements ArticleS
         return this.findEntity(id).map(art -> art.getImage()).orElse(new byte[] {});
     }
 
+    @Override
+    public Optional<Shop> getShopForArticle(final Article art) {
+        final TypedQuery<Shop> query = this.getEm()
+                .createNamedQuery("Shop.findAll", Shop.class);
+        final List<Shop> shps = query.getResultList();
+        return shps.parallelStream().filter(s -> s.getArticles().contains(art)).findFirst();
+    }
+
     @Transactional
     @Override
     public void deleteArticle(final Article art) {
         final Article merged = this.getEm().merge(art);
+        // named query fails somehow. doing it manually
+        //final TypedQuery<Shop> query = this.getEm()
+                //.createNamedQuery("Shop.findByArticle", Shop.class);
+        //query.setParameter("art", art);
+        //final Optional<Shop> owner = AbstractService.singleResultToOptional(query);
+        final TypedQuery<Shop> query = this.getEm()
+                .createNamedQuery("Shop.findAll", Shop.class);
+        final List<Shop> shps = query.getResultList();
+        final Optional<Shop> owner = shps.parallelStream().filter(s -> s.getArticles().contains(art)).findFirst();
+        owner.map(s -> this.getEm().merge(s)).ifPresent(s -> s.removeArticle(merged));
         merged.getRatings().parallelStream().forEach(this.getEm()::remove);
         this.os.findForArticle(art).parallelStream().map(this.getEm()::merge)
                 .forEach(this.getEm()::remove);
         this.getEm().remove(merged);
+    }
+
+    @Override
+    public Collection<Article> findAll() {
+        return this.getEm().createNamedQuery("Article.findAll", Article.class).getResultList();
     }
 
 }

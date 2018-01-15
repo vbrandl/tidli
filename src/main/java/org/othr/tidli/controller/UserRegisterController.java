@@ -19,10 +19,8 @@ package org.othr.tidli.controller;
 import java.util.Objects;
 import java.util.Optional;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
-import org.othr.tidli.entity.Address;
 import org.othr.tidli.service.RegisterService;
 import org.othr.tidli.service.UserServiceIF;
 
@@ -31,12 +29,12 @@ import org.othr.tidli.service.UserServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
-@ViewScoped
 public class UserRegisterController extends RegisterController<Account> {
 
     private static final long serialVersionUID = -9069340813032081058L;
 
     private String email, name, pw1, pw2, city, street, number;
+    private Integer zip;
 
     @Inject
     private UserServiceIF us;
@@ -50,9 +48,8 @@ public class UserRegisterController extends RegisterController<Account> {
     @Override
     protected Optional<Account> createEntity() {
         if (Objects.equals(this.pw1, this.pw2)) {
-            final Address addr = new Address(0, this.city, this.street, this.number);
             return Optional.of(
-                    Account.createUser(this.email, this.name, addr, this.pw1)
+                    Account.createUser(this.email, this.name, this.city, this.street, this.number, this.zip, this.pw1)
             );
         } else {
             this.sendError("Register", "Passwörter stimmen nicht überein");
@@ -114,6 +111,14 @@ public class UserRegisterController extends RegisterController<Account> {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Integer getZip() {
+        return this.zip;
+    }
+
+    public void setZip(Integer zip) {
+        this.zip = zip;
     }
 
 }

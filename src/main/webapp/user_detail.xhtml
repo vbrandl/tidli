@@ -16,14 +16,30 @@
                         <p:inputText id="name" label="Name" value="#{userDetailController.unwrapedUser.name}" />
                         
                         <p:outputLabel for="pw_old" value="Altes Passwort" />
-                        <p:inputText id="pw_old" type="password" label="Altes Passwort" value="#{userDetailController.pwOld}" required="true" />
+                        <p:inputText id="pw_old" type="password" label="Altes Passwort" value="#{userDetailController.pwOld}" />
                         
                         <p:outputLabel for="pw1" value="Neues Passwort" />
-                        <p:inputText id="pw1" type="password" label="Neues Passwort" value="#{userDetailController.pw1}" required="true" />
+                        <p:inputText id="pw1" type="password" label="Neues Passwort" value="#{userDetailController.pw1}" />
 
                         <p:outputLabel for="pw2" value="Neues Passwort wiederholen" />
-                        <p:inputText id="pw2" type="password" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" required="true" />
+                        <p:inputText id="pw2" type="password" label="Neues Passwort wiederholen" value="#{userDetailController.pw2}" />
+
+                        <p:separator />
+                        <p:separator />
+
+                        <p:outputLabel for="city" value="Stadt" />
+                        <p:inputText id="city" value="#{userDetailController.unwrapedUser.city}" />
                             
+                        <p:outputLabel for="street" value="Straße" />
+                        <p:inputText id="street" value="#{userDetailController.unwrapedUser.street}" />
+                            
+                        <p:outputLabel for="number" value="Hausnummer" />
+                        <p:inputText id="number" value="#{userDetailController.unwrapedUser.number}" />
+
+                        <p:outputLabel for="zip" value="PLZ" />
+                        <p:inputNumber id="zip" value="#{userDetailController.unwrapedUser.zipCode}" minValue="0" maxValue="99999" thousandSeparator="" />
+                            
+                        <p:outputLabel value="" />
                         <p:commandButton value="Speichern" actionListener="#{userDetailController.updateUser()}" />
                     </p:panelGrid>
                 </h:form>

@@ -3,23 +3,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        <ui:composition template="template/template.xhtml" rendered="#{createArticleController.shopRole}">
+        <ui:composition template="template/template.xhtml" rendered="#{editOfferController.shopRole}">
             <ui:define name="content">
                 <h:form>
-                    <p:panelGrid columns="1">
-                        <p:inputText id="name" label="Name" value="#{createArticleController.name}" required="true" />
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="arts" value="Artikel wählen" />
+                        <p:selectOneMenu id="arts" required="true" value="#{editOfferController.article}">
+                            <f:selectItem itemLabel="Artikel wählen" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{editOfferController.articles}" itemLabel="#{art.name}" itemValue="#{art.id}" var="art" />
+                        </p:selectOneMenu>
 
-                        <p:inputTextarea id="desc" label="Beschreibung" value="#{createArticleController.description}" required="true" />
+                        <p:outputLabel for="amount" value="Anzahl" />
+                        <p:inputNumber id="amount" value="#{editOfferController.amount}" decimalPlaces="0" minValue="1" required="true" />
 
-                        <p:fileUpload id="dl" label="Bild" fileUploadListener="#{createArticleController.fileUpload}" required="true" auto="true" />
-                        
-                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
+                        <p:outputLabel for="price" value="Preis" />
+                        <p:inputNumber id="price" value="#{editOfferController.price}" required="true" decimalPlaces="2" minValue="0" symbol="€" />
+
+                        <p:commandButton value="Erstellen" actionListener="#{editOfferController.createOffer()}" ajax="false" />
                     </p:panelGrid>
                 </h:form>
             </ui:define>
         </ui:composition>
     </h:body>
 </html>
-

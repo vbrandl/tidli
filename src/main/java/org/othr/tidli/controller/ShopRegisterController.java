@@ -19,9 +19,7 @@ package org.othr.tidli.controller;
 import java.util.Objects;
 import java.util.Optional;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import org.othr.tidli.entity.Address;
 import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.RegisterService;
 import org.othr.tidli.service.ShopServiceIF;
@@ -31,7 +29,6 @@ import org.othr.tidli.service.ShopServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
-@ViewScoped
 public class ShopRegisterController extends RegisterController<Shop> {
 
     private static final long serialVersionUID = 5982363413410764051L;
@@ -51,9 +48,7 @@ public class ShopRegisterController extends RegisterController<Shop> {
     @Override
     protected Optional<Shop> createEntity() {
         if (Objects.equals(this.pw1, this.pw2)) {
-            final Address addr = new Address(
-                    this.zip, this.city, this.street, this.number);
-            return Optional.of(new Shop(this.email, this.name, this.pw1, addr, this.desc));
+            return Optional.of(new Shop(this.email, this.name, this.pw1, this.city, this.street, this.number, this.zip, this.desc));
         } else {
             this.sendError("Register", "Passwörter stimmen nicht überein");
             return Optional.empty();

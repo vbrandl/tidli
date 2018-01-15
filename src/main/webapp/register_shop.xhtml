@@ -28,7 +28,7 @@
                         <p:inputText id="city" label="Stadt" value="#{shopRegisterController.city}" />
 
                         <p:outputLabel for="zip" value="PLZ" />
-                        <p:inputText id="zip" label="PLZ" value="#{shopRegisterController.zip}" type="number" maxlength="5" />
+                        <p:inputNumber id="zip" value="#{shopRegisterController.zip}" minValue="10000" maxValue="99999" />
                         
                         <p:outputLabel for="street" value="Straße" />
                         <p:inputText id="street" label="Straße" value="#{shopRegisterController.street}" />
@@ -36,6 +36,7 @@
                         <p:outputLabel for="number" value="Hausnummer" />
                         <p:inputText id="number" label="Hausnummer" value="#{shopRegisterController.number}" />
                         
+                        <p:outputLabel value="" />
                         <p:commandButton value="Registrieren" action="#{shopRegisterController.register()}" />
                     </p:panelGrid>
                 </h:form>

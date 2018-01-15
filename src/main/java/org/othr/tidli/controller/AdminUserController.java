@@ -20,45 +20,53 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
-import org.othr.tidli.entity.Shop;
-import org.othr.tidli.service.ShopServiceIF;
+import org.othr.tidli.entity.Account;
+import org.othr.tidli.service.UserServiceIF;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
-public class AdminShopController extends AbstractController {
+public class AdminUserController extends AbstractController {
 
     private static final long serialVersionUID = 3565920421845368710L;
     
     @Inject
-    private ShopServiceIF ss;
-    private Set<Shop> shops;
+    private UserServiceIF us;
+    private Set<Account> users;
 
     @PostConstruct
     private void prepareData() {
-        this.shops = new HashSet<>(this.ss.getAllShops());
-    }
-
-    public void toogleActivationState(final Shop shp) {
-        if (this.shops.remove(shp)) {
-            final Shop updated = this.ss.toogleActivationState(shp);
-            this.shops.add(updated);
+        if (this.isAdminRole()) {
+            this.users = new HashSet<>(this.us.getAllUsers());
         }
     }
 
-    public void deleteShop(final Shop shp) {
-        if (this.shops.remove(shp)) {
-            this.ss.deleteShop(shp);
+    public void toogleActivationState(final Account acc) {
+        if (this.isAdminRole()) {
+            if (this.users.remove(acc)) {
+                final Account updated = this.us.toogleActivationState(acc);
+                this.users.add(updated);
+            }
         }
     }
 
-    public Set<Shop> getShops() {
-        return Collections.unmodifiableSet(this.shops);
+    public void deleteShop(final Account acc) {
+        if (this.isAdminRole()) {
+            if (this.users.remove(acc)) {
+                this.us.deleteUser(acc);
+            }
+        }
+    }
+
+    public Set<Account> getUsers() {
+        if (this.isAdminRole()) {
+            return Collections.unmodifiableSet(this.users);
+        } else {
+            return Collections.emptySet();
+        }
     }
 }

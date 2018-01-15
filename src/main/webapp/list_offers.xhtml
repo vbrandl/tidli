@@ -5,26 +5,41 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/template.xhtml" rendered="#{listArticlesController.shopRole}">
+        <ui:composition template="template/template.xhtml" rendered="#{listOffersController.loggedIn}">
             <ui:define name="content">
                 <h:form>
-                    <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art" selectionMode="single">
-                        <p:column headerText="Name">
-                            <p:outputLabel value="#{art.name}" />
+                    <p:dataTable value="#{listOffersController.offers}" id="offTable" var="off">
+                        <p:column headerText="Name" filterBy="#{off.article.name}">
+                            <p:outputLabel value="#{off.article.name}" />
                         </p:column>
                         
-                        <p:column headerText="Beschreibung">
-                            <p:outputLabel value="#{art.description}" />
+                        <p:column headerText="Beschreibung" filterBy="#{off.article.description}">
+                            <p:outputLabel value="#{off.article.description}" />
                         </p:column>
                         
                         <p:column headerText="Foto">
-                            <!--<b:image value="#{images.image}">
-                                <f:param name="id" value="#{art.id}" />
-                            </b:image>-->
+                            <!--<p:graphicImage value="#{off.article.image}" />-->
                         </p:column>
 
-                        <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole}">
-                            <p:commandButton value="Löschen" icon="trash" ajax="true" update="artTable" actionListener="#{listArticlesController.deleteArticle(art)}" rendered="#{listArticlesController.userIsOwnerOf(art)}" />
+                        <p:column headerText="Anzahl" filterBy="#{off.amount}">
+                            <p:outputLabel value="#{off.amount}" />
+                        </p:column>
+
+                        <p:column headerText="Preis" filterBy="#{listOffersController.formatPrice(off)}">
+                            <p:outputLabel value="#{listOffersController.formatPrice(off)}" />
+                        </p:column>
+
+                        <p:column headerText="Bewerten" rendered="#{listOffersController.userRole}">
+                            <p:inputNumber value="#{off.rating}" decimalPlaces="0" minValue="1" maxValue="5" />
+                            <p:commandButton value="Bewerten" actionListener="#{listOffersController.rateOffer(off)}" disabled="#{listOffersController.isAlreadyRated(off)}" />
+                        </p:column>
+
+                        <p:column headerText="Optionen" rendered="#{listOffersController.shopRole}">
+                            <p:commandButton value="-1" update="offTable" actionListener="#{listOffersController.decrementOffer(off, 1)}" rendered="#{listOffersController.isOwnerOfOffer(off)}" />
+                        </p:column>
+
+                        <p:column headerText="Löschen" rendered="#{listOffersController.adminRole}">
+                            <p:commandButton value="Löschen" icon="trash" ajax="true" update="offTable" actionListener="#{listOffersController.deleteOffer(off)}" rendered="#{listOffersController.adminRole}" />
                         </p:column>
 
                     </p:dataTable>

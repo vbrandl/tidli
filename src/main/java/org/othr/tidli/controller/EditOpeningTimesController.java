@@ -17,9 +17,12 @@
 package org.othr.tidli.controller;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
@@ -44,10 +47,21 @@ public class EditOpeningTimesController extends AbstractController {
     private WeekDay wd;
     private LocalTime from;
     private LocalTime to;
+    private Set<WeekDay> availableWeekDays;
 
     @PostConstruct
     private void prepareData() {
         this.ot = this.getShop().map(s -> s.getOpeningTimes());
+        this.availableWeekDays = new HashSet<>(Arrays.asList(WeekDay.values()));
+        this.getShop()
+                .map( // map shop to stream of week days
+                        shp -> shp
+                                .getOpeningTimes().getDays()
+                                .parallelStream()
+                                .map(day -> day.getWeekDay())
+                ).ifPresent( // remove each existing week day from available days
+                        stream -> stream.forEach(day -> this.availableWeekDays.remove(day))
+                );
     }
 
     public Collection<OpeningDay> getOpeningTimes() {
@@ -55,7 +69,19 @@ public class EditOpeningTimesController extends AbstractController {
     }
 
     public void addDay() {
-        this.ss.addOpeningDay(this.getShop(), new OpeningDay(this.wd, this.from, this.to));
+        if (this.ss
+                .addOpeningDay(
+                        this.getShop(),
+                        new OpeningDay(this.wd, this.from, this.to)
+                )
+                ) {
+            //this.availableWeekDays.remove(this.wd);
+            this.updateSession();
+            this.prepareData();
+            this.sendInfo("Erfolgreich angelegt", "Öffnungszeit wurde erfolgreich angelegt!");
+        } else {
+            this.sendError("Fehler", "Fehler beim anlegen der Öffnungszeit!");
+        }
     }
 
     public boolean save() {
@@ -86,6 +112,10 @@ public class EditOpeningTimesController extends AbstractController {
 
     public void setTo(final LocalTime to) {
         this.to = to;
+    }
+
+    public Set<WeekDay> getAvailableWeekDays() {
+        return Collections.unmodifiableSet(this.availableWeekDays);
     }
 
 }

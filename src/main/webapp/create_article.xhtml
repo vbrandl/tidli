@@ -5,17 +5,21 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/template.xhtml" rendered="#{createArticleController.shopRole}">
-            <ui:define name="content">
-                <h:form>
-                    <p:panelGrid columns="1">
-                        <p:inputText id="name" label="Name" value="#{createArticleController.name}" required="true" />
+        <ui:composition template="template/template.xhtml">
+            <ui:define name="content" rendered="#{createArticleController.shopRole}">
+                <h:form enctype="multipart/form-data">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="name" value="Name" />
+                        <p:inputText id="name" value="#{createArticleController.name}" required="true" />
 
-                        <p:inputTextarea id="desc" label="Beschreibung" value="#{createArticleController.description}" required="true" />
+                        <p:outputLabel for="desc" value="Beschreibung" />
+                        <p:inputTextarea id="desc" value="#{createArticleController.description}" required="true" />
 
-                        <p:fileUpload id="dl" label="Bild" fileUploadListener="#{createArticleController.fileUpload}" required="true" auto="true" />
+                        <p:outputLabel for="ul" value="Bild" />
+                        <p:fileUpload id="ul" value="#{createArticleController.file}" mode="simple" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" />
                         
-                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
+                        <p:outputLabel /><!-- placeholder -->
+                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" ajax="false" />
                     </p:panelGrid>
                 </h:form>
             </ui:define>

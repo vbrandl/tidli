@@ -66,5 +66,7 @@ public interface LoginServiceIF {
      * @return The accounts role or {@code empty}
      */
     Optional<Role> getRole();
+
+    void updateSession();
     
 }

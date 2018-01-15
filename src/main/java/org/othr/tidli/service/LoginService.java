@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.othr.tidli.service;
 
 import java.util.Optional;
-import java.util.UUID;
 import javax.enterprise.context.SessionScoped;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
 import org.othr.tidli.entity.Shop;
@@ -36,14 +37,9 @@ public class LoginService extends AbstractService<Account> implements LoginServi
     private static final long serialVersionUID = 8818972444125627074L;
 
     private Optional<Account> user = Optional.empty();
-    private final UUID uid;
-
-    public LoginService() {
-        this.uid = UUID.randomUUID();
-    }
 
     private Optional<Account> findByEmail(final String email) {
-        final TypedQuery<Account> query = this.getEm().createNamedQuery("findByEmail", Account.class);
+        final TypedQuery<Account> query = this.getEm().createNamedQuery("Account.findByEmail", Account.class);
         query.setParameter("email", email);
         return singleResultToOptional(query);
     }
@@ -103,6 +99,20 @@ public class LoginService extends AbstractService<Account> implements LoginServi
     @Override
     public Optional<Administrator> getAdmin() {
         return this.user.filter(a -> a.getRole() == Role.Administrator).map(a -> (Administrator)a);
+    }
+
+    @Transactional
+    @Override
+    public void updateSession() {
+        this.user = this.user.map(u -> {
+            if (u.getRole() == Role.Shop) {
+                return this.getEm().find(Shop.class, u.getId());
+            } else if (u.getRole() == Role.Administrator) {
+                return this.getEm().find(Administrator.class, u.getId());
+            } else {
+                return this.getEm().find(Account.class, u.getId());
+            }
+        });
     }
     
 }

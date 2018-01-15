@@ -21,5 +21,21 @@ package org.othr.tidli.util;
  * @author Brandl Valentin
  */
 public enum WeekDay {
-    Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+    Monday("Montag"),
+    Tuesday("Dienstag"),
+    Wednesday("Mittwoch"),
+    Thursday("Donnerstag"),
+    Friday("Freitag"),
+    Saturday("Samstag"),
+    Sunday("Sonntag");
+
+    private final String name;
+    private WeekDay(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

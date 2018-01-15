@@ -43,6 +43,10 @@ public abstract class Id implements Serializable {
         return this.id;
     }
 
+    public void setId(final long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

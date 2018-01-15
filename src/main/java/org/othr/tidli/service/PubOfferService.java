@@ -18,9 +18,9 @@ package org.othr.tidli.service;
 
 import javax.inject.Inject;
 import javax.jws.WebService;
+import org.othr.tidli.dto.ShopDTO;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
-import org.othr.tidli.entity.Shop;
 
 /**
  *
@@ -34,7 +34,7 @@ public class PubOfferService extends AbstractService<Offer> implements PubOfferS
     @Inject
     private OfferServiceIF os;
     @Inject
-    private ArticleServiceIF as;
+    private ShopServiceIF ss;
     
     @Override
     protected Class<Offer> getEntityClass() {
@@ -42,20 +42,11 @@ public class PubOfferService extends AbstractService<Offer> implements PubOfferS
     }
 
     @Override
-    public boolean createOffer(final Shop s, final Article art, final Offer off,
+    public boolean createOffer(final ShopDTO s, final Article art,
             final int price, final int amount) {
-        return null != this.os.createOffer(art, price, amount, s);
+        return this.ss.fromDTO(s)
+                .map(shp -> this.os.createOffer(art, price, amount, shp) != null)
+                .orElse(false);
     }
-
-    //@Override
-    //public boolean createArticle(final Shop s, final Article art) {
-        //return null != this.as.createArticle(art, s);
-    //}
-
-    //@Override
-    //public Collection<Article> listArticles(final Shop s) {
-        //final Shop persistentShop = this.getEm().find(Shop.class, s.getId());
-        //return persistentShop.getArticles();
-    //}
     
 }

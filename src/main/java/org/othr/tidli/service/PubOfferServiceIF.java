@@ -16,10 +16,8 @@
  */
 package org.othr.tidli.service;
 
-import javax.jws.WebService;
+import org.othr.tidli.dto.ShopDTO;
 import org.othr.tidli.entity.Article;
-import org.othr.tidli.entity.Offer;
-import org.othr.tidli.entity.Shop;
 
 /**
  *
@@ -27,9 +25,7 @@ import org.othr.tidli.entity.Shop;
  */
 public interface PubOfferServiceIF {
 
-    boolean createOffer(final Shop s, final Article art, final Offer off,
+    boolean createOffer(final ShopDTO s, final Article art,
             final int price, final int amount);
-    //boolean createArticle(final Shop s, final Article art);
-    //Collection<Article> listArticles(final Shop s);
 
 }

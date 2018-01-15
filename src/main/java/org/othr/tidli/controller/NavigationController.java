@@ -16,7 +16,6 @@
  */
 package org.othr.tidli.controller;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 
 /**
@@ -24,9 +23,12 @@ import javax.faces.bean.ManagedBean;
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class NavigationController extends AbstractController {
     
     private static final long serialVersionUID = -4852204425754218642L;
+
+    public String getUserName() {
+        return this.getUser().map(u -> u.getName()).orElse("");
+    }
     
 }

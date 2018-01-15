@@ -17,25 +17,24 @@
 package org.othr.tidli.controller;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.service.ArticleServiceIF;
-import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class CreateArticleController extends AbstractController {
 
     private static final long serialVersionUID = -7706811759715568074L;
 
-    private String name, description;
-//    private UploadedFile image;
-    private byte[] content = null;
+    private String name;
+    private String description;
+    private UploadedFile uf;
     @Inject
     private ArticleServiceIF as;
 
@@ -55,25 +54,30 @@ public class CreateArticleController extends AbstractController {
         this.description = description;
     }
 
-//    public UploadedFile getImage() {
-//        return image;
-//    }
-
-//    public void setImage(final UploadedFile image) {
-//        this.image = image;
-//    }
-
-    public void fileUpload(final FileUploadEvent fue) {
-        this.content = fue.getFile().getContents();
+    public UploadedFile getFile() {
+        return this.uf;
     }
 
+    public void setFile(final UploadedFile uf) {
+        this.uf = uf;
+    }
+
+    @Transactional
     public void save() {
-        this.getShop().ifPresent(shp -> {
-            this.as.createArticle(
-                    new Article(this.name, this.description, this.content),
+        if (this.getShop().map(shp -> {
+            final byte[] content = null != this.uf
+                    ? this.uf.getContents()
+                    : null;
+            return this.as.createArticle(
+                    new Article(this.name, this.description, content),
                     shp
             );
-        });
+        }).isPresent()) {
+            this.updateSession();
+            this.sendInfo("Artikel erstellen", "Artikel erfolgreich angelegt");
+        } else {
+            this.sendError("Artikel erstellen", "Es ist ein Fehler auftetreten");
+        }
     }
     
 }

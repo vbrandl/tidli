@@ -17,12 +17,16 @@
 
 package org.othr.tidli.service;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import org.othr.tidli.data.WrappedOffer;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
@@ -39,7 +43,14 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Override
     public Offer createOffer(final Article art, final int price, final int amount, final Shop s) {
         final Shop shop = this.getEm().merge(s);
-        final Offer o = new Offer(art, amount, price);
+        final Article artMerged;
+        if (this.getEm().find(Article.class, art.getId()) == null) {
+            this.getEm().persist(art);
+            artMerged = art;
+        } else {
+            artMerged = this.getEm().merge(art);
+        }
+        final Offer o = new Offer(artMerged, amount, price);
         this.getEm().persist(o);
         shop.addOffer(o);
         return o;
@@ -89,14 +100,27 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Override
     public Collection<Offer> findForLocation(final Optional<? extends Account> acc) {
         return acc
-                .filter(a -> a.getAddress() != null)
-                .map(a -> {
-                    final TypedQuery<Offer> query = this.getEm().createNamedQuery("Offer.findForLocation", Offer.class);
-                    query.setParameter("city", a.getAddress().getCity());
-                    query.setParameter("zipCode", a.getAddress().getZipCode());
-                    return query.getResultList();
-                }).orElse(Collections.emptyList());
+                .map(a -> this.findForCustomLocation(a.getCity(), a.getZipCode()))
+                .orElse(Collections.emptyList());
 
+    }
+
+    @Override
+    public Collection<Offer> findForCustomLocation(final String city, final Integer zip) {
+        final TypedQuery<Offer> query = this.getEm().createNamedQuery("Offer.findForLocation", Offer.class);
+        query.setParameter("city", city);
+        query.setParameter("zipCode", zip);
+        return query.getResultList();
+    }
+
+    @Override
+    public Set<WrappedOffer> listTodaysOffers() {
+        final TypedQuery<Offer> query = this.getEm().createNamedQuery("Offer.findAll", Offer.class);
+        final Collection<Offer> offers = query.getResultList();
+        return offers.parallelStream()
+                .filter(o -> o.getDay().equals(LocalDate.now()))
+                .map(WrappedOffer::new)
+                .collect(Collectors.toSet());
     }
     
 }

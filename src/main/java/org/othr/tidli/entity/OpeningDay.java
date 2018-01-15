@@ -19,8 +19,6 @@ package org.othr.tidli.entity;
 import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import org.othr.tidli.util.WeekDay;
 
@@ -35,10 +33,10 @@ public class OpeningDay extends Id {
     private static final long serialVersionUID = -3578698357739936426L;
 
     private WeekDay weekDay;
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIME)
     @Column(name = "from_date")
     private LocalTime from;
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIME)
     @Column(name = "to_date")
     private LocalTime to;
 

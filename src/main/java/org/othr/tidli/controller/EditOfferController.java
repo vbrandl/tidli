@@ -19,11 +19,12 @@ package org.othr.tidli.controller;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Article;
+import org.othr.tidli.service.ArticleServiceIF;
 import org.othr.tidli.service.OfferServiceIF;
 
 /**
@@ -31,15 +32,16 @@ import org.othr.tidli.service.OfferServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class EditOfferController extends AbstractController {
 
     private static final long serialVersionUID = -1331128825835684493L;
 
     @Inject
     private OfferServiceIF os;
+    @Inject
+    private ArticleServiceIF as;
     private Collection<Article> articles;
-    private Article art;
+    private Long art;
     private int amount;
     private BigDecimal price;
 
@@ -60,6 +62,10 @@ public class EditOfferController extends AbstractController {
         this.amount = amount;
     }
 
+    public boolean isArticleSelected() {
+        return null != this.art;
+    }
+
     public BigDecimal getPrice() {
         return this.price;
     }
@@ -68,21 +74,26 @@ public class EditOfferController extends AbstractController {
         this.price = price;
     }
 
-    public Article getArticle() {
+    public Long getArticle() {
         return this.art;
     }
 
-    public void setArticle(final Article art) {
+    public void setArticle(final Long art) {
         this.art = art;
     }
 
     public void createOffer() {
-        this.getShop().ifPresent(shp ->
-                this.os.createOffer(this.art, this.amount,
-                        this.price.multiply(new BigDecimal(100)).intValue(),
-                        shp
-                )
-        );
+        this.getShop().ifPresent(s -> {
+            final Optional<Article> arti = this.as.findEntity(this.art);
+            arti.ifPresent(a ->
+                    this.os.createOffer(
+                            a,
+                            this.amount,
+                            this.price.multiply(new BigDecimal(100)).intValue(),
+                            s
+                    )
+            );
+        });
     }
     
 }

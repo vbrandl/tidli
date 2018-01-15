@@ -16,11 +16,12 @@
  */
 package org.othr.tidli.controller;
 
+import com.othr.sw.gsupportticketsystem.services.UserAccessPointServiceService;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Shop;
@@ -31,7 +32,6 @@ import org.othr.tidli.service.ShopServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class AdminShopController extends AbstractController {
 
     private static final long serialVersionUID = 3565920421845368710L;

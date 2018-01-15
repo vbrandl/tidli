@@ -16,18 +16,19 @@
  */
 package org.othr.tidli.service;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
+import org.othr.tidli.util.Role;
 
 /**
  *
  * @author Brandl Valentin
  */
 @RequestScoped
-@WebService
 public class UserService extends RegisterService<Account> implements UserServiceIF {
 
     private static final long serialVersionUID = 1161955593295568896L;
@@ -45,7 +46,32 @@ public class UserService extends RegisterService<Account> implements UserService
     @Override
     public Account updateUser(Account user) {
         user.setLastUpdated(new Date());
-        return this.getEm().merge(user);
+        final Account merged = this.getEm().merge(user);
+        return merged;
+    }
+
+    @Override
+    public Collection<Account> getAllUsers() {
+        return this.getEm()
+                .createNamedQuery("Account.findAll", Account.class)
+                .getResultList()
+                .parallelStream()
+                .filter(a -> a.getRole() == Role.User)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public Account toogleActivationState(final Account acc) {
+        final Account merged = this.getEm().merge(acc);
+        merged.setActivated(!merged.isActivated());
+        return merged;
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(final Account acc) {
+        this.getEm().remove(acc);
     }
 
 }

@@ -18,7 +18,6 @@ package org.othr.tidli.controller;
 
 import java.util.Optional;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Account;
@@ -30,7 +29,6 @@ import org.othr.tidli.service.UserServiceIF;
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class UserDetailController extends AbstractController {
     private static final long serialVersionUID = -2292619186583344544L;
     private static boolean isNullOrEmpty(final String str) {
@@ -60,7 +58,9 @@ public class UserDetailController extends AbstractController {
                     return u;
                 }
             }
-            return this.us.updateUser(u);
+            final Account result = this.us.updateUser(u);
+            this.ls.updateSession();
+            return result;
         });
     }
 

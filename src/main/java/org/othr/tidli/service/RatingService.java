@@ -37,34 +37,47 @@ public class RatingService extends AbstractService<Rating> implements RatingServ
 
     @Transactional
     @Override
-    public void rateOffer(final Offer offer, final int score, final Optional<Account> acc) {
-        this.rate(offer, score, acc);
+    public boolean rateOffer(final Offer offer, final int score, final Optional<Account> acc) {
+        return this.rate(offer, score, acc);
     }
 
     @Transactional
     @Override
-    public void rateShop(final Shop shop, final int score, final Optional<Account> acc) {
-        this.rate(shop, score, acc);
+    public boolean rateShop(final Shop shop, final int score, final Optional<Account> acc) {
+        return this.rate(shop, score, acc);
     }
 
     @Transactional
     @Override
-    public void rateArticle(final Article art, final int score, final Optional<Account> acc) {
-        this.rate(art, score, acc);
+    public boolean rateArticle(final Article art, final int score, final Optional<Account> acc) {
+        return this.rate(art, score, acc);
     }
 
     @Transactional
-    private<T extends RatableEntity> void rate(final T ratable, final int score, final Optional<Account> acc) {
-        acc.filter(a -> !ratable.isRatedByUser(a)).map(a -> new Rating(score, a)).ifPresent(r -> {
+    private<T extends RatableEntity> boolean rate(final T ratable, final int score, final Optional<Account> acc) {
+        final Optional<Rating> opt = acc.filter(a -> !ratable.isRatedByUser(a)).map(a -> new Rating(score, a));
+        opt.ifPresent(r -> {
             final T merged = this.getEm().merge(ratable);
             this.getEm().persist(r);
             merged.addRating(r);
         });
+        return opt.isPresent();
     }
 
     @Override
     protected Class<Rating> getEntityClass() {
         return Rating.class;
+    }
+
+    @Override
+    public <T extends RatableEntity> boolean isRatedByUser(T entity, Optional<Account> acc) {
+        return acc
+                .map(a -> entity
+                        .getRatings()
+                        .parallelStream()
+                        .map(r -> r.getAccount())
+                        .anyMatch(ratingUser -> ratingUser.equals(a)))
+                .orElse(false);
     }
     
 }

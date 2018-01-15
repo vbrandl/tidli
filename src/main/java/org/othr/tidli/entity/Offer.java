@@ -16,9 +16,9 @@
  */
 package org.othr.tidli.entity;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +26,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
@@ -36,9 +34,10 @@ import javax.persistence.Transient;
  */
 @Entity
 @NamedQueries({
+    @NamedQuery(name = "Offer.findAll", query = "SELECT o FROM Offer o"),
     @NamedQuery(name = "Offer.findForArticle", query = "SELECT o FROM Offer o WHERE o.article = :article"),
     @NamedQuery(name = "Offer.findForQuery", query = "SELECT o FROM Offer o WHERE LOWER(o.article.description) LIKE LOWER('%:query%') OR LOWER(o.article.name) LIKE LOWER('%:query%')"),
-    @NamedQuery(name = "Offer.findForLocation", query = "SELECT o FROM Offer o, Shop s WHERE o IN s.offers AND LOWER(s.address.city) = LOWER(:city) OR s.address.zipCode = :zipCode")
+    @NamedQuery(name = "Offer.findForLocation", query = "SELECT o FROM Offer o, Shop s WHERE o IN s.offers AND LOWER(s.city) = LOWER(:city) OR s.zipCode = :zipCode"),
 })
 public class Offer extends Id implements RatableEntity {
     
@@ -51,9 +50,8 @@ public class Offer extends Id implements RatableEntity {
     //private Shop owner;
     private int amount;
     private int price;
-    @Temporal(TemporalType.DATE)
     @Column(name = "offer_date")
-    private Date day = new Date();
+    private LocalDate day = LocalDate.now();
     @OneToMany(targetEntity = Rating.class)
     private Collection<Rating> ratings;
 
@@ -85,12 +83,12 @@ public class Offer extends Id implements RatableEntity {
         this.price = price;
     }
 
-    public Date getDay() {
-        return (Date)this.day.clone();
+    public LocalDate getDay() {
+        return this.day;
     }
 
-    public void setDay(final Date day) {
-        this.day = (Date)day.clone();
+    public void setDay(final LocalDate day) {
+        this.day = day;
     }
 
     public Article getArticle() {

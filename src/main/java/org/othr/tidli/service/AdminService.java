@@ -17,6 +17,7 @@
 package org.othr.tidli.service;
 
 import java.util.Optional;
+import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Administrator;
@@ -28,6 +29,7 @@ import org.othr.tidli.util.Role;
  *
  * @author Brandl Valentin
  */
+@RequestScoped
 public class AdminService extends AbstractService<Administrator> implements AdminServiceIF {
 
     private static final long serialVersionUID = -4883918402174245937L;

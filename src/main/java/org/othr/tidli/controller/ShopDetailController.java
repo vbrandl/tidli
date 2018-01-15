@@ -16,22 +16,19 @@
  */
 package org.othr.tidli.controller;
 
-import java.util.Optional;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
-import org.othr.tidli.entity.Account;
+import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.LoginServiceIF;
-import org.othr.tidli.service.UserServiceIF;
+import org.othr.tidli.service.ShopServiceIF;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
-public class UserDetailController extends AbstractController {
+public class ShopDetailController extends AbstractController {
     private static final long serialVersionUID = -2292619186583344544L;
     private static boolean isNullOrEmpty(final String str) {
         return null == str || str.isEmpty();
@@ -40,32 +37,36 @@ public class UserDetailController extends AbstractController {
     @Inject
     private LoginServiceIF ls;
     @Inject 
-    private UserServiceIF us;
-    private Optional<Account> user;
-    private String pw1, pw2, pwOld;
-
+    private ShopServiceIF ss;
+    private Shop shop;
+    private String pw1;
+    private String pw2;
+    private String pwOld;
 
     @PostConstruct
     private void prepareData() {
-        this.user = this.ls.getAccount();
+        this.shop = this.ls.getShop().get();
     }
 
 
-    public void updateUser() {
-        this.user = this.user.map(u -> {
-            if (!isNullOrEmpty(this.pw1) || !isNullOrEmpty(this.pw2) || !isNullOrEmpty(this.pwOld)) {
-                if (this.pw1.equals(this.pw2) && u.checkPassword(this.pw1)) {
-                    u.changePassword(this.pwOld, this.pw1);
-                } else {
-                    return u;
-                }
+    public void updateShop() {
+        if (!isNullOrEmpty(this.pw1) || !isNullOrEmpty(this.pw2) || !isNullOrEmpty(this.pwOld)) {
+            if (this.pw1.equals(this.pw2) && this.shop.checkPassword(this.pw1)) {
+                this.ss.updateShop(this.shop, this.pwOld, this.pw1);
+                this.ls.updateSession();
+                this.sendInfo("Erfolg", "Erfolgreich gespeichert");
+            } else {
+                this.sendError("Passwort", "Passwort ist falsch oder stimmen nicht überein");
             }
-            return this.us.updateUser(u);
-        });
+        } else {
+            this.ss.updateShop(this.shop, null, null);
+            this.ls.updateSession();
+            this.sendInfo("Erfolg", "Erfolgreich gespeichert");
+        }
     }
 
-    public Account getUnwrapedUser() {
-        return this.user.get();
+    public Shop getUnwrapedShop() {
+        return this.shop;
     }
 
     public String getPw1() {

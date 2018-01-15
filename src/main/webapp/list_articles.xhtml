@@ -5,22 +5,29 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="template/template.xhtml" rendered="#{listArticlesController.shopRole}">
+        <ui:composition template="template/template.xhtml">
             <ui:define name="content">
                 <h:form>
-                    <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art" selectionMode="single">
-                        <p:column headerText="Name">
+                    <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art">
+                        <p:column headerText="Name" filterBy="#{art.name}">
                             <p:outputLabel value="#{art.name}" />
                         </p:column>
                         
-                        <p:column headerText="Beschreibung">
+                        <p:column headerText="Beschreibung" filterBy="#{art.description}">
                             <p:outputLabel value="#{art.description}" />
                         </p:column>
                         
                         <p:column headerText="Foto">
-                            <!--<b:image value="#{images.image}">
-                                <f:param name="id" value="#{art.id}" />
-                            </b:image>-->
+                            <p:graphicImage value="#{listArticlesController.getImageForArt(art)}" />
+                        </p:column>
+
+                        <p:column headerText="Shop">
+                            <p:outputLabel value="#{listArticlesController.shopForArt(art)}" />
+                        </p:column>
+
+                        <p:column headerText="Bewerten" rendered="#{listArticlesController.userRole}">
+                            <p:inputNumber value="#{art.rating}" decimalPlaces="0" minValue="1" maxValue="5" />
+                            <p:commandButton value="Bewerten" actionListener="#{listArticlesController.rateArticle(art)}" disabled="#{listArticlesController.isAlreadyRated(art)}" />
                         </p:column>
 
                         <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole}">
@@ -33,4 +40,3 @@
         </ui:composition>
     </h:body>
 </html>
-

@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
+import org.othr.tidli.entity.RatableEntity;
 import org.othr.tidli.entity.Shop;
 
 /**
@@ -33,21 +34,26 @@ public interface RatingServiceIF {
      * @param offer The offer to be rated
      * @param rating The rating {@code 1 - 5}
      * @param acc
+     * @return 
      */
-    void rateOffer(final Offer offer, final int rating, final Optional<Account> acc);
+    boolean rateOffer(final Offer offer, final int rating, final Optional<Account> acc);
     /**
      * Creates a rating for the given shop
      * @param shop The shop to be rated
      * @param rating The rating {@code 1 - 5}
      * @param acc
+     * @return 
      */
-    void rateShop(final Shop shop, final int rating, final Optional<Account> acc);
+    boolean rateShop(final Shop shop, final int rating, final Optional<Account> acc);
     /**
      * Creates a rating for the given article
      * @param article The shop to be rated
      * @param rating The rating {@code 1 - 5}
      * @param acc
+     * @return 
      */
-    void rateArticle(final Article article, final int rating, final Optional<Account> acc);
+    boolean rateArticle(final Article article, final int rating, final Optional<Account> acc);
+
+    <T extends RatableEntity> boolean isRatedByUser(final T entity, final Optional<Account> acc);
     
 }

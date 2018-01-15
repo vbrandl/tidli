@@ -32,7 +32,8 @@ import org.othr.tidli.util.Role;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Shop.findAll", query = "SELECT s FROM Shop s")
+    @NamedQuery(name = "Shop.findAll", query = "SELECT s FROM Shop s"),
+    //@NamedQuery(name = "Shop.findByArticle", query = "SELECT s FROM Shop s WHERE s.articles"),//"SELECT s FROM Shop s WHERE :art IN s.articles"),
 })
 public class Shop extends Account implements RatableEntity {
 
@@ -40,7 +41,6 @@ public class Shop extends Account implements RatableEntity {
     private static final Role ROLE = Role.Shop;
 
     @OneToOne
-//    @NotNull
     private OpeningTime openingTimes;
     @OneToMany
     private Collection<Offer> offers;
@@ -49,21 +49,21 @@ public class Shop extends Account implements RatableEntity {
     private String description;
     @OneToMany(targetEntity = Rating.class)
     private Collection<Rating> ratings;
-    @OneToOne
-    private Contact contact;
+    private String telNo;
+    private String pubEmail;
 
     public Shop(final String email, final String name, final String password,
-            final Address address, final String description) {
-        super(email, password, name, address);
+            final String city, final String street, final String number, final Integer zip, final String description) {
+        super(email, password, name, city, street, number, zip);
         this.description = description;
-        this.setActivated(false);
+        super.setActivated(false);
     }
 
     public Shop(final String name, final OpeningTime openingTimes,
             final String description) {
         this.openingTimes = openingTimes;
         this.description = description;
-        this.setActivated(false);
+        super.setActivated(false);
     }
 
     public Shop() {
@@ -114,12 +114,20 @@ public class Shop extends Account implements RatableEntity {
         return this.ratings.add(r);
     }
 
-    public Contact getContact() {
-        return this.contact;
+    public String getTelNo() {
+        return this.telNo;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setTelNo(final String telNo) {
+        this.telNo = telNo;
+    }
+
+    public String getPubEmail() {
+        return this.pubEmail;
+    }
+
+    public void setPubEmail(final String pubEmail) {
+        this.pubEmail = pubEmail;
     }
 
     public Collection<Article> getArticles() {
@@ -144,6 +152,10 @@ public class Shop extends Account implements RatableEntity {
 
     public boolean hasArticle(final Article art) {
         return this.articles.contains(art);
+    }
+
+    public boolean removeArticle(final Article art) {
+        return this.articles.remove(art);
     }
 
 }

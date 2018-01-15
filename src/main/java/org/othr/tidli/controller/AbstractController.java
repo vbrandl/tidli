@@ -38,6 +38,10 @@ public abstract class AbstractController implements Serializable {
     @Inject
     private LoginServiceIF ls;
 
+    public void updateSession() {
+        this.ls.updateSession();
+    }
+
     public Optional<Account> getUser() {
         return this.ls.getAccount();
     }

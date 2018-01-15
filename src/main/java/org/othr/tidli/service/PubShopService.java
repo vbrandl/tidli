@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Brandl Valentin
+ * Copyright (C) 2018 Brandl Valentin
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,32 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Optional;
-import org.othr.tidli.entity.Account;
-import org.othr.tidli.entity.Administrator;
-import org.othr.tidli.entity.Offer;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.jws.WebService;
+import org.othr.tidli.dto.ShopDTO;
 import org.othr.tidli.entity.Shop;
 
-/**
- *
- * @author Brandl Valentin
- */
-public interface AdminServiceIF {
 
-    boolean activateShop(final Shop s, final Optional<Administrator> adm);
-    boolean deleteAccount(final Account acc, final Optional<Administrator> adm);
-    boolean deleteOffer(final Offer off, final Optional<Administrator> adm);
-    Optional<Administrator> findEntity(final long id);
+@WebService
+@RequestScoped
+public class PubShopService extends AbstractService<Shop> implements PubShopServiceIF {
+
+    private static final long serialVersionUID = 6286821680487468328L;
+
+    @Inject
+    private ShopServiceIF ss;
+
+    @Override
+    public Collection<ShopDTO> listShops() {
+        return this.ss.getAllShops().parallelStream().map(ShopDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    protected Class<Shop> getEntityClass() {
+        return Shop.class;
+    }
     
 }

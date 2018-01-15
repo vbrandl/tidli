@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition>
             <h:form>
@@ -12,28 +13,19 @@
                     <p:menuitem value="Register Shop" outcome="/register_shop" rendered="#{not navigationController.loggedIn}" />
                     <p:menuitem value="Register User" outcome="/register_user" rendered="#{not navigationController.loggedIn}" />
                     <p:menuitem value="Account details" outcome="/user_detail" rendered="#{navigationController.userRole}" />
+                    <p:menuitem value="Shop details" outcome="/shop_detail" rendered="#{navigationController.shopRole}" />
                     <p:menuitem value="Artikel anlegen" outcome="/create_article" rendered="#{navigationController.shopRole}" />
-                    <p:menuitem value="Artikel ansehen" outcome="/list_articles" rendered="#{navigationController.shopRole}" />
+                    <p:menuitem value="Angebot anlegen" outcome="/create_offer" rendered="#{navigationController.shopRole}" />
+                    <p:menuitem value="Artikel ansehen" outcome="/list_articles" rendered="#{navigationController.loggedIn}" />
+                    <p:menuitem value="Angebote ansehen" outcome="/list_offers" rendered="#{navigationController.loggedIn}" />
                     <p:menuitem value="Shops administrieren" outcome="/admin/shop_admin" rendered="#{navigationController.adminRole}" />
-                    <p:menuitem value="Login" outcome="/login" rendered="#{not navigationController.loggedIn}" />
-                    <p:menuitem value="Logout" outcome="/index" actionListener="#{loginController.logout()}" rendered="#{navigationController.loggedIn}" />
+                    <p:menuitem value="User administrieren" outcome="/admin/user_admin" rendered="#{navigationController.adminRole}" />
+                    <f:facet name="options">
+                        <p:outputLabel value="Willkommen #{navigationController.userName}" rendered="#{loginController.loggedIn}" />
+                        <p:commandButton value="Login" action="/login" rendered="#{not loginController.loggedIn}" />
+                        <p:commandButton value="Logout" action="#{loginController.logout()}" ajax="false" rendered="#{loginController.loggedIn}" />
+                    </f:facet>
                 </p:menubar>
-                <!--<b:navBar brand="Tidli" inverse="true" position="top" sticky="true"
-                          style="padding-top:2px;padding-bottom:2px">
-                    <b:navbarLinks>
-                        <b:navLink outcome="/index" value="Home" icon-awesome="home" />
-                        <b:navLink outcome="/register_shop" value="Register Shop" rendered="#{not navigationController.loggedIn}" />
-                        <b:navLink outcome="/register_user" value="Register User" rendered="#{not navigationController.loggedIn}" />
-                        <b:navLink outcome="/user_detail" value="Account details" rendered="#{navigationController.userRole}" />
-                        <b:navLink outcome="/create_article" value="Artikel anlegen" rendered="#{navigationController.shopRole}" />
-                        <b:navLink outcome="/list_articles" value="Artikel ansehen" rendered="#{navigationController.shopRole}" />
-                        <b:navLink outcome="/admin/shop_admin" value="Shops administrieren" rendered="#{navigationController.adminRole}" />
-                    </b:navbarLinks>
-                    <b:navbarLinks styleClass="navbar-right">
-                        <b:navLink outcome="/login" value="Login" rendered="#{not navigationController.loggedIn}" />
-                        <b:navCommandLink outcome="/index" value="Logout" actionListener="#{loginController.logout()}" rendered="#{navigationController.loggedIn}" />
-                    </b:navbarLinks>
-                </b:navBar>-->
             </h:form>
         </ui:composition>
     </h:body>

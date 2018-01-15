@@ -16,6 +16,8 @@
  */
 package org.othr.tidli.service;
 
+import java.util.Collection;
+import java.util.Optional;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Shop;
 
@@ -28,5 +30,8 @@ public interface ArticleServiceIF {
     Article createArticle(final Article art, final Shop shp);
     byte[] getImageForId(final long id);
     void deleteArticle(final Article art);
+    Optional<Article> findEntity(final long id);
+    Collection<Article> findAll();
+    public Optional<Shop> getShopForArticle(final Article art);
     
 }

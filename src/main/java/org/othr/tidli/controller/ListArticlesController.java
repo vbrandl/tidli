@@ -16,42 +16,60 @@
  */
 package org.othr.tidli.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
+import org.othr.tidli.data.WrappedArticle;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.ArticleServiceIF;
+import org.othr.tidli.service.RatingServiceIF;
 import org.othr.tidli.util.Role;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
  * @author Brandl Valentin
  */
 @ManagedBean
-@SessionScoped
 public class ListArticlesController extends AbstractController {
 
     private static final long serialVersionUID = 1877130317374256378L;
 
     @Inject
     private ArticleServiceIF as;
-    private Collection<Article> articles;
+    @Inject
+    private RatingServiceIF rs;
+    private Collection<WrappedArticle> articles;
 
     @PostConstruct
     private void prepareData() {
-        this.articles = this.getShop().map(shp -> shp.getArticles()).orElse(Collections.emptyList());
+        //this.articles = this.isShopRole()
+        //? this.getShop().map(shp -> shp.getArticles()).orElse(Collections.emptyList())
+        this.articles = this.as.findAll().parallelStream().map(WrappedArticle::new).collect(Collectors.toList());
     }
 
-    public Collection<Article> getArticles() {
+    public void filterOwn() {
+        if (this.isShopRole()) {
+            this.articles = this.getShop()
+                    .map(shp -> shp.getArticles())
+                    .map(a -> a.parallelStream().map(WrappedArticle::new).collect(Collectors.toList()))
+                    .orElse(Collections.emptyList());
+        }
+    }
+
+    public Collection<WrappedArticle> getArticles() {
         return Collections.unmodifiableCollection(this.articles);
     }
 
     public void deleteArticle(final Article art) {
         this.as.deleteArticle(art);
+        this.updateSession();
     }
 
     public boolean userIsOwnerOf(final Article art) {
@@ -60,5 +78,31 @@ public class ListArticlesController extends AbstractController {
                 .map(s -> ((Shop)s).getArticles().contains(art))
                 .orElse(false);
     }
-    
+
+    public String shopForArt(final Article art) {
+        return this.as.getShopForArticle(art).map(Shop::getName).orElse("");
+    }
+
+    public StreamedContent getImageForArt(final Article art) {
+        if (null != art) {
+            return new DefaultStreamedContent(new ByteArrayInputStream(art.getImage()));
+        } else {
+            return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
+        }
+    }
+
+    public void rateArticle(final WrappedArticle art) {
+        final int rating = art.getRating();
+        final Article unwrap = art.unwrap();
+        if (this.rs.rateArticle(unwrap, rating, this.getUser())) {
+            this.sendInfo("Erfolg", "Erfolgreich bewertet");
+        } else {
+            this.sendError("Fehler", "Artikel bereits bewertet");
+        }
+    }
+
+    public boolean isAlreadyRated(final WrappedArticle art) {
+        return this.rs.isRatedByUser(art, this.getUser());
+    }
+
 }

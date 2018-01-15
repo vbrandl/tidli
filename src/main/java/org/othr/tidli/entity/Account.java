@@ -34,16 +34,17 @@ import org.othr.tidli.util.Static;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email")
+    @NamedQuery(name = "Account.findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email"),
+    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
 })
 public class Account extends Id {
 
     private static final long serialVersionUID = -1876443309866494657L;
     private static final Role ROLE = Role.User;
     public static Account createUser(final String email, final String name,
-            final Address address, final String password) {
+            final String city, String street, String number, Integer zip, final String password) {
         return new Account(
-                email, password, name, address
+                email, password, name, city, street, number, zip
         );
     }
 
@@ -59,9 +60,12 @@ public class Account extends Id {
     private Date creationTime = new Date();
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
-    private Address address;
     @NotNull
     private boolean activated = true;
+    private Integer zipCode;
+    private String city;
+    private String street;
+    private String number;
 
 
     /**
@@ -70,33 +74,32 @@ public class Account extends Id {
      * @param email
      * @param password
      * @param name
-     * @param address
+     * @param city
+     * @param street
+     * @param number
+     * @param zip
      */
     public Account(final String email, final String password, final String name,
-            final Address address) {
+            final String city, String street, String number, Integer zip) {
         super();
         this.email = email;
         this.password = SCryptUtil.scrypt(password, Static.SCRYPT_CPU_COST, Static.SCRYPT_MEM_COST, Static.SCRYPT_PARALLELIZATION);
         this.name = name;
-        this.address = address;
+        this.city = city;
+        this.street = street;
+        this.number = number;
+        this.zipCode = zip;
     }
+
     public Account() {}
-    public final boolean isActivated() {
+
+    public boolean isActivated() {
         return this.activated;
     }
 
-    public final void setActivated(boolean activated) {
+    public void setActivated(boolean activated) {
         this.activated = activated;
     }
-
-    public Address getAddress() {
-        return this.address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
 
     public String getEmail() {
         return this.email;
@@ -158,6 +161,38 @@ public class Account extends Id {
 
     public Role getRole() {
         return ROLE;
+    }
+
+    public Integer getZipCode() {
+        return this.zipCode;
+    }
+
+    public void setZipCode(final Integer zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return this.street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getNumber() {
+        return this.number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
 }

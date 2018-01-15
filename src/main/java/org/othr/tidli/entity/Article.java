@@ -20,19 +20,28 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Brandl Valentin
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a"),
+})
 public class Article extends Id implements RatableEntity {
     
     private static final long serialVersionUID = -1604497535637986945L;
 
+    @NotNull
     private String name;
     private String description;
+    @Lob
     private byte[] image;
     @OneToMany(targetEntity = Rating.class)
     private Collection<Rating> ratings;

@@ -17,11 +17,11 @@
 package org.othr.tidli.service;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
-import org.othr.tidli.entity.Address;
-import org.othr.tidli.entity.Contact;
+import org.othr.tidli.dto.ShopDTO;
 import org.othr.tidli.entity.OpeningDay;
 import org.othr.tidli.entity.OpeningTime;
 import org.othr.tidli.entity.Shop;
@@ -34,6 +34,9 @@ import org.othr.tidli.entity.Shop;
 public class ShopService extends RegisterService<Shop> implements ShopServiceIF {
 
     private static final long serialVersionUID = -4857663652344397423L;
+    private static boolean isNullOrEmpty(final String str) {
+        return null == str || str.isEmpty();
+    }
 
     @Override
     protected Class<Shop> getEntityClass() {
@@ -60,12 +63,11 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
 
     @Override
     protected boolean validateEntity(final Shop entity) {
-        final Address a = entity.getAddress();
-        return null != a
-                && null != a.getCity()
-                && null != a.getNumber()
-                && null != a.getStreet()
-                && null != a.getZipCode();
+        return null != entity
+                && null != entity.getCity()
+                && null != entity.getNumber()
+                && null != entity.getStreet()
+                && null != entity.getZipCode();
     }
 
     @Override
@@ -95,17 +97,6 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
     }
 
     @Override
-    public boolean editContact(final Optional<Shop> shp, final Contact contact) {
-        return shp
-                .map(s -> {
-                    final Shop merged = this.getEm().merge(s);
-                    this.getEm().persist(contact);
-                    merged.setContact(contact);
-                    return true;
-                }).orElse(false);
-    }
-
-    @Override
     @Transactional
     public boolean addOpeningDay(final Optional<Shop> shp, final OpeningDay od) {
         return shp
@@ -122,6 +113,38 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
                     }
                     return true;
                 }).orElse(false);
+    }
+
+    @Override
+    public Optional<Shop> fromDTO(final ShopDTO shp) {
+        return null != shp
+                ? this.findEntity(shp.getId())
+                : Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public Shop updateShop(final Shop shp, final String pwOld, final String pwNew) {
+        final Optional<Shop> merged = this.findEntity(shp.getId())
+                .map(this.getEm()::merge);
+        merged.ifPresent(s -> {
+            s.setLastUpdated(shp.getLastUpdated());
+            s.setName(shp.getName());
+            s.setEmail(shp.getEmail());
+            s.setCity(shp.getCity());
+            s.setStreet(shp.getStreet());
+            s.setZipCode(shp.getZipCode());
+            s.setNumber(shp.getNumber());
+            s.setPubEmail(shp.getPubEmail());
+            s.setTelNo(shp.getTelNo());
+            s.setDescription(shp.getDescription());
+            s.setLastUpdated(new Date());
+            if (!isNullOrEmpty(pwOld) && !isNullOrEmpty(pwNew)) {
+                s.changePassword(pwOld, pwNew);
+            }
+        });
+        //final Shop merged = this.getEm().merge(shp);
+        return merged.orElse(null);
     }
     
 }
