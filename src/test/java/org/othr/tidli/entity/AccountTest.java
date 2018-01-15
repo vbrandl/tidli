@@ -16,14 +16,8 @@
  */
 package org.othr.tidli.entity;
 
-import java.util.Date;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.othr.tidli.util.Role;
 
 /**
  *
@@ -31,50 +25,29 @@ import org.othr.tidli.util.Role;
  */
 public class AccountTest {
 
-    public AccountTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of checkPassword method, of class Account.
      */
-    @org.junit.Test
+    @Test
     public void testCheckPassword() {
-        System.out.println("checkPassword");
         final String pw = "foo";
-        final Account instance = new Account("foo", pw, "bar", null);
-        assertTrue(instance.checkPassword(pw));
-        assertFalse(instance.checkPassword("baz"));
+        final Account instance = new Account("foo", pw, "bar", null, null, null, null);
+        Assert.assertTrue(instance.checkPassword(pw));
+        Assert.assertFalse(instance.checkPassword("baz"));
     }
 
     /**
      * Test of changePassword method, of class Account.
      */
-    @org.junit.Test
+    @Test
     public void testChangePassword() {
-        System.out.println("changePassword");
         final String old = "bar";
         final String newPw = "baz";
-        final Account instance = new Account("foo", old, "bar", null);
-        assertFalse(instance.changePassword("foo", newPw));
-        assertTrue(instance.checkPassword(old));
-        assertTrue(instance.changePassword(old, newPw));
-        assertTrue(instance.checkPassword(newPw));
+        final Account instance = new Account("foo", old, "bar", null, null, null, null);
+        Assert.assertFalse(instance.changePassword("foo", newPw));
+        Assert.assertTrue(instance.checkPassword(old));
+        Assert.assertTrue(instance.changePassword(old, newPw));
+        Assert.assertTrue(instance.checkPassword(newPw));
     }
 
 }
