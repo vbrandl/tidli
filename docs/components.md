@@ -13,5 +13,5 @@ lof: true
 
 ## Component Diagramm
 
-![Component Diagramm](./components_umlet.png)
+![Component Diagramm](./assets/components_umlet.png)
 ![Component Diagramm](./services.png)
