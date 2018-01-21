@@ -20,23 +20,21 @@ import java.io.Serializable;
 import org.othr.tidli.entity.Shop;
 
 /**
- * Immutable DTO for shops.
- * This class is truly immutable. Calling setters won't mutate the current object but
- * create a new object with the new attribute.
- *
  * @author Brandl Valentin
  */
-public final class ShopDTO implements Serializable {
+public class ShopDTO implements Serializable {
     
     private static final long serialVersionUID = 8067666177472185397L;
 
-    private final long id;
-    private final String email;
-    private final String name;
-    private final String city;
-    private final String street;
-    private final String number;
-    private final Integer zipCode;
+    private long id;
+    private String email;
+    private String name;
+    private String city;
+    private String street;
+    private String number;
+    private Integer zipCode;
+
+    public ShopDTO() {}
 
     public ShopDTO(final long id, final String email, final String name, final String city, final String street, final String number, final Integer zipCode) {
         this.id = id;
@@ -47,7 +45,6 @@ public final class ShopDTO implements Serializable {
         this.number = number;
         this.zipCode = zipCode;
     }
-
     public ShopDTO(final Shop shp) {
         this.id = shp.getId();
         this.email = shp.getEmail();
@@ -62,56 +59,56 @@ public final class ShopDTO implements Serializable {
         return this.id;
     }
 
-    public ShopDTO setId(final long id) {
-        return new ShopDTO(id, this.email, this.name, this.city, this.street, this.number, this.zipCode);
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getEmail() {
         return this.email;
     }
 
-    public ShopDTO setEmail(final String email) {
-        return new ShopDTO(this.id, email, this.name, this.city, this.street, this.number, this.zipCode);
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public ShopDTO setName(final String name) {
-        return new ShopDTO(this.id, this.email, name, this.city, this.street, this.number, this.zipCode);
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCity() {
         return this.city;
     }
 
-    public ShopDTO setCity(final String city) {
-        return new ShopDTO(this.id, this.email, this.name, city, this.street, this.number, this.zipCode);
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getStreet() {
         return this.street;
     }
 
-    public ShopDTO setStreet(final String street) {
-        return new ShopDTO(this.id, this.email, this.name, this.city, street, this.number, this.zipCode);
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getNumber() {
         return this.number;
     }
 
-    public ShopDTO setNumber(final String number) {
-        return new ShopDTO(this.id, this.email, this.name, this.city, this.street, number, this.zipCode);
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public Integer getZipCode() {
         return this.zipCode;
     }
 
-    public ShopDTO setZipCode(final Integer zipCode) {
-        return new ShopDTO(this.id, this.email, this.name, this.city, this.street, this.number, zipCode);
+    public void setZipCode(Integer zipCode) {
+        this.zipCode = zipCode;
     }
 
 }

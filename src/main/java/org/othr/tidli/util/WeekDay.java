@@ -16,6 +16,8 @@
  */
 package org.othr.tidli.util;
 
+import java.util.Optional;
+
 /**
  *
  * @author Brandl Valentin
@@ -37,5 +39,31 @@ public enum WeekDay {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public static Optional<WeekDay> fromString(final String str) {
+        if (null != str) {
+            for (final WeekDay wd : WeekDay.values()) {
+                if (wd.toString().toLowerCase().equals(str.trim().toLowerCase())) {
+                    return Optional.of(wd);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<WeekDay> fromInteger(final Integer str) {
+        if (null != str) {
+            for (final WeekDay wd : WeekDay.values()) {
+                if (wd.ordinal() == str) {
+                    return Optional.of(wd);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public int getInt() {
+        return this.ordinal();
     }
 }

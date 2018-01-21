@@ -16,15 +16,20 @@
  */
 package org.othr.tidli.entity;
 
+import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import org.othr.tidli.util.ImageMimeType;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -72,11 +77,29 @@ public class Article extends Id implements RatableEntity {
     }
 
     public byte[] getImage() {
-        return this.image.clone();
+        return this.image != null
+                ? this.image.clone()
+                : new byte[0];
+    }
+
+    public StreamedContent getImageAsStream() {
+        final Optional<ImageMimeType> imt = ImageMimeType.fromContent(this.image);
+        return new DefaultStreamedContent(
+                new ByteArrayInputStream(
+                        null != this.image
+                                ? this.image
+                                : new byte[0]
+                ),
+                imt
+                        .map(ImageMimeType::getMimeType)
+                        .orElse("image/png") // silent fallback, maybe we are lucky
+        );
     }
 
     public void setImage(final byte[] image) {
-        this.image = image.clone();
+        this.image = null != image
+                ? image.clone()
+                : new byte[0];
     }
 
     @Override
@@ -93,5 +116,5 @@ public class Article extends Id implements RatableEntity {
     public boolean addRating(Rating r) {
         return this.ratings.add(r);
     }
-    
+
 }

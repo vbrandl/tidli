@@ -5,17 +5,19 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:body>
-        <ui:composition template="/template/layout.xhtml" rendered="#{adminUserController.adminRole}">
+        <ui:composition template="/template/template.xhtml">
             <ui:define name="content" rendered="#{adminUserController.adminRole}">
-                <h:form>
+                <h:form rendered="#{adminUserController.adminRole}">
                     <p:remoteCommand update="usrTable" name="updateTable" />
                     <p:dataTable value="#{adminUserController.users}" id="usrTable" var="usr">
                         <p:column headerText="Name">
-                            <p:outputLabel#{usr.name} />
+                            <p:outputLabel value="#{usr.name}" />
                         </p:column>
 
                         <p:column headerText="Adresse">
-                            <p:outputLabel value="#{usr.address.toString()}" />
+                            <p:outputLabel value="#{usr.street} #{usr.number}" />
+                            <br />
+                            <p:outputLabel value="#{usr.zipCode} #{usr.city}" />
                         </p:column>
 
                         <p:column headerText="Aktiviert">

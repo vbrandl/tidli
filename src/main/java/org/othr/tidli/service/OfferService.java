@@ -31,7 +31,6 @@ import org.othr.tidli.entity.Account;
 import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.Offer;
 import org.othr.tidli.entity.Shop;
-import org.othr.tidli.util.Role;
 
 
 @RequestScoped
@@ -80,7 +79,16 @@ public class OfferService extends AbstractService<Offer> implements OfferService
     @Override
     public boolean deleteOffer(final Offer off, final Optional<Shop> shp) {
         final Optional<Shop> opt = shp.filter(s -> s.getOffers().contains(off));
-        return this.deleteEntity(off, opt, Role.Shop);
+        if (opt.isPresent()) {
+            final Offer merged = this.getEm().merge(off);
+            merged.getRatings().parallelStream().map(this.getEm()::merge).forEach(this.getEm()::remove);
+            final Shop mShop = this.getEm().merge(opt.get());
+            mShop.removeOffer(merged);
+            this.getEm().remove(merged);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -121,6 +129,15 @@ public class OfferService extends AbstractService<Offer> implements OfferService
                 .filter(o -> o.getDay().equals(LocalDate.now()))
                 .map(WrappedOffer::new)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Optional<Shop> findOwner(final Offer off) {
+        return this.getEm().createNamedQuery("Shop.findAll", Shop.class)
+                .getResultList()
+                .parallelStream()
+                .filter(s -> s.getOffers().contains(off))
+                .findAny();
     }
     
 }

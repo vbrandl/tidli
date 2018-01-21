@@ -24,6 +24,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.entity.Article;
+import org.othr.tidli.entity.Offer;
+import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.ArticleServiceIF;
 import org.othr.tidli.service.OfferServiceIF;
 
@@ -47,7 +49,7 @@ public class EditOfferController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        this.getShop().ifPresent(shp -> this.articles = shp.getArticles());
+        this.articles = this.getShop().map(Shop::getArticles).orElse(Collections.emptyList());
     }
 
     public Collection<Article> getArticles() {
@@ -83,17 +85,22 @@ public class EditOfferController extends AbstractController {
     }
 
     public void createOffer() {
-        this.getShop().ifPresent(s -> {
+        final Optional<Offer> opt = this.getShop().flatMap(s -> {
             final Optional<Article> arti = this.as.findEntity(this.art);
-            arti.ifPresent(a ->
+            return arti.map(a ->
                     this.os.createOffer(
                             a,
-                            this.amount,
                             this.price.multiply(new BigDecimal(100)).intValue(),
+                            this.amount,
                             s
                     )
             );
         });
+        if (opt.filter(o -> o != null).isPresent()) {
+            this.sendInfo("Erfolg", "Angebot erfolgreich angelegt");
+        } else {
+            this.sendError("Fehler", "Fehler beim anlegen des Angebots");
+        }
     }
     
 }

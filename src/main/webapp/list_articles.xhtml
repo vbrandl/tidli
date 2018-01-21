@@ -3,11 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="template/template.xhtml">
             <ui:define name="content">
                 <h:form>
+                    <p:remoteCommand name="updateDlg" update="shpDlg, shpDlgGrd" />
                     <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art">
                         <p:column headerText="Name" filterBy="#{art.name}">
                             <p:outputLabel value="#{art.name}" />
@@ -18,23 +21,54 @@
                         </p:column>
                         
                         <p:column headerText="Foto">
-                            <p:graphicImage value="#{listArticlesController.getImageForArt(art)}" />
+                            <p:graphicImage value="#{art.imageAsStream}" />
                         </p:column>
-
-                        <p:column headerText="Shop">
-                            <p:outputLabel value="#{listArticlesController.shopForArt(art)}" />
+                        
+                        <p:column headerText="Anbieter">
+                            <p:commandLink value="#{listArticlesController.shopForArt(art).name}" action="/shop_info" ajax="false">
+                                <f:param name="id" value="#{listArticlesController.shopForArt(art).id}" />
+                            </p:commandLink>
                         </p:column>
-
+                        
                         <p:column headerText="Bewerten" rendered="#{listArticlesController.userRole}">
                             <p:inputNumber value="#{art.rating}" decimalPlaces="0" minValue="1" maxValue="5" />
                             <p:commandButton value="Bewerten" actionListener="#{listArticlesController.rateArticle(art)}" disabled="#{listArticlesController.isAlreadyRated(art)}" />
                         </p:column>
-
-                        <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole}">
+                        
+                        <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole || listArticlesController.adminRole}">
                             <p:commandButton value="Löschen" icon="trash" ajax="true" update="artTable" actionListener="#{listArticlesController.deleteArticle(art)}" rendered="#{listArticlesController.userIsOwnerOf(art)}" />
                         </p:column>
-
+                        
                     </p:dataTable>
+                    
+                    <p:dialog id="shpDlg" dynamic="true" header="Shop Details"  widgetVar="shpDlg" minHeight="40">
+                        <p:panelGrid id="shpDlgGrd" columns="2">
+                            <p:outputLabel value="Name:" />
+                            <p:outputLabel value="#{listArticlesController.detailShop.name}" />
+                            
+                            <p:outputLabel value="Telefon:" />
+                            <p:outputLabel value="#{listArticlesController.detailShop.telNo}" />
+                            
+                            <p:outputLabel value="E-Mail:" />
+                            <p:outputLabel value="#{listArticlesController.detailShop.pubEmail}" />
+                            
+                            <p:outputLabel value="Adresse:" />
+                            <p:column>
+                                <p:outputLabel value="#{listArticlesController.detailShop.street} #{listArticlesController.detailShop.number}" />
+                                <br />
+                                <p:outputLabel value="#{listArticlesController.detailShop.zipCode} #{listArticlesController.detailShop.city}" />
+                            </p:column>
+                            
+                            <p:separator />
+                            <p:separator />
+                            
+                            <c:forEach items="#{listArticlesController.detailOpeningDays}" var="od">
+                                <p:outputLabel value="#{od.weekDay.toString()}" />
+                                <p:outputLabel value='#{od.from} - #{od.to}' />
+                            </c:forEach>
+                            
+                        </p:panelGrid>
+                    </p:dialog>
                 </h:form>
             </ui:define>
         </ui:composition>

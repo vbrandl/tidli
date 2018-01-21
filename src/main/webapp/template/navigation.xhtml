@@ -16,9 +16,11 @@
                     <p:menuitem value="Shop details" outcome="/shop_detail" rendered="#{navigationController.shopRole}" />
                     <p:menuitem value="Artikel anlegen" outcome="/create_article" rendered="#{navigationController.shopRole}" />
                     <p:menuitem value="Angebot anlegen" outcome="/create_offer" rendered="#{navigationController.shopRole}" />
+                    <p:menuitem value="Öffnungszeiten bearbeiten" outcome="/edit_opening_times" rendered="#{navigationController.shopRole}" />
                     <p:menuitem value="Artikel ansehen" outcome="/list_articles" rendered="#{navigationController.loggedIn}" />
                     <p:menuitem value="Angebote ansehen" outcome="/list_offers" rendered="#{navigationController.loggedIn}" />
                     <p:menuitem value="Shops administrieren" outcome="/admin/shop_admin" rendered="#{navigationController.adminRole}" />
+                    <p:menuitem value="Ticket erstellen" outcome="/ticket" rendered="#{navigationController.shopRole || navigationController.userRole}" />
                     <p:menuitem value="User administrieren" outcome="/admin/user_admin" rendered="#{navigationController.adminRole}" />
                     <f:facet name="options">
                         <p:outputLabel value="Willkommen #{navigationController.userName}" rendered="#{loginController.loggedIn}" />
@@ -30,4 +32,3 @@
         </ui:composition>
     </h:body>
 </html>
-

@@ -83,5 +83,7 @@ public interface OfferServiceIF {
     Collection<Offer> findForCustomLocation(final String city, final Integer zip);
 
     Set<WrappedOffer> listTodaysOffers();
+
+    Optional<Shop> findOwner(final Offer off);
     
 }

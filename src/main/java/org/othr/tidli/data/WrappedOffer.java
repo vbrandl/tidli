@@ -44,5 +44,25 @@ public class WrappedOffer extends Offer {
         o.setId(this.getId());
         return o;
     }
+
+    @Override
+    public int hashCode() {
+        return this.unwrap().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Offer) || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Offer other = (Offer)obj;
+        return this.unwrap().equals(other);
+    }
     
 }

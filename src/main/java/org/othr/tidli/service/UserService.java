@@ -16,8 +16,8 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
@@ -51,13 +51,13 @@ public class UserService extends RegisterService<Account> implements UserService
     }
 
     @Override
-    public Collection<Account> getAllUsers() {
+    public Set<Account> getAllUsers() {
         return this.getEm()
                 .createNamedQuery("Account.findAll", Account.class)
                 .getResultList()
                 .parallelStream()
                 .filter(a -> a.getRole() == Role.User)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Transactional

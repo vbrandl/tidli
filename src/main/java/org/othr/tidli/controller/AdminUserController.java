@@ -40,9 +40,7 @@ public class AdminUserController extends AbstractController {
 
     @PostConstruct
     private void prepareData() {
-        if (this.isAdminRole()) {
-            this.users = new HashSet<>(this.us.getAllUsers());
-        }
+        this.users = this.getAdmin().map(_unused -> this.us.getAllUsers()).orElse(Collections.emptySet());
     }
 
     public void toogleActivationState(final Account acc) {

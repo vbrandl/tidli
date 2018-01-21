@@ -20,8 +20,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import org.othr.tidli.dto.ShopDTO;
+import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.OpeningDay;
 import org.othr.tidli.entity.OpeningTime;
 import org.othr.tidli.entity.Shop;
@@ -115,6 +117,21 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
                 }).orElse(false);
     }
 
+    @Transactional
+    @Override
+    public boolean removeOpeningDay(Optional<Shop> shp, OpeningDay od) {
+        return shp
+                .map(Shop::getOpeningTimes)
+                .map(this.getEm()::merge)
+                .map(ot -> {
+                    ot.removeDay(od);
+                    final OpeningDay merged = this.getEm().merge(od);
+                    this.getEm().remove(merged);
+                    return true;
+                })
+                .orElse(false);
+    }
+
     @Override
     public Optional<Shop> fromDTO(final ShopDTO shp) {
         return null != shp
@@ -145,6 +162,31 @@ public class ShopService extends RegisterService<Shop> implements ShopServiceIF 
         });
         //final Shop merged = this.getEm().merge(shp);
         return merged.orElse(null);
+    }
+
+    @Transactional
+    @Override
+    public Optional<Shop> register(final Shop entity) {
+        if (this.validateEntity(entity)) {
+            try {
+                final OpeningTime ot = new OpeningTime();
+                this.getEm().persist(ot);
+                entity.setOpeningTimes(ot);
+                return super.register(entity);
+            } catch (final PersistenceException pe) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean isOwnerOf(final Article art, final Optional<Shop> shp) {
+        return shp
+                .map(s -> this.getEm().find(Shop.class, s.getId()))
+                .map(s -> s.hasArticle(art))
+                .orElse(false);
     }
     
 }

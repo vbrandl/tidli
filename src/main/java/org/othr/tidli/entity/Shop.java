@@ -67,7 +67,7 @@ public class Shop extends Account implements RatableEntity {
     }
 
     public Shop() {
-        this.setActivated(false);
+        super.setActivated(false);
     }
 
     public OpeningTime getOpeningTimes() {
@@ -156,6 +156,10 @@ public class Shop extends Account implements RatableEntity {
 
     public boolean removeArticle(final Article art) {
         return this.articles.remove(art);
+    }
+
+    public boolean removeOffer(final Offer off) {
+        return this.offers.remove(off);
     }
 
 }

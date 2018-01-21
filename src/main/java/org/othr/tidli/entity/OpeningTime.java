@@ -45,7 +45,9 @@ public class OpeningTime extends Id implements Serializable {
     public OpeningTime() {}
 
     public Collection<OpeningDay> getDays() {
-        return Collections.unmodifiableCollection(this.days);
+        return null != this.days
+                ? Collections.unmodifiableCollection(this.days)
+                : Collections.emptyList();
     }
 
     public void setDays(final Collection<OpeningDay> days) {
@@ -57,6 +59,12 @@ public class OpeningTime extends Id implements Serializable {
             this.days = new HashSet<>(7);
         }
         this.days.add(day);
+    }
+
+    public void removeDay(final OpeningDay day) {
+        if (null != this.days) {
+            this.days.remove(day);
+        }
     }
 
 }

@@ -22,7 +22,7 @@
                         <p:outputLabel for="price" value="Preis" />
                         <p:inputNumber id="price" value="#{editOfferController.price}" required="true" decimalPlaces="2" minValue="0" symbol="€" />
 
-                        <p:commandButton value="Erstellen" actionListener="#{editOfferController.createOffer()}" ajax="false" />
+                        <p:commandButton value="Erstellen" actionListener="#{editOfferController.createOffer()}" />
                     </p:panelGrid>
                 </h:form>
             </ui:define>

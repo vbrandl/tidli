@@ -16,8 +16,6 @@
  */
 package org.othr.tidli.controller;
 
-import com.othr.sw.gsupportticketsystem.services.UserAccessPointServiceService;
-import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

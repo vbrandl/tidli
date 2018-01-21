@@ -16,10 +16,9 @@
  */
 package org.othr.tidli.controller;
 
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -53,13 +52,14 @@ public class ListOffersController extends AbstractController {
         return Collections.unmodifiableSet(this.offers);
     }
 
-    public void decrementOffer(final Offer off, final int n) {   
-        this.os.decrementOffer(off, n, this.getShop()).ifPresent(offer -> {
-            final WrappedOffer wo = new WrappedOffer(offer);
-            if (this.offers.remove(wo)) {
-                this.offers.add(wo);
-            }
-        });
+    public void decrementOffer(final WrappedOffer off, final int n) {   
+        final Optional<Offer> opt = this.os.decrementOffer(off.unwrap(), n, this.getShop());
+        if (opt.isPresent() && this.offers.remove(off)) {
+            this.offers.add(off);
+            this.sendInfo("Erfolg", "Anzahl erflogreich veringert");
+        } else {
+            this.sendError("Fehler", "Fehler beim veringern der Anzahl!");
+        }
     }
 
     public void rateOffer(final WrappedOffer off) {
@@ -73,31 +73,34 @@ public class ListOffersController extends AbstractController {
     }
 
     public void deleteOffer(final Offer off) {
-        this.os.deleteOffer(off, this.getShop());
+        if (
+                this.os.deleteOffer(
+                        off,
+                        this.isAdminRole()
+                                ? this.os.findOwner(off) // find owner if admin
+                                : this.getShop() // use current shop
+                )
+                ) {
+            this.sendInfo("Erfolg", "Angebot erfolgreich gelöscht!");
+        } else {
+            this.sendError("Fehler", "Fehler beim löschen des Angebots!");
+        }
     }
 
     public boolean isActive(final Offer off) {
         return off.getDay().equals(LocalDate.now());
     }
 
-    public String formatPrice(final Offer off) {
-        if (null != off) {
-            return NumberFormat.getCurrencyInstance(Locale.GERMANY).format((double)off.getPrice() / 100);
-        } else {
-            return "";
-        }
-    }
-
-    public boolean isOwnerOfOffer(final Offer off) {
+    public boolean isOwnerOfOffer(final WrappedOffer off) {
         return null != off 
                 ? this.getShop() // is shop?
-                        .filter(s -> s.getOffers().contains(off)) // that owns the offer?
+                        .filter(s -> s.getOffers().contains(off.unwrap())) // that owns the offer?
                         .isPresent() // or not?
                 : false; // or no offer?
     }
 
     public boolean isAlreadyRated(final WrappedOffer off) {
-        return this.rs.isRatedByUser(off, this.getUser());
+        return this.rs.isRatedByUser(off.unwrap(), this.getUser());
     }
 
     

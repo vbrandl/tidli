@@ -15,11 +15,11 @@
                         <p:outputLabel for="desc" value="Beschreibung" />
                         <p:inputTextarea id="desc" value="#{createArticleController.description}" required="true" />
 
-                        <p:outputLabel for="ul" value="Bild" />
-                        <p:fileUpload id="ul" value="#{createArticleController.file}" mode="simple" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" />
+                        <p:outputLabel for="ul" value="Bild (PNG oder JPG)" />
+                        <p:fileUpload id="ul" value="#{createArticleController.file}" mode="simple" allowTypes="/(\.|\/)(jpe?g|png)$/" sizeLimit="100000" />
                         
                         <p:outputLabel /><!-- placeholder -->
-                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" ajax="false" />
+                        <p:commandButton value="Speichern" actionListener="#{createArticleController.save()}" />
                     </p:panelGrid>
                 </h:form>
             </ui:define>

@@ -16,10 +16,12 @@
  */
 package org.othr.tidli.entity;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -112,6 +114,10 @@ public class Offer extends Id implements RatableEntity {
     @Override
     public boolean addRating(Rating r) {
         return this.ratings.add(r);
+    }
+
+    public String getFormattedPrice() {
+        return NumberFormat.getCurrencyInstance(Locale.GERMANY).format((double)this.getPrice() / 100);
     }
     
 }

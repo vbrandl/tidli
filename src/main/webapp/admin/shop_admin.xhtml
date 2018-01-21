@@ -4,14 +4,14 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <h:body>
-        <ui:composition template="/template/layout.xhtml" rendered="#{adminShopController.adminRole}">
+    <h:body rendered="#{adminShopController.adminRole}">
+        <ui:composition template="/template/template.xhtml" rendered="#{adminShopController.adminRole}">
             <ui:define name="content" rendered="#{adminShopController.adminRole}">
-                <h:form>
+                <h:form rendered="#{adminShopController.adminRole}">
                     <p:remoteCommand update="shpTable" name="updateTable" />
                     <p:dataTable value="#{adminShopController.shops}" id="shpTable" var="shp">
                         <p:column headerText="Name">
-                            <p:outputLabel#{shp.name} />
+                            <p:outputLabel value="#{shp.name}" />
                         </p:column>
                         
                         <p:column headerText="Beschreibung">
@@ -19,7 +19,9 @@
                         </p:column>
 
                         <p:column headerText="Adresse">
-                            <p:outputLabel value="#{shp.address.toString()}" />
+                            <p:outputLabel value="#{shp.street} #{shp.number}" />
+                            <br />
+                            <p:outputLabel value="#{shp.zipCode} #{shp.city}" />
                         </p:column>
 
                         <p:column headerText="Aktiviert">

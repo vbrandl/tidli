@@ -3,11 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="template/template.xhtml" rendered="#{listOffersController.loggedIn}">
             <ui:define name="content">
                 <h:form>
+                    <p:remoteCommand name="updateTable" update="offTable" />
                     <p:dataTable value="#{listOffersController.offers}" id="offTable" var="off">
                         <p:column headerText="Name" filterBy="#{off.article.name}">
                             <p:outputLabel value="#{off.article.name}" />
@@ -18,15 +20,21 @@
                         </p:column>
                         
                         <p:column headerText="Foto">
-                            <!--<p:graphicImage value="#{off.article.image}" />-->
+                            <p:graphicImage value="#{off.article.imageAsStream}" />
+                        </p:column>
+
+                        <p:column headerText="Anbieter">
+                            <p:commandLink value="#{listArticlesController.shopForArt(off.article).name}" action="/shop_info" ajax="false">
+                                <f:param name="id" value="#{listArticlesController.shopForArt(off.article).id}" />
+                            </p:commandLink>
                         </p:column>
 
                         <p:column headerText="Anzahl" filterBy="#{off.amount}">
                             <p:outputLabel value="#{off.amount}" />
                         </p:column>
 
-                        <p:column headerText="Preis" filterBy="#{listOffersController.formatPrice(off)}">
-                            <p:outputLabel value="#{listOffersController.formatPrice(off)}" />
+                        <p:column headerText="Preis" filterBy="#{off.formattedPrice}">
+                            <p:outputLabel value="#{off.formattedPrice}" />
                         </p:column>
 
                         <p:column headerText="Bewerten" rendered="#{listOffersController.userRole}">
@@ -35,7 +43,7 @@
                         </p:column>
 
                         <p:column headerText="Optionen" rendered="#{listOffersController.shopRole}">
-                            <p:commandButton value="-1" update="offTable" actionListener="#{listOffersController.decrementOffer(off, 1)}" rendered="#{listOffersController.isOwnerOfOffer(off)}" />
+                            <p:commandButton value="-1" disabled="#{off.amount lt 1}" actionListener="#{listOffersController.decrementOffer(off, 1)}" rendered="#{listOffersController.isOwnerOfOffer(off)}" oncomplete="updateTable();" />
                         </p:column>
 
                         <p:column headerText="Löschen" rendered="#{listOffersController.adminRole}">

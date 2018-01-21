@@ -16,8 +16,8 @@
  */
 package org.othr.tidli.service;
 
-import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.othr.tidli.entity.Account;
 
@@ -30,7 +30,7 @@ public interface UserServiceIF {
     Optional<Account> register(final Account entity);
     @Transactional
     Account updateUser(final Account user);
-    Collection<Account> getAllUsers();
+    Set<Account> getAllUsers();
     Account toogleActivationState(final Account acc);
     void deleteUser(final Account acc);
     Optional<Account> findEntity(final long id);

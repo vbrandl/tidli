@@ -16,13 +16,16 @@
  */
 package org.othr.tidli.controller;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
@@ -44,15 +47,18 @@ public class EditOpeningTimesController extends AbstractController {
     private ShopServiceIF ss;
     private Optional<OpeningTime> ot;
 
-    private WeekDay wd;
-    private LocalTime from;
-    private LocalTime to;
-    private Set<WeekDay> availableWeekDays;
+    private Integer wd;
+    private Date from;
+    private Date to;
+    private List<WeekDay> availableWeekDays;
 
     @PostConstruct
     private void prepareData() {
         this.ot = this.getShop().map(s -> s.getOpeningTimes());
-        this.availableWeekDays = new HashSet<>(Arrays.asList(WeekDay.values()));
+        this.availableWeekDays = Arrays
+                .stream(WeekDay.values())
+                .sorted((d1, d2) -> Integer.compare(d1.getInt(), d2.getInt()))
+                .collect(Collectors.toList());
         this.getShop()
                 .map( // map shop to stream of week days
                         shp -> shp
@@ -60,7 +66,7 @@ public class EditOpeningTimesController extends AbstractController {
                                 .parallelStream()
                                 .map(day -> day.getWeekDay())
                 ).ifPresent( // remove each existing week day from available days
-                        stream -> stream.forEach(day -> this.availableWeekDays.remove(day))
+                        stream -> stream.filter(d -> null != d).forEach(day -> this.availableWeekDays.remove(day))
                 );
     }
 
@@ -68,12 +74,25 @@ public class EditOpeningTimesController extends AbstractController {
         return this.ot.map(OpeningTime::getDays).orElse(Collections.emptyList());
     }
 
+    public void removeDay(final OpeningDay od) {
+        if (this.ss.removeOpeningDay(this.getShop(), od)) {
+            this.updateSession();
+            this.prepareData();
+            this.sendInfo("Erfolg", "Erfolgreich gelöscht");
+        } else {
+            this.sendError("Fehler", "Fehler beim Löschen");
+        }
+    }
+
     public void addDay() {
-        if (this.ss
+        //final LocalTime f = LocalDateTime.ofInstant(this.from.toInstant(), ZoneId.systemDefault()).toLocalTime();
+        //final LocalTime t = LocalDateTime.ofInstant(this.to.toInstant(), ZoneId.systemDefault()).toLocalTime();
+        final Optional<WeekDay> w = WeekDay.fromInteger(this.wd);
+        if (w.map(_w -> this.ss
                 .addOpeningDay(
                         this.getShop(),
-                        new OpeningDay(this.wd, this.from, this.to)
-                )
+                        new OpeningDay(_w, this.from, this.to)
+                )).orElse(false)
                 ) {
             //this.availableWeekDays.remove(this.wd);
             this.updateSession();
@@ -90,32 +109,32 @@ public class EditOpeningTimesController extends AbstractController {
                 .orElse(false);
     }
 
-    public WeekDay getWd() {
+    public Integer getWd() {
         return this.wd;
     }
 
-    public void setWd(final WeekDay wd) {
+    public void setWd(final Integer wd) {
         this.wd = wd;
     }
 
-    public LocalTime getFrom() {
+    public Date getFrom() {
         return this.from;
     }
 
-    public void setFrom(final LocalTime from) {
+    public void setFrom(final Date from) {
         this.from = from;
     }
 
-    public LocalTime getTo() {
+    public Date getTo() {
         return this.to;
     }
 
-    public void setTo(final LocalTime to) {
+    public void setTo(final Date to) {
         this.to = to;
     }
 
-    public Set<WeekDay> getAvailableWeekDays() {
-        return Collections.unmodifiableSet(this.availableWeekDays);
+    public Collection<WeekDay> getAvailableWeekDays() {
+        return Collections.unmodifiableList(this.availableWeekDays);
     }
 
 }

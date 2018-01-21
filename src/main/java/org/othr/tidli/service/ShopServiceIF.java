@@ -19,6 +19,7 @@ package org.othr.tidli.service;
 import java.util.Collection;
 import java.util.Optional;
 import org.othr.tidli.dto.ShopDTO;
+import org.othr.tidli.entity.Article;
 import org.othr.tidli.entity.OpeningDay;
 import org.othr.tidli.entity.OpeningTime;
 import org.othr.tidli.entity.Shop;
@@ -36,8 +37,10 @@ public interface ShopServiceIF {
     Shop toogleActivationState(final Shop shp);
     boolean editOpeningTimes(final Optional<Shop> shp, final OpeningTime ot);
     boolean addOpeningDay(final Optional<Shop> shp, final OpeningDay od);
+    boolean removeOpeningDay(final Optional<Shop> shp, final OpeningDay od);
     Optional<Shop> fromDTO(final ShopDTO shp);
     Shop updateShop(final Shop shp, final String pwOld, final String pwNew);
     Optional<Shop> findEntity(final long id);
+    boolean isOwnerOf(final Article art, final Optional<Shop> shp);
     
 }

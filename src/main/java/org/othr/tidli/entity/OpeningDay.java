@@ -16,9 +16,14 @@
  */
 package org.othr.tidli.entity;
 
-import java.time.LocalTime;
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import org.othr.tidli.util.WeekDay;
 
@@ -33,14 +38,14 @@ public class OpeningDay extends Id {
     private static final long serialVersionUID = -3578698357739936426L;
 
     private WeekDay weekDay;
-    //@Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "from_date")
-    private LocalTime from;
-    //@Temporal(TemporalType.TIME)
+    private Date from;
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "to_date")
-    private LocalTime to;
+    private Date to;
 
-    public OpeningDay(final WeekDay wd, final LocalTime f, final LocalTime t) {
+    public OpeningDay(final WeekDay wd, final Date f, final Date t) {
         super();
         this.weekDay = wd;
         this.from = f;
@@ -57,19 +62,27 @@ public class OpeningDay extends Id {
         this.weekDay = weekDay;
     }
 
-    public LocalTime getFrom() {
+    public Date getFrom() {
         return this.from;
     }
 
-    public void setFrom(final LocalTime from) {
+    public String getFormattedFrom() {
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(this.from);
+    }
+
+    public void setFrom(final Date from) {
         this.from = from;
     }
 
-    public LocalTime getTo() {
+    public String getFormattedTo() {
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(this.to);
+    }
+
+    public Date getTo() {
         return this.to;
     }
 
-    public void setTo(final LocalTime to) {
+    public void setTo(final Date to) {
         this.to = to;
     }
 

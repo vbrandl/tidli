@@ -61,7 +61,7 @@ public class ArticleService extends AbstractService<Article> implements ArticleS
         final TypedQuery<Shop> query = this.getEm()
                 .createNamedQuery("Shop.findAll", Shop.class);
         final List<Shop> shps = query.getResultList();
-        return shps.parallelStream().filter(s -> s.getArticles().contains(art)).findFirst();
+        return shps.parallelStream().filter(s -> s.getArticles().contains(art)).findAny();
     }
 
     @Transactional
@@ -77,9 +77,9 @@ public class ArticleService extends AbstractService<Article> implements ArticleS
                 .createNamedQuery("Shop.findAll", Shop.class);
         final List<Shop> shps = query.getResultList();
         final Optional<Shop> owner = shps.parallelStream().filter(s -> s.getArticles().contains(art)).findFirst();
-        owner.map(s -> this.getEm().merge(s)).ifPresent(s -> s.removeArticle(merged));
-        merged.getRatings().parallelStream().forEach(this.getEm()::remove);
-        this.os.findForArticle(art).parallelStream().map(this.getEm()::merge)
+        owner.map(this.getEm()::merge).ifPresent(s -> s.removeArticle(merged)); // remove article from shop
+        merged.getRatings().parallelStream().forEach(this.getEm()::remove); // remove ratings
+        this.os.findForArticle(art).parallelStream().map(this.getEm()::merge) // remove offers
                 .forEach(this.getEm()::remove);
         this.getEm().remove(merged);
     }

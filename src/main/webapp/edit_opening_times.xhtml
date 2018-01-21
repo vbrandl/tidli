@@ -9,41 +9,41 @@
         <ui:composition template="template/template.xhtml">
             <ui:define name="content" rendered="#{editOpeningTimesController.shopRole}">
                 <h:form>
+                    <p:remoteCommand name="updateGrid" update="wd" />
                     <p:panelGrid columns="2">
                         <p:outputLabel for="wd" value="Wochentag wählen" />
                         <p:selectOneMenu id="wd" required="true" value="#{editOpeningTimesController.wd}">
-                            <f:selectItems value="#{editOpeningTimesController.availableWeekDays}" var="d" itemLabel="#{d.toString}" />
+                            <f:selectItem itemLabel="Tag wählen" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{editOpeningTimesController.availableWeekDays}" itemLabel="#{d.toString()}" itemValue="#{d.int}" var="d" />
                         </p:selectOneMenu>
 
                         <p:outputLabel for="from" value="Von" />
-                        <p:calendar timeOnly="true" pattern="HH:mm" value="#{editOpeningTimesController.from}" required="true" />
+                        <p:calendar id="from" timeOnly="true" pattern="HH:mm" value="#{editOpeningTimesController.from}" required="true" />
 
                         <p:outputLabel for="to" value="Bis" />
-                        <p:calendar timeOnly="true" pattern="HH:mm" value="#{editOpeningTimesController.to}" required="true" />
+                        <p:calendar id="to" timeOnly="true" pattern="HH:mm" value="#{editOpeningTimesController.to}" required="true" />
 
-                        <p:outputLabel />
+                        <p:outputLabel value="" />
                         <p:commandButton value="Speichern" actionListener="#{editOpeningTimesController.addDay()}" />
                     </p:panelGrid>
                 </h:form>
                 <p:separator />
                 <h:form>
-                    <p:dataTable value="#{listArticlesController.articles}" id="artTable" var="art" selectionMode="single">
-                        <p:column headerText="Name">
-                            <p:outputLabel value="#{art.name}" />
+                    <p:dataTable value="#{editOpeningTimesController.openingTimes}" id="otTable" var="ot">
+                        <p:column headerText="Tag">
+                            <p:outputLabel value="#{ot.weekDay.toString()}" />
                         </p:column>
                         
-                        <p:column headerText="Beschreibung">
-                            <p:outputLabel value="#{art.description}" />
-                        </p:column>
-                        
-                        <p:column headerText="Foto">
-                            <!--<b:image value="#{images.image}">
-                                <f:param name="id" value="#{art.id}" />
-                            </b:image>-->
+                        <p:column headerText="Von">
+                            <p:outputLabel value="#{ot.formattedFrom}" />
                         </p:column>
 
-                        <p:column headerText="Optionen" rendered="#{listArticlesController.shopRole}">
-                            <p:commandButton value="Löschen" icon="trash" ajax="true" update="artTable" actionListener="#{listArticlesController.deleteArticle(art)}" rendered="#{listArticlesController.userIsOwnerOf(art)}" />
+                        <p:column headerText="Bis">
+                            <p:outputLabel value="#{ot.formattedTo}" />
+                        </p:column>
+                        
+                        <p:column headerText="Optionen">
+                            <p:commandButton value="Löschen" icon="trash" ajax="true" update="otTable" actionListener="#{editOpeningTimesController.removeDay(ot)}" oncomplete="updateGrid();" />
                         </p:column>
 
                     </p:dataTable>

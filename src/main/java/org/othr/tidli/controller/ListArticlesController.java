@@ -16,21 +16,20 @@
  */
 package org.othr.tidli.controller;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import org.othr.tidli.data.WrappedArticle;
 import org.othr.tidli.entity.Article;
+import org.othr.tidli.entity.OpeningDay;
 import org.othr.tidli.entity.Shop;
 import org.othr.tidli.service.ArticleServiceIF;
 import org.othr.tidli.service.RatingServiceIF;
-import org.othr.tidli.util.Role;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
+import org.othr.tidli.service.ShopServiceIF;
 
 /**
  *
@@ -45,7 +44,10 @@ public class ListArticlesController extends AbstractController {
     private ArticleServiceIF as;
     @Inject
     private RatingServiceIF rs;
+    @Inject
+    private ShopServiceIF ss;
     private Collection<WrappedArticle> articles;
+    private Shop detailShop;
 
     @PostConstruct
     private void prepareData() {
@@ -72,23 +74,17 @@ public class ListArticlesController extends AbstractController {
         this.updateSession();
     }
 
-    public boolean userIsOwnerOf(final Article art) {
-        return this.getUser()
-                .filter(u -> u.getRole() == Role.Shop)
-                .map(s -> ((Shop)s).getArticles().contains(art))
-                .orElse(false);
+    public boolean userIsOwnerOf(final WrappedArticle art) {
+        return this.isAdminRole()
+                || this.ss.isOwnerOf(art.unwrap(), this.getShop());
     }
 
-    public String shopForArt(final Article art) {
-        return this.as.getShopForArticle(art).map(Shop::getName).orElse("");
+    public Shop shopForArt(final WrappedArticle art) {
+        return this.shopForArt(art.unwrap());
     }
 
-    public StreamedContent getImageForArt(final Article art) {
-        if (null != art) {
-            return new DefaultStreamedContent(new ByteArrayInputStream(art.getImage()));
-        } else {
-            return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
-        }
+    public Shop shopForArt(final Article art) {
+        return this.as.getShopForArticle(art).orElse(null);
     }
 
     public void rateArticle(final WrappedArticle art) {
@@ -103,6 +99,32 @@ public class ListArticlesController extends AbstractController {
 
     public boolean isAlreadyRated(final WrappedArticle art) {
         return this.rs.isRatedByUser(art, this.getUser());
+    }
+
+    public Shop getDetailShop() {
+        return this.detailShop;
+    }
+
+    public void setDetailShop(Shop detailShop) {
+        this.detailShop = detailShop;
+    }
+    
+    public void setDetailShopForArt(WrappedArticle art) {
+        this.setDetailShop(this.shopForArt(art));
+    }
+
+    public List<OpeningDay> getDetailOpeningDays() {
+        return null != this.detailShop
+                && null != this.detailShop.getOpeningTimes()
+                && null != this.detailShop.getOpeningTimes().getDays()
+                ? this.detailShop
+                        .getOpeningTimes()
+                        .getDays()
+                        .parallelStream()
+                        .sorted((o1, o2) ->
+                                Integer.compare(o1.getWeekDay().ordinal(), o2.getWeekDay().ordinal())
+                        ).collect(Collectors.toList())
+                : Collections.emptyList();
     }
 
 }

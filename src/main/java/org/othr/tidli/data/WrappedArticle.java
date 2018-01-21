@@ -41,5 +41,25 @@ public class WrappedArticle extends Article {
         a.setId(this.getId());
         return a;
     }
+
+    @Override
+    public int hashCode() {
+        return this.unwrap().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Article) || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Article other = (Article)obj;
+        return this.unwrap().equals(other);
+    }
     
 }
